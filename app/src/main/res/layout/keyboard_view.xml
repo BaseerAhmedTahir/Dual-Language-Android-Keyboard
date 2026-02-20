@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#E0E0E0">
+
+    <include layout="@layout/suggestion_bar" />
+
+    <com.example.urduenglishkeyboard.ui.CustomKeyboardView
+        android:id="@+id/custom_keyboard_view"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:padding="4dp" />
+        
+</LinearLayout>
