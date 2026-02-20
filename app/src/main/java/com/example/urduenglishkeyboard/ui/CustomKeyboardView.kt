@@ -6,8 +6,12 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.PopupWindow
+import android.view.ViewGroup
+import android.view.LayoutInflater
 import com.example.urduenglishkeyboard.keyboard.KeyData
 import android.graphics.drawable.GradientDrawable
+import com.example.urduenglishkeyboard.R
 
 class CustomKeyboardView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -15,6 +19,7 @@ class CustomKeyboardView @JvmOverloads constructor(
 
     private var keyClickListener: ((KeyData) -> Unit)? = null
     private var isDarkTheme = false
+    private var keyLongClickListener: ((KeyData, TextView) -> Unit)? = null
 
     init {
         orientation = VERTICAL
@@ -28,6 +33,10 @@ class CustomKeyboardView @JvmOverloads constructor(
 
     fun setOnKeyClickListener(listener: (KeyData) -> Unit) {
         this.keyClickListener = listener
+    }
+    
+    fun setOnKeyLongClickListener(listener: (KeyData, TextView) -> Unit) {
+        this.keyLongClickListener = listener
     }
 
     fun renderLayout(rows: List<List<KeyData>>, isShifted: Boolean) {
@@ -64,6 +73,11 @@ class CustomKeyboardView @JvmOverloads constructor(
                     
                     setOnClickListener {
                         keyClickListener?.invoke(key)
+                    }
+                    
+                    setOnLongClickListener {
+                        keyLongClickListener?.invoke(key, this)
+                        true // Consume the long click event
                     }
                 }
                 rowLayout.addView(keyView)

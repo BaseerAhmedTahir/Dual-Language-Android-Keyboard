@@ -4,6 +4,10 @@ import android.inputmethodservice.InputMethodService
 import android.view.KeyEvent
 import android.view.View
 import android.widget.TextView
+import android.widget.PopupWindow
+import android.widget.LinearLayout
+import android.view.ViewGroup
+import android.view.Gravity
 import com.example.urduenglishkeyboard.data.AppDatabase
 import com.example.urduenglishkeyboard.data.WordDao
 import com.example.urduenglishkeyboard.data.WordEntity
@@ -30,6 +34,8 @@ class UrduEnglishKeyboardService : InputMethodService() {
     private var isEnglish = true
     private var isShifted = false
     
+    private var popupWindow: PopupWindow? = null
+    
     private val serviceJob = Job()
     private val coroutineScope = CoroutineScope(Dispatchers.Main + serviceJob)
     private lateinit var wordDao: WordDao
@@ -53,6 +59,10 @@ class UrduEnglishKeyboardService : InputMethodService() {
         
         keyboardView.setOnKeyClickListener { keyData ->
             handleKeyClick(keyData)
+        }
+        
+        keyboardView.setOnKeyLongClickListener { keyData, keyViewTextView ->
+            handleKeyLongClick(keyData, keyViewTextView)
         }
         
         setupSuggestionListeners()
@@ -111,6 +121,47 @@ class UrduEnglishKeyboardService : InputMethodService() {
         super.onFinishInput()
         currentComposingText.clear()
         updateSuggestions(emptyList())
+    }
+
+    private fun handleKeyLongClick(keyData: KeyData, keyView: View) {
+        if (keyData.longPressOptions.isEmpty()) return
+        
+        keyboardView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+        
+        val popupView = layoutInflater.inflate(R.layout.popup_key_options, null) as LinearLayout
+        
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val isDark = currentNightMode == Configuration.UI_MODE_NIGHT_YES
+        val textColor = if (isDark) Color.WHITE else Color.BLACK
+
+        for (option in keyData.longPressOptions) {
+            val btn = TextView(this).apply {
+                text = option
+                textSize = 24f
+                setPadding(32, 24, 32, 24)
+                setTextColor(textColor)
+                val typedArray = obtainStyledAttributes(intArrayOf(android.R.attr.selectableItemBackground))
+                background = typedArray.getDrawable(0)
+                typedArray.recycle()
+                
+                setOnClickListener {
+                    currentInputConnection?.commitText(option, 1)
+                    popupWindow?.dismiss()
+                }
+            }
+            popupView.addView(btn)
+        }
+
+        popupWindow = PopupWindow(
+            popupView,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true
+        ).apply {
+            elevation = 8f
+            // Show above the key and slightly offset to center
+            showAsDropDown(keyView, (keyView.width - popupView.measuredWidth) / 2, -keyView.height * 2)
+        }
     }
 
     private fun handleKeyClick(keyData: KeyData) {

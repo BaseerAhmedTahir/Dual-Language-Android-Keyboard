@@ -5,5 +5,6 @@ data class KeyData(
     val label: String,
     val shiftLabel: String = "",
     val isFunctional: Boolean = false,
-    val weight: Float = 1f
+    val weight: Float = 1f,
+    val longPressOptions: List<String> = emptyList()
 )
