@@ -1,0 +1,45 @@
+# Built application files
+*.apk
+*.aar
+*.ap_
+*.aab
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Android Studio, IntelliJ
+*.iml
+.idea/
+.gradle/
+local.properties
+
+# Build directories
+build/
+app/build/
+bin/
+gen/
+out/
+
+# Log Files
+*.log
+build_log.txt
+build_log_clean.txt
+build_log_k2.txt
+build_log_kt.txt
+build_log_utf8.txt
+build_output.log
+build_output_utf8.log
+build_debug_log.txt
+
+# NDK
+obj/
+.cxx/
+.externalNativeBuild/
+
+# Keystores
+*.jks
+*.keystore
+
+# Google Services
+google-services.json

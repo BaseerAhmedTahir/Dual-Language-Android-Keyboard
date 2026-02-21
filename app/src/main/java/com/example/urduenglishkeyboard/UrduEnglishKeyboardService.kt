@@ -34,6 +34,7 @@ class UrduEnglishKeyboardService : InputMethodService() {
     private var isEnglish = true
     private var isShifted = false
     private var isEmoji = false
+    private var isNumbers = false
     
     private var popupWindow: PopupWindow? = null
     
@@ -195,13 +196,20 @@ class UrduEnglishKeyboardService : InputMethodService() {
                 isEnglish = !isEnglish
                 isShifted = false
                 isEmoji = false
+                isNumbers = false
                 currentComposingText.clear()
                 inputConnection.finishComposingText()
                 updateSuggestions(emptyList())
                 updateKeyboardLayout()
             }
             KeyboardLayouts.CODE_EMOJI -> {
-                isEmoji = !isEmoji
+                if (isEmoji) {
+                    isEmoji = false
+                    // Maintain previous language/number state
+                } else {
+                    isEmoji = true
+                    isNumbers = false
+                }
                 updateKeyboardLayout()
             }
             KeyboardLayouts.CODE_SPACE -> {
@@ -228,14 +236,27 @@ class UrduEnglishKeyboardService : InputMethodService() {
                 inputConnection.sendKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER))
             }
             KeyboardLayouts.CODE_NUMBERS -> {
-                // TODO: Switch to number/symbols layout
+                if (isNumbers) {
+                    isNumbers = false
+                    isEmoji = false
+                } else {
+                    isNumbers = true
+                    isEmoji = false
+                }
+                updateKeyboardLayout()
             }
             else -> {
+                if (keyData.code == 0) {
+                    // It's an Emoji or sticker. Just commit it directly.
+                    inputConnection.commitText(keyData.label, 1)
+                    return
+                }
+                
                 var textToCommit = if (isShifted && keyData.shiftLabel.isNotEmpty()) keyData.shiftLabel else keyData.label
                 
-                if (isEnglish && currentComposingText.isEmpty()) {
+                if (isEnglish && !isNumbers && currentComposingText.isEmpty() && textToCommit.length == 1 && textToCommit[0].isLetter()) {
                     val textBeforeCursor = inputConnection.getTextBeforeCursor(2, 0)
-                    if (textBeforeCursor.isNullOrEmpty() || textBeforeCursor.toString().endsWith(". ")) {
+                    if (textBeforeCursor.isNullOrEmpty() || textBeforeCursor.toString().endsWith(". ") || textBeforeCursor.toString().endsWith("\n")) {
                         textToCommit = textToCommit.uppercase()
                     }
                 }
@@ -284,12 +305,15 @@ class UrduEnglishKeyboardService : InputMethodService() {
     private fun updateKeyboardLayout() {
         val layout = if (isEmoji) {
             KeyboardLayouts.emojiLayout
+        } else if (isNumbers) {
+            KeyboardLayouts.numberSymbolLayout
         } else if (isEnglish) {
             KeyboardLayouts.englishQwerty
         } else {
             KeyboardLayouts.urduPhonetic
         }
-        keyboardView.renderLayout(layout, isShifted, !isEnglish && !isEmoji)
+        val requiresNastaliq = !isEnglish && !isEmoji && !isNumbers
+        keyboardView.renderLayout(layout, isShifted, requiresNastaliq)
     }
 
     override fun onDestroy() {

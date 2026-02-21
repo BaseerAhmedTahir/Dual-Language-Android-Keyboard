@@ -67,6 +67,29 @@ object KeyboardLayouts {
         )
     )
 
+    val numberSymbolLayout = listOf(
+        listOf(
+            KeyData('1'.code, "1", "1"), KeyData('2'.code, "2", "2"), KeyData('3'.code, "3", "3"), KeyData('4'.code, "4", "4"), KeyData('5'.code, "5", "5"),
+            KeyData('6'.code, "6", "6"), KeyData('7'.code, "7", "7"), KeyData('8'.code, "8", "8"), KeyData('9'.code, "9", "9"), KeyData('0'.code, "0", "0")
+        ),
+        listOf(
+            KeyData('@'.code, "@", "@"), KeyData('#'.code, "#", "#"), KeyData('$'.code, "$", "$"), KeyData('%'.code, "%", "%"), KeyData('&'.code, "&", "&"),
+            KeyData('-'.code, "-", "-"), KeyData('+'.code, "+", "+"), KeyData('('.code, "(", "("), KeyData(')'.code, ")", ")"), KeyData('/'.code, "/", "/")
+        ),
+        listOf(
+            KeyData('*'.code, "*", "*"), KeyData('"'.code, "\"", "\""), KeyData('\''.code, "'", "'"), KeyData(':'.code, ":", ":"), KeyData(';'.code, ";", ";"),
+            KeyData('!'.code, "!", "!"), KeyData('?'.code, "?", "?"), KeyData(CODE_DELETE, "⌫", "⌫", true, 1.5f)
+        ),
+        listOf(
+            KeyData(CODE_NUMBERS, "ABC", "ABC", true, 1.2f),
+            KeyData(CODE_EMOJI, "😀", "😀", true, 1f),
+            KeyData(','.code, ",", ","),
+            KeyData(CODE_SPACE, " ", " ", true, 3.5f),
+            KeyData('.'.code, ".", "."),
+            KeyData(CODE_ENTER, "↵", "↵", true, 1.2f)
+        )
+    )
+
     val emojiLayout = listOf(
         listOf(
             KeyData(0, "😀", "😀"), KeyData(0, "😂", "😂"), KeyData(0, "😊", "😊"), KeyData(0, "😍", "😍"), KeyData(0, "😒", "😒"), KeyData(0, "😘", "😘"), KeyData(0, "😁", "😁")

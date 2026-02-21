@@ -21,15 +21,34 @@ class CustomKeyboardView @JvmOverloads constructor(
     private var isDarkTheme = false
     private var keyLongClickListener: ((KeyData, TextView) -> Unit)? = null
     private var urduTypeface: android.graphics.Typeface? = null
+    
+    // Auto-repeat helpers
+    private var isRepeating = false
+    private val repeatHandler = android.os.Handler(android.os.Looper.getMainLooper())
+    private var repeatingKey: KeyData? = null
+    
+    private val repeatRunnable = object : Runnable {
+        override fun run() {
+            repeatingKey?.let {
+                keyClickListener?.invoke(it)
+                repeatHandler.postDelayed(this, 50) // 50ms interval for fast deletion
+            }
+        }
+    }
 
     init {
         orientation = VERTICAL
         setBackgroundColor(Color.parseColor("#EEEEEE")) // Default Light gray
-        try {
-            urduTypeface = android.graphics.Typeface.createFromAsset(context.assets, "fonts/jameel_noori_nastaliq.ttf")
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        Thread {
+            try {
+                val tf = android.graphics.Typeface.createFromAsset(context.assets, "fonts/jameel_noori_nastaliq.ttf")
+                post {
+                    urduTypeface = tf
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }.start()
     }
 
     fun setTheme(isDark: Boolean) {
@@ -57,12 +76,12 @@ class CustomKeyboardView @JvmOverloads constructor(
             for (key in row) {
                 val keyView = TextView(context).apply {
                     val lParams = LayoutParams(0, LayoutParams.MATCH_PARENT, key.weight)
-                    lParams.setMargins(6, 12, 6, 12)
+                    lParams.setMargins(8, 12, 8, 12)
                     layoutParams = lParams
                     
                     text = if (isShifted && key.shiftLabel.isNotEmpty()) key.shiftLabel else key.label
                     gravity = Gravity.CENTER
-                    val textColor = if (isDarkTheme) Color.WHITE else Color.BLACK
+                    val textColor = if (isDarkTheme) Color.WHITE else Color.parseColor("#1F1F1F")
                     setTextColor(textColor)
                     
                     if (isUrdu && !key.isFunctional) {
@@ -74,23 +93,50 @@ class CustomKeyboardView @JvmOverloads constructor(
                     }
                     
                     val bgDrawable = GradientDrawable().apply {
-                        val regularBg = if (isDarkTheme) Color.parseColor("#333333") else Color.WHITE
-                        val functionalBg = if (isDarkTheme) Color.parseColor("#555555") else Color.parseColor("#D6D6D6")
+                        val regularBg = if (isDarkTheme) Color.parseColor("#3C4043") else Color.WHITE
+                        val functionalBg = if (isDarkTheme) Color.parseColor("#2E3134") else Color.parseColor("#D2D6DA")
                         setColor(if (key.isFunctional) functionalBg else regularBg)
-                        cornerRadius = 16f // Rounded corners for keys
+                        cornerRadius = 24f // Softer, more modern rounded corners
                     }
-                    background = bgDrawable
+                    val rippleColor = android.content.res.ColorStateList.valueOf(Color.parseColor(if (isDarkTheme) "#55AAAAAA" else "#33000000"))
+                    background = android.graphics.drawable.RippleDrawable(rippleColor, bgDrawable, null)
+                    elevation = 6f // Adds a subtle drop shadow to buttons
                     
                     isClickable = true
                     isFocusable = true
                     
+                    setOnTouchListener { v, event ->
+                        when (event.action) {
+                            android.view.MotionEvent.ACTION_UP, android.view.MotionEvent.ACTION_CANCEL -> {
+                                if (isRepeating) {
+                                    isRepeating = false
+                                    repeatingKey = null
+                                    repeatHandler.removeCallbacks(repeatRunnable)
+                                }
+                            }
+                        }
+                        false // Allow the TextView to handle click and ripples normally
+                    }
+                    
                     setOnClickListener {
-                        keyClickListener?.invoke(key)
+                        if (!isRepeating) { // Do not trigger an extra click if auto-repeat ran
+                            keyClickListener?.invoke(key)
+                        }
                     }
                     
                     setOnLongClickListener {
-                        keyLongClickListener?.invoke(key, this)
-                        true // Consume the long click event
+                        if (key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_DELETE || key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_SPACE) {
+                            // Start auto-repeating for backspace and space
+                            isRepeating = true
+                            repeatingKey = key
+                            repeatHandler.post(repeatRunnable)
+                            true
+                        } else if (key.longPressOptions.isNotEmpty()) {
+                            keyLongClickListener?.invoke(key, this)
+                            true // Consume the long click event
+                        } else {
+                            false // Allow normal click
+                        }
                     }
                 }
                 rowLayout.addView(keyView)
