@@ -1,0 +1,4 @@
+com.example.urduenglishkeyboard.test.app-androidTest-0 C:\Users\Mustafavi\Desktop\keeyboard\app\build\generated\res\resValues\androidTest\debug
+com.example.urduenglishkeyboard.test.app-mergeDebugAndroidTestResources-1 C:\Users\Mustafavi\Desktop\keeyboard\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
+com.example.urduenglishkeyboard.test.app-mergeDebugAndroidTestResources-2 C:\Users\Mustafavi\Desktop\keeyboard\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
+com.example.urduenglishkeyboard.test.app-merged_res-3 C:\Users\Mustafavi\Desktop\keeyboard\app\build\intermediates\merged_res\debugAndroidTest

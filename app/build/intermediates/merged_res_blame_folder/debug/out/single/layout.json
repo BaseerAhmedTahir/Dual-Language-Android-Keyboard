@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "C:\\Users\\Mustafavi\\.gradle\\daemon\\8.4\\com.example.urduenglishkeyboard.app-mergeDebugResources-34:\\layout\\keyboard_view.xml",
+        "source": "C:\\Users\\Mustafavi\\.gradle\\daemon\\8.4\\com.example.urduenglishkeyboard.app-main-37:\\layout\\keyboard_view.xml"
+    },
+    {
+        "merged": "C:\\Users\\Mustafavi\\.gradle\\daemon\\8.4\\com.example.urduenglishkeyboard.app-mergeDebugResources-34:\\layout\\suggestion_bar.xml",
+        "source": "C:\\Users\\Mustafavi\\.gradle\\daemon\\8.4\\com.example.urduenglishkeyboard.app-main-37:\\layout\\suggestion_bar.xml"
+    },
+    {
+        "merged": "com.example.urduenglishkeyboard.app-mergeDebugResources-34:/layout/activity_main.xml",
+        "source": "com.example.urduenglishkeyboard.app-main-37:/layout/activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\Mustafavi\\.gradle\\daemon\\8.4\\com.example.urduenglishkeyboard.app-mergeDebugResources-34:\\layout\\popup_key_options.xml",
+        "source": "C:\\Users\\Mustafavi\\.gradle\\daemon\\8.4\\com.example.urduenglishkeyboard.app-main-37:\\layout\\popup_key_options.xml"
+    },
+    {
+        "merged": "C:\\Users\\Mustafavi\\.gradle\\daemon\\8.4\\com.example.urduenglishkeyboard.app-mergeDebugResources-34:\\layout\\activity_main.xml",
+        "source": "C:\\Users\\Mustafavi\\.gradle\\daemon\\8.4\\com.example.urduenglishkeyboard.app-main-37:\\layout\\activity_main.xml"
+    }
+]

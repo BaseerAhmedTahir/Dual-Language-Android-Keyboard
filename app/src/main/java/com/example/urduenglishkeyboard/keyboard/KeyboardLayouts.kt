@@ -7,6 +7,7 @@ object KeyboardLayouts {
     const val CODE_ENTER = 10
     const val CODE_LANGUAGE_SWITCH = -2
     const val CODE_NUMBERS = -3
+    const val CODE_EMOJI = -4
 
     val englishQwerty = listOf(
         listOf(
@@ -28,11 +29,12 @@ object KeyboardLayouts {
             KeyData(CODE_DELETE, "⌫", "⌫", true, 1.5f)
         ),
         listOf(
-            KeyData(CODE_NUMBERS, "?123", "?123", true, 1.5f),
-            KeyData(CODE_LANGUAGE_SWITCH, "\uD83C\uDF10", "\uD83C\uDF10", true, 1f),
-            KeyData(CODE_SPACE, " ", " ", true, 4f),
+            KeyData(CODE_NUMBERS, "?123", "?123", true, 1.2f),
+            KeyData(CODE_EMOJI, "😀", "😀", true, 1f),
+            KeyData(CODE_LANGUAGE_SWITCH, "\uD83C\uDF10", "\uD83C\uDF10", true, 1.2f),
+            KeyData(CODE_SPACE, " ", " ", true, 3.5f),
             KeyData('.'.code, ".", "."),
-            KeyData(CODE_ENTER, "↵", "↵", true, 1.5f)
+            KeyData(CODE_ENTER, "↵", "↵", true, 1.2f)
         )
     )
 
@@ -56,11 +58,29 @@ object KeyboardLayouts {
             KeyData(CODE_DELETE, "⌫", "⌫", true, 1.5f)
         ),
         listOf(
-            KeyData(CODE_NUMBERS, "?123", "?123", true, 1.5f),
-            KeyData(CODE_LANGUAGE_SWITCH, "\uD83C\uDF10", "\uD83C\uDF10", true, 1f),
-            KeyData(CODE_SPACE, " ", " ", true, 4f),
+            KeyData(CODE_NUMBERS, "?123", "?123", true, 1.2f),
+            KeyData(CODE_EMOJI, "😀", "😀", true, 1f),
+            KeyData(CODE_LANGUAGE_SWITCH, "\uD83C\uDF10", "\uD83C\uDF10", true, 1.2f),
+            KeyData(CODE_SPACE, " ", " ", true, 3.5f),
             KeyData('۔'.code, "۔", "."),
-            KeyData(CODE_ENTER, "↵", "↵", true, 1.5f)
+            KeyData(CODE_ENTER, "↵", "↵", true, 1.2f)
+        )
+    )
+
+    val emojiLayout = listOf(
+        listOf(
+            KeyData(0, "😀", "😀"), KeyData(0, "😂", "😂"), KeyData(0, "😊", "😊"), KeyData(0, "😍", "😍"), KeyData(0, "😒", "😒"), KeyData(0, "😘", "😘"), KeyData(0, "😁", "😁")
+        ),
+        listOf(
+            KeyData(0, "😭", "😭"), KeyData(0, "🥺", "🥺"), KeyData(0, "😅", "😅"), KeyData(0, "🙏", "🙏"), KeyData(0, "👍", "👍"), KeyData(0, "❤️", "❤️"), KeyData(0, "✨", "✨")
+        ),
+        listOf(
+            KeyData(0, "🔥", "🔥"), KeyData(0, "🥰", "🥰"), KeyData(0, "😎", "😎"), KeyData(0, "🤔", "🤔"), KeyData(0, "🙌", "🙌"), KeyData(0, "👏", "👏"), KeyData(0, "🎉", "🎉")
+        ),
+        listOf(
+            KeyData(CODE_EMOJI, "ABC", "ABC", true, 2f),
+            KeyData(CODE_SPACE, " ", " ", true, 3f),
+            KeyData(CODE_DELETE, "⌫", "⌫", true, 2f)
         )
     )
 }

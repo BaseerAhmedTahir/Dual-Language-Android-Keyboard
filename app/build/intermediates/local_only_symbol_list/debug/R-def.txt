@@ -1,0 +1,20 @@
+R_DEF: Internal format may change without notice
+local
+drawable ic_launcher
+id btn_enable_keyboard
+id btn_select_keyboard
+id custom_keyboard_view
+id suggestion1
+id suggestion2
+id suggestion3
+id suggestion_bar_layout
+layout activity_main
+layout keyboard_view
+layout popup_key_options
+layout suggestion_bar
+string app_name
+string setup_enable
+string setup_select
+string setup_welcome
+style Theme.UrduEnglishKeyboard
+xml method

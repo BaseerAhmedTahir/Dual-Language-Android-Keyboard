@@ -33,6 +33,7 @@ class UrduEnglishKeyboardService : InputMethodService() {
     
     private var isEnglish = true
     private var isShifted = false
+    private var isEmoji = false
     
     private var popupWindow: PopupWindow? = null
     
@@ -193,9 +194,14 @@ class UrduEnglishKeyboardService : InputMethodService() {
             KeyboardLayouts.CODE_LANGUAGE_SWITCH -> {
                 isEnglish = !isEnglish
                 isShifted = false
+                isEmoji = false
                 currentComposingText.clear()
                 inputConnection.finishComposingText()
                 updateSuggestions(emptyList())
+                updateKeyboardLayout()
+            }
+            KeyboardLayouts.CODE_EMOJI -> {
+                isEmoji = !isEmoji
                 updateKeyboardLayout()
             }
             KeyboardLayouts.CODE_SPACE -> {
@@ -276,8 +282,14 @@ class UrduEnglishKeyboardService : InputMethodService() {
     }
 
     private fun updateKeyboardLayout() {
-        val layout = if (isEnglish) KeyboardLayouts.englishQwerty else KeyboardLayouts.urduPhonetic
-        keyboardView.renderLayout(layout, isShifted)
+        val layout = if (isEmoji) {
+            KeyboardLayouts.emojiLayout
+        } else if (isEnglish) {
+            KeyboardLayouts.englishQwerty
+        } else {
+            KeyboardLayouts.urduPhonetic
+        }
+        keyboardView.renderLayout(layout, isShifted, !isEnglish && !isEmoji)
     }
 
     override fun onDestroy() {

@@ -20,10 +20,16 @@ class CustomKeyboardView @JvmOverloads constructor(
     private var keyClickListener: ((KeyData) -> Unit)? = null
     private var isDarkTheme = false
     private var keyLongClickListener: ((KeyData, TextView) -> Unit)? = null
+    private var urduTypeface: android.graphics.Typeface? = null
 
     init {
         orientation = VERTICAL
         setBackgroundColor(Color.parseColor("#EEEEEE")) // Default Light gray
+        try {
+            urduTypeface = android.graphics.Typeface.createFromAsset(context.assets, "fonts/jameel_noori_nastaliq.ttf")
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun setTheme(isDark: Boolean) {
@@ -39,7 +45,7 @@ class CustomKeyboardView @JvmOverloads constructor(
         this.keyLongClickListener = listener
     }
 
-    fun renderLayout(rows: List<List<KeyData>>, isShifted: Boolean) {
+    fun renderLayout(rows: List<List<KeyData>>, isShifted: Boolean, isUrdu: Boolean = false) {
         removeAllViews()
         
         for (row in rows) {
@@ -58,7 +64,14 @@ class CustomKeyboardView @JvmOverloads constructor(
                     gravity = Gravity.CENTER
                     val textColor = if (isDarkTheme) Color.WHITE else Color.BLACK
                     setTextColor(textColor)
-                    textSize = 24f
+                    
+                    if (isUrdu && !key.isFunctional) {
+                        typeface = urduTypeface
+                        textSize = 28f // Nastaliq requires larger text
+                    } else {
+                        typeface = android.graphics.Typeface.DEFAULT
+                        textSize = 24f
+                    }
                     
                     val bgDrawable = GradientDrawable().apply {
                         val regularBg = if (isDarkTheme) Color.parseColor("#333333") else Color.WHITE

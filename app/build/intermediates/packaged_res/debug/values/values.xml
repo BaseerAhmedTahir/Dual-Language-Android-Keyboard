@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Urdu English Keyboard</string>
+    <string name="setup_enable">1. Enable in Settings</string>
+    <string name="setup_select">2. Select Urdu English Keyboard</string>
+    <string name="setup_welcome">Welcome! Follow the steps below to enable and select the keyboard.</string>
+    <style name="Theme.UrduEnglishKeyboard" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#6200EE</item>
+        <item name="colorPrimaryDark">#3700B3</item>
+        <item name="colorAccent">#03DAC5</item>
+    </style>
+</resources>
