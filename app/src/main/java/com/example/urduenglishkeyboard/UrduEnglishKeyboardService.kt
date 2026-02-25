@@ -35,6 +35,7 @@ class UrduEnglishKeyboardService : InputMethodService() {
     private var isShifted = false
     private var isEmoji = false
     private var isNumbers = false
+    private var currentEmojiPage = 0
     
     private var popupWindow: PopupWindow? = null
     
@@ -109,25 +110,35 @@ class UrduEnglishKeyboardService : InputMethodService() {
             if (testSuggestions.isEmpty()) {
                 val words = mutableListOf<WordEntity>()
                 // Common English words
-                listOf("the", "to", "and", "that", "this", "they", "there", "their", "then", "them", "these", "those",
+                val englishWords = listOf("the", "to", "and", "that", "this", "they", "there", "their", "then", "them", "these", "those",
                        "time", "today", "tomorrow", "thanks", "think", "thing", "take", "tell", "talk", "try",
                        "hello", "hi", "how", "have", "has", "had", "here", "help", "hope", "happy", "home",
                        "you", "your", "yours", "yes", "yeah", "year", "yesterday",
                        "we", "will", "what", "where", "when", "why", "who", "which", "with", "would", "want", "work", "well",
                        "are", "about", "all", "also", "any", "after", "always", "around", "ask", "answer",
                        "is", "it", "its", "if", "in", "into", "can", "could", "call", "come", "good", "great",
-                       "for", "from", "find", "first", "friend", "not", "now", "new", "no", "never", "need").forEach {
+                       "for", "from", "find", "first", "friend", "not", "now", "new", "no", "never", "need",
+                       "be", "of", "a", "I", "for", "on", "he", "as", "at", "but", "his", "by", "say", "her", "she",
+                       "or", "an", "my", "one", "so", "up", "out", "get", "go", "me", "make", "like", "just", "him", "know",
+                       "people", "some", "see", "other", "than", "look", "only", "over", "back", "use", "two", "our", "way",
+                       "even", "because", "give", "day", "most", "us", "okay", "ok", "sure", "please", "love", "much", "many", "more", "little")
+                englishWords.forEach {
                     words.add(WordEntity(word = it, frequency = 100, language = "en"))
                 }
                 
                 // Common Urdu words
-                listOf("کیا", "کیوں", "کب", "کیسے", "کہاں", "کون", "کچھ", "کوئی", "کہہ", "کر", "کرو", "کریں", "کرنا",
+                val urduWords = listOf("کیا", "کیوں", "کب", "کیسے", "کہاں", "کون", "کچھ", "کوئی", "کہہ", "کر", "کرو", "کریں", "کرنا",
                        "ہے", "ہیں", "ہو", "ہوں", "ہاں", "ہوتا", "ہوتی", "ہوتے", "ہمارا", "ہماری", "ہمارے", "ہم", "ہر",
                        "اور", "اب", "اس", "ان", "اپنا", "اپنی", "اپنے", "اچھا", "اچھی", "اچھے", "آج", "آؤ", "آئیں", "آپ",
                        "یہ", "یہاں", "یاد", "یقین", "یا", "تھا", "تھی", "تھے", "تم", "تیرا", "تیری", "تیرے", "تمہارا", "تو", "تک",
                        "میں", "میرا", "میری", "میرے", "مجھے", "مت", "مزید", "بہت", "بات", "بھی", "باہر", "بار", "بعد",
                        "نہیں", "نہ", "نام", "نے", "نظر", "دے", "دیں", "دو", "دیا", "دن", "دیر", "دیکھ", "دیکھو",
-                       "سلام", "شکریہ", "وقت", "وہ", "وہاں", "واپس", "لو", "لیں", "لیا", "لگتا", "لگتی", "لگتے").forEach {
+                       "سلام", "شکریہ", "وقت", "وہ", "وہاں", "واپس", "لو", "لیں", "لیا", "لگتا", "لگتی", "لگتے",
+                       "کہ", "سے", "کو", "کی", "کے", "پر", "ایک", "جو", "لیے", "ساتھ", "جس", "اپنی", "جائے", "کرنے",
+                       "گیا", "کام", "ہوا", "جب", "جیسے", "ایسے", "کہا", "کس", "اگر", "طرح", "مگر", "کرتا", "وہی", "پاس",
+                       "سب", "ہوگا", "تھوڑا", "بھائی", "دوست", "اللہ", "حافظ", "انشاءاللہ", "ماشاءاللہ", "الحمدللہ", "جزاک",
+                       "جلدی", "صبح", "رات", "شام", "خدا")
+                urduWords.forEach {
                     words.add(WordEntity(word = it, frequency = 100, language = "ur"))
                 }
                 wordDao.insertWords(words)
@@ -135,10 +146,27 @@ class UrduEnglishKeyboardService : InputMethodService() {
         }
     }
 
+    override fun onStartInputView(info: android.view.inputmethod.EditorInfo?, restarting: Boolean) {
+        super.onStartInputView(info, restarting)
+        
+        // Reset keyboard state when opening
+        isShifted = false
+        isEmoji = false
+        isNumbers = false
+        currentEmojiPage = 0
+        currentComposingText.clear()
+        
+        if (::keyboardView.isInitialized) {
+            updateKeyboardLayout()
+            updateSuggestions(emptyList())
+        }
+    }
+
     override fun onFinishInput() {
         super.onFinishInput()
         currentComposingText.clear()
         updateSuggestions(emptyList())
+        popupWindow?.dismiss()
     }
     
     override fun onUpdateSelection(
@@ -164,14 +192,22 @@ class UrduEnglishKeyboardService : InputMethodService() {
         
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         val isDark = currentNightMode == Configuration.UI_MODE_NIGHT_YES
-        val textColor = if (isDark) Color.WHITE else Color.BLACK
+        val textColor = if (isDark) Color.WHITE else Color.parseColor("#E0E0E0")
+        
+        val bgDrawable = android.graphics.drawable.GradientDrawable().apply {
+            setColor(if (isDark) Color.parseColor("#4A4D51") else Color.parseColor("#202124"))
+            cornerRadius = 24f
+            setStroke(2, if (isDark) Color.parseColor("#5A5D61") else Color.parseColor("#3C4043"))
+        }
+        popupView.background = bgDrawable
 
         for (option in keyData.longPressOptions) {
             val btn = TextView(this).apply {
                 text = option
-                textSize = 24f
-                setPadding(32, 24, 32, 24)
+                textSize = 28f
+                setPadding(36, 24, 36, 24)
                 setTextColor(textColor)
+                typeface = if (option.any { it in '\u0600'..'\u06FF' }) keyboardView.getUrduTypeface() else android.graphics.Typeface.DEFAULT
                 val typedArray = obtainStyledAttributes(intArrayOf(android.R.attr.selectableItemBackground))
                 background = typedArray.getDrawable(0)
                 typedArray.recycle()
@@ -184,15 +220,18 @@ class UrduEnglishKeyboardService : InputMethodService() {
             popupView.addView(btn)
         }
 
+        popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+
         popupWindow = PopupWindow(
             popupView,
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT,
-            true
+            false // Must be false so it doesn't steal focus from input connection!
         ).apply {
-            elevation = 8f
-            // Show above the key and slightly offset to center
-            showAsDropDown(keyView, (keyView.width - popupView.measuredWidth) / 2, -keyView.height * 2)
+            elevation = 16f
+            setBackgroundDrawable(android.graphics.drawable.ColorDrawable(Color.TRANSPARENT))
+            isOutsideTouchable = true
+            showAsDropDown(keyView, (keyView.width - popupView.measuredWidth) / 2, -keyView.height * 2 - 20)
         }
     }
 
@@ -239,7 +278,18 @@ class UrduEnglishKeyboardService : InputMethodService() {
                 } else {
                     isEmoji = true
                     isNumbers = false
+                    currentEmojiPage = 0
                 }
+                updateKeyboardLayout()
+            }
+            KeyboardLayouts.CODE_EMOJI_NEXT_PAGE -> {
+                val maxPages = KeyboardLayouts.emojiLayoutPages.size
+                currentEmojiPage = (currentEmojiPage + 1) % maxPages
+                updateKeyboardLayout()
+            }
+            KeyboardLayouts.CODE_EMOJI_PREV_PAGE -> {
+                val maxPages = KeyboardLayouts.emojiLayoutPages.size
+                currentEmojiPage = (currentEmojiPage - 1 + maxPages) % maxPages
                 updateKeyboardLayout()
             }
             KeyboardLayouts.CODE_SPACE -> {
@@ -351,7 +401,9 @@ class UrduEnglishKeyboardService : InputMethodService() {
 
     private fun updateKeyboardLayout() {
         val layout = if (isEmoji) {
-            KeyboardLayouts.emojiLayout
+            val maxPages = KeyboardLayouts.emojiLayoutPages.size
+            if (currentEmojiPage !in 0 until maxPages) currentEmojiPage = 0
+            KeyboardLayouts.emojiLayoutPages[currentEmojiPage]
         } else if (isNumbers) {
             if (isEnglish) KeyboardLayouts.numberSymbolLayout else KeyboardLayouts.urduNumberSymbolLayout
         } else if (isEnglish) {

@@ -3,14 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="#E0E0E0">
+    android:paddingBottom="4dp"
+    android:background="#E8EAED"> <!-- Gboard Material Light Gray -->
 
     <include layout="@layout/suggestion_bar" />
 
     <com.example.urduenglishkeyboard.ui.CustomKeyboardView
         android:id="@+id/custom_keyboard_view"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:padding="4dp" />
+        android:layout_height="240dp"
+        android:paddingTop="6dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp" />
         
 </LinearLayout>

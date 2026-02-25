@@ -2,11 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/suggestion_bar_layout"
     android:layout_width="match_parent"
-    android:layout_height="48dp"
+    android:layout_height="52dp"
     android:orientation="horizontal"
-    android:background="#D0D0D0"
+    android:background="#00000000"
     android:gravity="center"
-    android:elevation="4dp">
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp">
 
     <TextView
         android:id="@+id/suggestion1"
@@ -15,36 +16,32 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text=""
-        android:textColor="#000"
-        android:textSize="18sp"
-        android:background="?android:attr/selectableItemBackground"/>
+        android:textColor="#3C4043"
+        android:textSize="17sp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"/>
 
     <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="#A0A0A0"/>
+        android:layout_width="0.5dp"
+        android:layout_height="24dp"
+        android:background="#33A0A0A0"/>
 
     <TextView
         android:id="@+id/suggestion2"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="1.2"
         android:gravity="center"
         android:text=""
-        android:textColor="#000"
-        android:textSize="18sp"
+        android:textColor="#18191A"
+        android:textSize="19sp"
         android:textStyle="bold"
-        android:background="?android:attr/selectableItemBackground"/>
+        android:background="?android:attr/selectableItemBackgroundBorderless"/>
 
     <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="#A0A0A0"/>
-
+        android:layout_width="0.5dp"
+        android:layout_height="24dp"
+        android:background="#33A0A0A0"/>
+        
     <TextView
         android:id="@+id/suggestion3"
         android:layout_width="0dp"
@@ -52,7 +49,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text=""
-        android:textColor="#000"
-        android:textSize="18sp"
-        android:background="?android:attr/selectableItemBackground"/>
+        android:textColor="#3C4043"
+        android:textSize="17sp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"/>
 </LinearLayout>

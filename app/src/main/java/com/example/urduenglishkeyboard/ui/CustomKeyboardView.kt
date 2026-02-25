@@ -19,7 +19,7 @@ class CustomKeyboardView @JvmOverloads constructor(
 
     private var keyClickListener: ((KeyData) -> Unit)? = null
     private var isDarkTheme = false
-    private var keyLongClickListener: ((KeyData, TextView) -> Unit)? = null
+    private var keyLongClickListener: ((KeyData, android.view.View) -> Unit)? = null
     private var urduTypeface: android.graphics.Typeface? = null
     
     // Auto-repeat helpers
@@ -60,9 +60,11 @@ class CustomKeyboardView @JvmOverloads constructor(
         this.keyClickListener = listener
     }
     
-    fun setOnKeyLongClickListener(listener: (KeyData, TextView) -> Unit) {
+    fun setOnKeyLongClickListener(listener: (KeyData, android.view.View) -> Unit) {
         this.keyLongClickListener = listener
     }
+    
+    fun getUrduTypeface(): android.graphics.Typeface? = urduTypeface
 
     private var currentLayoutHashCode: Int = 0
 
@@ -91,80 +93,172 @@ class CustomKeyboardView @JvmOverloads constructor(
                 val rowLayout = getChildAt(i) as LinearLayout
                 val rowData = rows[i]
                 for (j in 0 until rowLayout.childCount) {
-                    val keyView = rowLayout.getChildAt(j) as TextView
+                    val keyContainer = rowLayout.getChildAt(j) as android.widget.FrameLayout
                     val key = rowData[j]
-                    
-                    keyView.text = if (isShifted && key.shiftLabel.isNotEmpty()) key.shiftLabel else key.label
+                    val mainLabel = keyContainer.getChildAt(0) as TextView
+                    mainLabel.text = if (isShifted && key.shiftLabel.isNotEmpty()) key.shiftLabel else key.label
                 }
             }
         }
     }
     
-    private fun createKeyView(key: KeyData, isShifted: Boolean, isUrdu: Boolean): TextView {
-        return TextView(context).apply {
+    private var keyPopupWindow: PopupWindow? = null
+    private var popupTextView: TextView? = null
+
+    private fun showKeyPopup(keyView: android.view.View, label: String, isFunctional: Boolean = false) {
+        if (label.isBlank() || isFunctional) return
+        
+        if (keyPopupWindow == null) {
+            val popupLayout = android.widget.FrameLayout(context).apply {
+                val bgDrawable = GradientDrawable().apply {
+                    setColor(if (isDarkTheme) Color.parseColor("#4A4D51") else Color.parseColor("#FFFFFF"))
+                    cornerRadius = 28f
+                }
+                background = bgDrawable
+                elevation = 20f
+                setPadding(16, 16, 16, 24)
+            }
+
+            popupTextView = TextView(context).apply {
+                textSize = 42f
+                setTextColor(if (isDarkTheme) Color.WHITE else Color.BLACK)
+                gravity = Gravity.CENTER
+                layoutParams = android.widget.FrameLayout.LayoutParams(
+                    android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                    android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                    Gravity.CENTER
+                )
+            }
+            popupLayout.addView(popupTextView)
+
+            keyPopupWindow = PopupWindow(popupLayout, 160, 200, false).apply {
+                isClippingEnabled = false
+            }
+        }
+        
+        popupTextView?.text = label
+        popupTextView?.typeface = if (label.any { it in '\u0600'..'\u06FF' }) urduTypeface else android.graphics.Typeface.DEFAULT
+        
+        val location = IntArray(2)
+        keyView.getLocationInWindow(location)
+        val viewX = location[0]
+        val viewY = location[1]
+
+        keyPopupWindow?.showAtLocation(
+            keyView,
+            Gravity.NO_GRAVITY,
+            viewX + keyView.width / 2 - 80,
+            viewY - 200 + 40
+        )
+    }
+
+    private fun dismissKeyPopup() {
+        keyPopupWindow?.dismiss()
+    }
+
+    private fun createKeyView(key: KeyData, isShifted: Boolean, isUrdu: Boolean): android.view.View {
+        val container = android.widget.FrameLayout(context).apply {
             val lParams = LayoutParams(0, LayoutParams.MATCH_PARENT, key.weight)
-            lParams.setMargins(8, 12, 8, 12)
+            lParams.setMargins(6, 12, 6, 12)
             layoutParams = lParams
             
-            text = if (isShifted && key.shiftLabel.isNotEmpty()) key.shiftLabel else key.label
-            gravity = Gravity.CENTER
-            val textColor = if (isDarkTheme) Color.WHITE else Color.parseColor("#1F1F1F")
-            setTextColor(textColor)
-            
-            if (isUrdu && !key.isFunctional) {
-                typeface = urduTypeface
-                textSize = 28f // Nastaliq requires larger text
-            } else {
-                typeface = android.graphics.Typeface.DEFAULT
-                textSize = 24f
-            }
-            
             val bgDrawable = GradientDrawable().apply {
-                val regularBg = if (isDarkTheme) Color.parseColor("#3C4043") else Color.WHITE
-                val functionalBg = if (isDarkTheme) Color.parseColor("#2E3134") else Color.parseColor("#D2D6DA")
+                val regularBg = if (isDarkTheme) Color.parseColor("#292C31") else Color.WHITE
+                val functionalBg = if (isDarkTheme) Color.parseColor("#1C1E21") else Color.parseColor("#D4D6D9")
                 setColor(if (key.isFunctional) functionalBg else regularBg)
-                cornerRadius = 24f // Softer, more modern rounded corners
+                cornerRadius = 20f // Pill-shaped modern feel
             }
+            elevation = 3f // Very subtle drop shadow
+            
             val rippleColor = android.content.res.ColorStateList.valueOf(Color.parseColor(if (isDarkTheme) "#55AAAAAA" else "#33000000"))
             background = android.graphics.drawable.RippleDrawable(rippleColor, bgDrawable, null)
-            elevation = 6f // Adds a subtle drop shadow to buttons
             
             isClickable = true
             isFocusable = true
                     
-                    setOnTouchListener { v, event ->
-                        when (event.action) {
-                            android.view.MotionEvent.ACTION_UP, android.view.MotionEvent.ACTION_CANCEL -> {
-                                if (isRepeating) {
-                                    isRepeating = false
-                                    repeatingKey = null
-                                    repeatHandler.removeCallbacks(repeatRunnable)
-                                }
-                            }
-                        }
-                        false // Allow the TextView to handle click and ripples normally
+            setOnTouchListener { v, event ->
+                when (event.action) {
+                    android.view.MotionEvent.ACTION_DOWN -> {
+                        val currentLabel = if (isShifted && key.shiftLabel.isNotEmpty()) key.shiftLabel else key.label
+                        showKeyPopup(this, currentLabel, key.isFunctional)
                     }
+                    android.view.MotionEvent.ACTION_UP, android.view.MotionEvent.ACTION_CANCEL -> {
+                        dismissKeyPopup()
+                        if (isRepeating) {
+                            isRepeating = false
+                            repeatingKey = null
+                            repeatHandler.removeCallbacks(repeatRunnable)
+                        }
+                    }
+                }
+                false
+            }
                     
-                    setOnClickListener {
-                        if (!isRepeating) { // Do not trigger an extra click if auto-repeat ran
-                            keyClickListener?.invoke(key)
-                        }
-                    }
+            setOnClickListener {
+                if (!isRepeating) {
+                    keyClickListener?.invoke(key)
+                }
+            }
                     
             setOnLongClickListener {
                 if (key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_DELETE || key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_SPACE) {
-                    // Start auto-repeating for backspace and space
                     isRepeating = true
                     repeatingKey = key
                     repeatHandler.post(repeatRunnable)
                     true
                 } else if (key.longPressOptions.isNotEmpty()) {
+                    dismissKeyPopup()
                     keyLongClickListener?.invoke(key, this)
-                    true // Consume the long click event
+                    true
                 } else {
-                    false // Allow normal click
+                    false
                 }
             }
         }
+        
+        val textColor = if (isDarkTheme) Color.WHITE else Color.BLACK
+        
+        val mainTextView = TextView(context).apply {
+            layoutParams = android.widget.FrameLayout.LayoutParams(
+                android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                Gravity.CENTER
+            )
+            text = if (isShifted && key.shiftLabel.isNotEmpty()) key.shiftLabel else key.label
+            setTextColor(textColor)
+            gravity = Gravity.CENTER
+            
+            if (isUrdu && !key.isFunctional) {
+                typeface = urduTypeface
+                textSize = 30f
+            } else {
+                typeface = android.graphics.Typeface.DEFAULT
+                textSize = 26f
+            }
+        }
+        
+        container.addView(mainTextView)
+        
+        // Secondary label hint for long-press
+        if (key.longPressOptions.isNotEmpty() && !key.isFunctional) {
+            val hintTextView = TextView(context).apply {
+                val params = android.widget.FrameLayout.LayoutParams(
+                    android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                    android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                    Gravity.TOP or Gravity.END
+                )
+                params.setMargins(0, 10, 14, 0)
+                layoutParams = params
+                text = key.longPressOptions[0]
+                setTextColor(Color.parseColor(if (isDarkTheme) "#A0A0A0" else "#707070"))
+                textSize = 11f
+                if (isUrdu) {
+                    typeface = urduTypeface
+                }
+            }
+            container.addView(hintTextView)
+        }
+        
+        return container
     }
 }
