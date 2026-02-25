@@ -64,46 +64,73 @@ class CustomKeyboardView @JvmOverloads constructor(
         this.keyLongClickListener = listener
     }
 
+    private var currentLayoutHashCode: Int = 0
+
     fun renderLayout(rows: List<List<KeyData>>, isShifted: Boolean, isUrdu: Boolean = false) {
-        removeAllViews()
+        val layoutHash = rows.hashCode()
+        val requiresFullRedraw = currentLayoutHashCode != layoutHash || childCount == 0
         
-        for (row in rows) {
-            val rowLayout = LinearLayout(context).apply {
-                orientation = HORIZONTAL
-                layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, 0, 1f)
+        if (requiresFullRedraw) {
+            removeAllViews()
+            currentLayoutHashCode = layoutHash
+            
+            for (rowParams in rows) {
+                val rowLayout = LinearLayout(context).apply {
+                    orientation = HORIZONTAL
+                    layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, 0, 1f)
+                }
+                for (key in rowParams) {
+                    val keyView = createKeyView(key, isShifted, isUrdu)
+                    rowLayout.addView(keyView)
+                }
+                addView(rowLayout)
+            }
+        } else {
+            // Fast Path: Layout hasn't changed structure, just update labels
+            for (i in 0 until childCount) {
+                val rowLayout = getChildAt(i) as LinearLayout
+                val rowData = rows[i]
+                for (j in 0 until rowLayout.childCount) {
+                    val keyView = rowLayout.getChildAt(j) as TextView
+                    val key = rowData[j]
+                    
+                    keyView.text = if (isShifted && key.shiftLabel.isNotEmpty()) key.shiftLabel else key.label
+                }
+            }
+        }
+    }
+    
+    private fun createKeyView(key: KeyData, isShifted: Boolean, isUrdu: Boolean): TextView {
+        return TextView(context).apply {
+            val lParams = LayoutParams(0, LayoutParams.MATCH_PARENT, key.weight)
+            lParams.setMargins(8, 12, 8, 12)
+            layoutParams = lParams
+            
+            text = if (isShifted && key.shiftLabel.isNotEmpty()) key.shiftLabel else key.label
+            gravity = Gravity.CENTER
+            val textColor = if (isDarkTheme) Color.WHITE else Color.parseColor("#1F1F1F")
+            setTextColor(textColor)
+            
+            if (isUrdu && !key.isFunctional) {
+                typeface = urduTypeface
+                textSize = 28f // Nastaliq requires larger text
+            } else {
+                typeface = android.graphics.Typeface.DEFAULT
+                textSize = 24f
             }
             
-            for (key in row) {
-                val keyView = TextView(context).apply {
-                    val lParams = LayoutParams(0, LayoutParams.MATCH_PARENT, key.weight)
-                    lParams.setMargins(8, 12, 8, 12)
-                    layoutParams = lParams
-                    
-                    text = if (isShifted && key.shiftLabel.isNotEmpty()) key.shiftLabel else key.label
-                    gravity = Gravity.CENTER
-                    val textColor = if (isDarkTheme) Color.WHITE else Color.parseColor("#1F1F1F")
-                    setTextColor(textColor)
-                    
-                    if (isUrdu && !key.isFunctional) {
-                        typeface = urduTypeface
-                        textSize = 28f // Nastaliq requires larger text
-                    } else {
-                        typeface = android.graphics.Typeface.DEFAULT
-                        textSize = 24f
-                    }
-                    
-                    val bgDrawable = GradientDrawable().apply {
-                        val regularBg = if (isDarkTheme) Color.parseColor("#3C4043") else Color.WHITE
-                        val functionalBg = if (isDarkTheme) Color.parseColor("#2E3134") else Color.parseColor("#D2D6DA")
-                        setColor(if (key.isFunctional) functionalBg else regularBg)
-                        cornerRadius = 24f // Softer, more modern rounded corners
-                    }
-                    val rippleColor = android.content.res.ColorStateList.valueOf(Color.parseColor(if (isDarkTheme) "#55AAAAAA" else "#33000000"))
-                    background = android.graphics.drawable.RippleDrawable(rippleColor, bgDrawable, null)
-                    elevation = 6f // Adds a subtle drop shadow to buttons
-                    
-                    isClickable = true
-                    isFocusable = true
+            val bgDrawable = GradientDrawable().apply {
+                val regularBg = if (isDarkTheme) Color.parseColor("#3C4043") else Color.WHITE
+                val functionalBg = if (isDarkTheme) Color.parseColor("#2E3134") else Color.parseColor("#D2D6DA")
+                setColor(if (key.isFunctional) functionalBg else regularBg)
+                cornerRadius = 24f // Softer, more modern rounded corners
+            }
+            val rippleColor = android.content.res.ColorStateList.valueOf(Color.parseColor(if (isDarkTheme) "#55AAAAAA" else "#33000000"))
+            background = android.graphics.drawable.RippleDrawable(rippleColor, bgDrawable, null)
+            elevation = 6f // Adds a subtle drop shadow to buttons
+            
+            isClickable = true
+            isFocusable = true
                     
                     setOnTouchListener { v, event ->
                         when (event.action) {
@@ -124,24 +151,20 @@ class CustomKeyboardView @JvmOverloads constructor(
                         }
                     }
                     
-                    setOnLongClickListener {
-                        if (key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_DELETE || key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_SPACE) {
-                            // Start auto-repeating for backspace and space
-                            isRepeating = true
-                            repeatingKey = key
-                            repeatHandler.post(repeatRunnable)
-                            true
-                        } else if (key.longPressOptions.isNotEmpty()) {
-                            keyLongClickListener?.invoke(key, this)
-                            true // Consume the long click event
-                        } else {
-                            false // Allow normal click
-                        }
-                    }
+            setOnLongClickListener {
+                if (key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_DELETE || key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_SPACE) {
+                    // Start auto-repeating for backspace and space
+                    isRepeating = true
+                    repeatingKey = key
+                    repeatHandler.post(repeatRunnable)
+                    true
+                } else if (key.longPressOptions.isNotEmpty()) {
+                    keyLongClickListener?.invoke(key, this)
+                    true // Consume the long click event
+                } else {
+                    false // Allow normal click
                 }
-                rowLayout.addView(keyView)
             }
-            addView(rowLayout)
         }
     }
 }

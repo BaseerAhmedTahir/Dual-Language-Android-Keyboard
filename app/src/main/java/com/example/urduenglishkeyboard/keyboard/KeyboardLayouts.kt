@@ -90,6 +90,29 @@ object KeyboardLayouts {
         )
     )
 
+    val urduNumberSymbolLayout = listOf(
+        listOf(
+            KeyData('۱'.code, "۱", "۱"), KeyData('۲'.code, "۲", "۲"), KeyData('۳'.code, "۳", "۳"), KeyData('۴'.code, "۴", "۴"), KeyData('۵'.code, "۵", "۵"),
+            KeyData('۶'.code, "۶", "۶"), KeyData('۷'.code, "۷", "۷"), KeyData('۸'.code, "۸", "۸"), KeyData('۹'.code, "۹", "۹"), KeyData('۰'.code, "۰", "۰")
+        ),
+        listOf(
+            KeyData('@'.code, "@", "@"), KeyData('#'.code, "#", "#"), KeyData('$'.code, "$", "$"), KeyData('%'.code, "%", "%"), KeyData('&'.code, "&", "&"),
+            KeyData('-'.code, "-", "-"), KeyData('+'.code, "+", "+"), KeyData('('.code, "(", "("), KeyData(')'.code, ")", ")"), KeyData('/'.code, "/", "/")
+        ),
+        listOf(
+            KeyData('*'.code, "*", "*"), KeyData('"'.code, "\"", "\""), KeyData('\''.code, "'", "'"), KeyData(':'.code, ":", ":"), KeyData('؛'.code, "؛", "؛"),
+            KeyData('!'.code, "!", "!"), KeyData('؟'.code, "؟", "؟"), KeyData(CODE_DELETE, "⌫", "⌫", true, 1.5f)
+        ),
+        listOf(
+            KeyData(CODE_NUMBERS, "ابپ", "ابپ", true, 1.2f),
+            KeyData(CODE_EMOJI, "😀", "😀", true, 1f),
+            KeyData('،'.code, "،", "،"),
+            KeyData(CODE_SPACE, " ", " ", true, 3.5f),
+            KeyData('۔'.code, "۔", "."),
+            KeyData(CODE_ENTER, "↵", "↵", true, 1.2f)
+        )
+    )
+
     val emojiLayout = listOf(
         listOf(
             KeyData(0, "😀", "😀"), KeyData(0, "😂", "😂"), KeyData(0, "😊", "😊"), KeyData(0, "😍", "😍"), KeyData(0, "😒", "😒"), KeyData(0, "😘", "😘"), KeyData(0, "😁", "😁")

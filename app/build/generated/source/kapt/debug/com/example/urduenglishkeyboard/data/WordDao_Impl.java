@@ -6,12 +6,15 @@ import androidx.annotation.NonNull;
 import androidx.room.CoroutinesRoom;
 import androidx.room.EntityInsertionAdapter;
 import androidx.room.RoomDatabase;
+import androidx.room.RoomDatabaseKt;
 import androidx.room.RoomSQLiteQuery;
+import androidx.room.SharedSQLiteStatement;
 import androidx.room.util.CursorUtil;
 import androidx.room.util.DBUtil;
 import androidx.sqlite.db.SupportSQLiteStatement;
 import java.lang.Class;
 import java.lang.Exception;
+import java.lang.Integer;
 import java.lang.Object;
 import java.lang.Override;
 import java.lang.String;
@@ -32,6 +35,8 @@ public final class WordDao_Impl implements WordDao {
   private final EntityInsertionAdapter<WordEntity> __insertionAdapterOfWordEntity;
 
   private final EntityInsertionAdapter<WordEntity> __insertionAdapterOfWordEntity_1;
+
+  private final SharedSQLiteStatement __preparedStmtOfIncrementWordFrequency;
 
   public WordDao_Impl(@NonNull final RoomDatabase __db) {
     this.__db = __db;
@@ -83,6 +88,14 @@ public final class WordDao_Impl implements WordDao {
         }
       }
     };
+    this.__preparedStmtOfIncrementWordFrequency = new SharedSQLiteStatement(__db) {
+      @Override
+      @NonNull
+      public String createQuery() {
+        final String _query = "UPDATE words SET frequency = frequency + ? WHERE word = ? AND language = ?";
+        return _query;
+      }
+    };
   }
 
   @Override
@@ -117,6 +130,50 @@ public final class WordDao_Impl implements WordDao {
           return Unit.INSTANCE;
         } finally {
           __db.endTransaction();
+        }
+      }
+    }, $completion);
+  }
+
+  @Override
+  public Object upsertWord(final String word, final String lang, final int amount,
+      final Continuation<? super Unit> $completion) {
+    return RoomDatabaseKt.withTransaction(__db, (__cont) -> WordDao.DefaultImpls.upsertWord(WordDao_Impl.this, word, lang, amount, __cont), $completion);
+  }
+
+  @Override
+  public Object incrementWordFrequency(final String word, final String lang, final int amount,
+      final Continuation<? super Integer> $completion) {
+    return CoroutinesRoom.execute(__db, true, new Callable<Integer>() {
+      @Override
+      @NonNull
+      public Integer call() throws Exception {
+        final SupportSQLiteStatement _stmt = __preparedStmtOfIncrementWordFrequency.acquire();
+        int _argIndex = 1;
+        _stmt.bindLong(_argIndex, amount);
+        _argIndex = 2;
+        if (word == null) {
+          _stmt.bindNull(_argIndex);
+        } else {
+          _stmt.bindString(_argIndex, word);
+        }
+        _argIndex = 3;
+        if (lang == null) {
+          _stmt.bindNull(_argIndex);
+        } else {
+          _stmt.bindString(_argIndex, lang);
+        }
+        try {
+          __db.beginTransaction();
+          try {
+            final Integer _result = _stmt.executeUpdateDelete();
+            __db.setTransactionSuccessful();
+            return _result;
+          } finally {
+            __db.endTransaction();
+          }
+        } finally {
+          __preparedStmtOfIncrementWordFrequency.release(_stmt);
         }
       }
     }, $completion);

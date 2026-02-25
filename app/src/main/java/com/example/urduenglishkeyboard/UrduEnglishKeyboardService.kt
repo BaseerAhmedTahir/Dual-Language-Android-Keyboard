@@ -40,6 +40,7 @@ class UrduEnglishKeyboardService : InputMethodService() {
     
     private val serviceJob = Job()
     private val coroutineScope = CoroutineScope(Dispatchers.Main + serviceJob)
+    private var suggestionJob: Job? = null
     private lateinit var wordDao: WordDao
     
     private var currentComposingText = StringBuilder()
@@ -106,15 +107,30 @@ class UrduEnglishKeyboardService : InputMethodService() {
         coroutineScope.launch(Dispatchers.IO) {
             val testSuggestions = wordDao.getSuggestions("t", "en")
             if (testSuggestions.isEmpty()) {
-                wordDao.insertWords(listOf(
-                    WordEntity(word = "the", frequency = 100, language = "en"),
-                    WordEntity(word = "this", frequency = 90, language = "en"),
-                    WordEntity(word = "that", frequency = 85, language = "en"),
-                    WordEntity(word = "there", frequency = 80, language = "en"),
-                    WordEntity(word = "سلام", frequency = 100, language = "ur"),
-                    WordEntity(word = "کیا", frequency = 90, language = "ur"),
-                    WordEntity(word = "ہے", frequency = 85, language = "ur")
-                ))
+                val words = mutableListOf<WordEntity>()
+                // Common English words
+                listOf("the", "to", "and", "that", "this", "they", "there", "their", "then", "them", "these", "those",
+                       "time", "today", "tomorrow", "thanks", "think", "thing", "take", "tell", "talk", "try",
+                       "hello", "hi", "how", "have", "has", "had", "here", "help", "hope", "happy", "home",
+                       "you", "your", "yours", "yes", "yeah", "year", "yesterday",
+                       "we", "will", "what", "where", "when", "why", "who", "which", "with", "would", "want", "work", "well",
+                       "are", "about", "all", "also", "any", "after", "always", "around", "ask", "answer",
+                       "is", "it", "its", "if", "in", "into", "can", "could", "call", "come", "good", "great",
+                       "for", "from", "find", "first", "friend", "not", "now", "new", "no", "never", "need").forEach {
+                    words.add(WordEntity(word = it, frequency = 100, language = "en"))
+                }
+                
+                // Common Urdu words
+                listOf("کیا", "کیوں", "کب", "کیسے", "کہاں", "کون", "کچھ", "کوئی", "کہہ", "کر", "کرو", "کریں", "کرنا",
+                       "ہے", "ہیں", "ہو", "ہوں", "ہاں", "ہوتا", "ہوتی", "ہوتے", "ہمارا", "ہماری", "ہمارے", "ہم", "ہر",
+                       "اور", "اب", "اس", "ان", "اپنا", "اپنی", "اپنے", "اچھا", "اچھی", "اچھے", "آج", "آؤ", "آئیں", "آپ",
+                       "یہ", "یہاں", "یاد", "یقین", "یا", "تھا", "تھی", "تھے", "تم", "تیرا", "تیری", "تیرے", "تمہارا", "تو", "تک",
+                       "میں", "میرا", "میری", "میرے", "مجھے", "مت", "مزید", "بہت", "بات", "بھی", "باہر", "بار", "بعد",
+                       "نہیں", "نہ", "نام", "نے", "نظر", "دے", "دیں", "دو", "دیا", "دن", "دیر", "دیکھ", "دیکھو",
+                       "سلام", "شکریہ", "وقت", "وہ", "وہاں", "واپس", "لو", "لیں", "لیا", "لگتا", "لگتی", "لگتے").forEach {
+                    words.add(WordEntity(word = it, frequency = 100, language = "ur"))
+                }
+                wordDao.insertWords(words)
             }
         }
     }
@@ -123,6 +139,20 @@ class UrduEnglishKeyboardService : InputMethodService() {
         super.onFinishInput()
         currentComposingText.clear()
         updateSuggestions(emptyList())
+    }
+    
+    override fun onUpdateSelection(
+        oldSelStart: Int, oldSelEnd: Int,
+        newSelStart: Int, newSelEnd: Int,
+        candidatesStart: Int, candidatesEnd: Int
+    ) {
+        super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
+        // If the user taps away from the composing text, reset the composing buffer
+        if (currentComposingText.isNotEmpty() && (newSelStart != candidatesEnd || newSelEnd != candidatesEnd)) {
+            currentComposingText.clear()
+            updateSuggestions(emptyList())
+            currentInputConnection?.finishComposingText()
+        }
     }
 
     private fun handleKeyLongClick(keyData: KeyData, keyView: View) {
@@ -214,12 +244,10 @@ class UrduEnglishKeyboardService : InputMethodService() {
             }
             KeyboardLayouts.CODE_SPACE -> {
                 if (currentComposingText.isNotEmpty()) {
-                    val topSuggestion = suggestion2.text.toString()
-                    if (topSuggestion.isNotEmpty()) {
-                        inputConnection.commitText(topSuggestion + " ", 1)
-                    } else {
-                        inputConnection.commitText(currentComposingText.toString() + " ", 1)
-                    }
+                    saveWordToDictionary(currentComposingText.toString())
+                    // We clear composing text cleanly before writing out the raw input
+                    inputConnection.setComposingText("", 0)
+                    inputConnection.commitText(currentComposingText.toString() + " ", 1)
                     currentComposingText.clear()
                     updateSuggestions(emptyList())
                 } else {
@@ -228,6 +256,7 @@ class UrduEnglishKeyboardService : InputMethodService() {
             }
             KeyboardLayouts.CODE_ENTER -> {
                 if (currentComposingText.isNotEmpty()) {
+                    saveWordToDictionary(currentComposingText.toString())
                     inputConnection.commitText(currentComposingText.toString(), 1)
                     currentComposingText.clear()
                     updateSuggestions(emptyList())
@@ -281,7 +310,10 @@ class UrduEnglishKeyboardService : InputMethodService() {
         }
         
         val lang = if (isEnglish) "en" else "ur"
-        coroutineScope.launch {
+        suggestionJob?.cancel() // Cancel previous in-flight database request
+        suggestionJob = coroutineScope.launch {
+            // Slight delay to debounce rapid typing
+            kotlinx.coroutines.delay(50) 
             val suggestions = withContext(Dispatchers.IO) {
                 wordDao.getSuggestions(prefix.lowercase(), lang)
             }
@@ -297,16 +329,31 @@ class UrduEnglishKeyboardService : InputMethodService() {
 
     private fun commitSuggestion(word: String) {
         val inputConnection = currentInputConnection ?: return
+        if (currentComposingText.isNotEmpty()) {
+            // Safely clear the buggy prefix before committing suggestion
+            inputConnection.setComposingText("", 0)
+        }
+        saveWordToDictionary(word, 3) // Boost frequency highly since user picked it
         inputConnection.commitText("$word ", 1)
         currentComposingText.clear()
         updateSuggestions(emptyList())
+    }
+    
+    private fun saveWordToDictionary(word: String, boostValue: Int = 1) {
+        if (word.isBlank() || isEmoji || isNumbers) return
+        val lang = if (isEnglish) "en" else "ur"
+        coroutineScope.launch {
+            withContext(Dispatchers.IO) {
+                wordDao.upsertWord(word.lowercase(), lang, boostValue)
+            }
+        }
     }
 
     private fun updateKeyboardLayout() {
         val layout = if (isEmoji) {
             KeyboardLayouts.emojiLayout
         } else if (isNumbers) {
-            KeyboardLayouts.numberSymbolLayout
+            if (isEnglish) KeyboardLayouts.numberSymbolLayout else KeyboardLayouts.urduNumberSymbolLayout
         } else if (isEnglish) {
             KeyboardLayouts.englishQwerty
         } else {

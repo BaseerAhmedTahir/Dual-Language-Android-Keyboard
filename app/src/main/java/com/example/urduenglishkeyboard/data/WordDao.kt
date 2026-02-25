@@ -15,4 +15,15 @@ interface WordDao {
     
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertWords(words: List<WordEntity>)
+    
+    @Query("UPDATE words SET frequency = frequency + :amount WHERE word = :word AND language = :lang")
+    suspend fun incrementWordFrequency(word: String, lang: String, amount: Int): Int
+    
+    @androidx.room.Transaction
+    suspend fun upsertWord(word: String, lang: String, amount: Int = 1) {
+        val rowsAffected = incrementWordFrequency(word, lang, amount)
+        if (rowsAffected == 0) {
+            insertWord(WordEntity(word = word, frequency = amount, language = lang))
+        }
+    }
 }
