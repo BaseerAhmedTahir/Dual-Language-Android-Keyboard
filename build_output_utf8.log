@@ -43,9 +43,9 @@ top/keeyboard/app/src/m
 ain/java/com/example/ur
 duenglishkeyboard/UrduE
 nglishKeyboardService.k
-t:210:86 Unresolved 
+t:291:29 Unresolved 
 reference: 
-getUrduTypeface
+CODE_EMOJI_NEXT_PAGE
 At line:1 char:1
 + ./gradlew 
 assembleDebug 
@@ -58,13 +58,117 @@ Get- ...
     + CategoryInfo     
          : NotSpecifi  
   ed: (e: file:///C:   
- /U...getUrduTypefa    
-ce:String) [], Rem    
+ /U...EMOJI_NEXT_PA    
+GE:String) [], Rem    
 oteException
     + FullyQualifiedEr 
    rorId : NativeComm  
   andError
  
+e: file:///C:/Users/Mus
+tafavi/Desktop/keeyboar
+d/app/src/main/java/com
+/example/urduenglishkey
+board/UrduEnglishKeyboa
+rdService.kt:292:48 
+Unresolved reference: 
+emojiLayoutPages
+e: file:///C:/Users/Mus
+tafavi/Desktop/keeyboar
+d/app/src/main/java/com
+/example/urduenglishkey
+board/UrduEnglishKeyboa
+rdService.kt:293:59 
+Overload resolution 
+ambiguity: 
+public final operator 
+fun rem(other: Byte): 
+Int defined in 
+kotlin.Int
+public final operator 
+fun rem(other: 
+Double): Double 
+defined in kotlin.Int
+public final operator 
+fun rem(other: Float): 
+Float defined in 
+kotlin.Int
+public final operator 
+fun rem(other: Int): 
+Int defined in 
+kotlin.Int
+public final operator 
+fun rem(other: Long): 
+Long defined in 
+kotlin.Int
+public final operator 
+fun rem(other: Short): 
+Int defined in 
+kotlin.Int
+e: file:///C:/Users/Mus
+tafavi/Desktop/keeyboar
+d/app/src/main/java/com
+/example/urduenglishkey
+board/UrduEnglishKeyboa
+rdService.kt:296:29 
+Unresolved reference: 
+CODE_EMOJI_PREV_PAGE
+e: file:///C:/Users/Mus
+tafavi/Desktop/keeyboar
+d/app/src/main/java/com
+/example/urduenglishkey
+board/UrduEnglishKeyboa
+rdService.kt:297:48 
+Unresolved reference: 
+emojiLayoutPages
+e: file:///C:/Users/Mus
+tafavi/Desktop/keeyboar
+d/app/src/main/java/com
+/example/urduenglishkey
+board/UrduEnglishKeyboa
+rdService.kt:298:58 
+Overload resolution 
+ambiguity: 
+public final operator 
+fun plus(other: Byte): 
+Int defined in 
+kotlin.Int
+public final operator 
+fun plus(other: 
+Double): Double 
+defined in kotlin.Int
+public final operator 
+fun plus(other: 
+Float): Float defined 
+in kotlin.Int
+public final operator 
+fun plus(other: Int): 
+Int defined in 
+kotlin.Int
+public final operator 
+fun plus(other: Long): 
+Long defined in 
+kotlin.Int
+public final operator 
+fun plus(other: 
+Short): Int defined in 
+kotlin.Int
+e: file:///C:/Users/Mus
+tafavi/Desktop/keeyboar
+d/app/src/main/java/com
+/example/urduenglishkey
+board/UrduEnglishKeyboa
+rdService.kt:410:44 
+Unresolved reference: 
+emojiLayoutPages
+e: file:///C:/Users/Mus
+tafavi/Desktop/keeyboar
+d/app/src/main/java/com
+/example/urduenglishkey
+board/UrduEnglishKeyboa
+rdService.kt:412:29 
+Unresolved reference: 
+emojiLayoutPages
 
 FAILURE: Build failed 
 with an exception.
@@ -95,5 +199,5 @@ get full insights.
 > Get more help at http
 s://help.gradle.org.
 
-BUILD FAILED in 19s
+BUILD FAILED in 25s
 30 actionable tasks: 2 executed, 28 up-to-date

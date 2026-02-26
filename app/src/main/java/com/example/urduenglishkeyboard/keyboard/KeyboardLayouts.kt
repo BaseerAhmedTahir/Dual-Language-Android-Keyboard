@@ -8,8 +8,6 @@ object KeyboardLayouts {
     const val CODE_LANGUAGE_SWITCH = -2
     const val CODE_NUMBERS = -3
     const val CODE_EMOJI = -4
-    const val CODE_EMOJI_NEXT_PAGE = -6
-    const val CODE_EMOJI_PREV_PAGE = -7
 
     val englishQwerty = listOf(
         listOf(
@@ -28,13 +26,13 @@ object KeyboardLayouts {
             KeyData('z'.code, "z", "Z", longPressOptions = listOf("ž", "ź")), KeyData('x'.code, "x", "X"), KeyData('c'.code, "c", "C", longPressOptions = listOf("ç", "ć", "č")), 
             KeyData('v'.code, "v", "V"), KeyData('b'.code, "b", "B"), KeyData('n'.code, "n", "N", longPressOptions = listOf("ñ", "ń")), 
             KeyData('m'.code, "m", "M"),
-            KeyData(CODE_DELETE, "⌫", "⌫", true, 1.5f)
+            KeyData(CODE_DELETE, "⌫", "⌫", true, 1.5f, longPressOptions = listOf("Clear All"))
         ),
         listOf(
             KeyData(CODE_NUMBERS, "?123", "?123", true, 1.2f),
             KeyData(CODE_EMOJI, "😀", "😀", true, 1f),
             KeyData(CODE_LANGUAGE_SWITCH, "\uD83C\uDF10", "\uD83C\uDF10", true, 1.2f),
-            KeyData(CODE_SPACE, " ", " ", true, 3.5f),
+            KeyData(CODE_SPACE, "English", "English", false, 3.5f), // isFunctional = false for regular tint
             KeyData('.'.code, ".", ".", longPressOptions = listOf(",", "?", "!", ":", ";", "'", "\"")),
             KeyData(CODE_ENTER, "↵", "↵", true, 1.2f)
         )
@@ -42,10 +40,10 @@ object KeyboardLayouts {
 
     val urduPhonetic = listOf(
         listOf(
-            KeyData('ق'.code, "ق", "ْ", longPressOptions = listOf("1", "۱")), KeyData('و'.code, "و", "ّ", longPressOptions = listOf("2", "۲", "ؤ")), KeyData('ع'.code, "ع", "ٰ", longPressOptions = listOf("3", "۳", "أ", "إ")), 
-            KeyData('ر'.code, "ر", "ڑ", longPressOptions = listOf("4", "۴")), KeyData('ت'.code, "ت", "ٹ", longPressOptions = listOf("5", "۵")), KeyData('ے'.code, "ے", "َ", longPressOptions = listOf("6", "۶")), 
-            KeyData('ء'.code, "ء", "ُ", longPressOptions = listOf("7", "۷")), KeyData('ی'.code, "ی", "ِ", longPressOptions = listOf("8", "۸", "ئ")), KeyData('ہ'.code, "ہ", "ۃ", longPressOptions = listOf("9", "۹", "ھ", "ح")), 
-            KeyData('پ'.code, "پ", "ٌ", longPressOptions = listOf("0", "۰"))
+            KeyData('ق'.code, "ق", "◌ْ", longPressOptions = listOf("1", "۱")), KeyData('و'.code, "و", "◌ّ", longPressOptions = listOf("2", "۲", "ؤ")), KeyData('ع'.code, "ع", "◌ٰ", longPressOptions = listOf("3", "۳", "أ", "إ")), 
+            KeyData('ر'.code, "ر", "ڑ", longPressOptions = listOf("4", "۴")), KeyData('ت'.code, "ت", "ٹ", longPressOptions = listOf("5", "۵")), KeyData('ے'.code, "ے", "◌َ", longPressOptions = listOf("6", "۶")), 
+            KeyData('ء'.code, "ء", "◌ُ", longPressOptions = listOf("7", "۷")), KeyData('ی'.code, "ی", "◌ِ", longPressOptions = listOf("8", "۸", "ئ")), KeyData('ہ'.code, "ہ", "ۃ", longPressOptions = listOf("9", "۹", "ھ", "ح")), 
+            KeyData('پ'.code, "پ", "◌ٌ", longPressOptions = listOf("0", "۰"))
         ),
         listOf(
             KeyData('ا'.code, "ا", "آ"), KeyData('س'.code, "س", "ص", longPressOptions = listOf("ث")), KeyData('د'.code, "د", "ڈ", longPressOptions = listOf("ذ")), 
@@ -57,13 +55,13 @@ object KeyboardLayouts {
             KeyData('ز'.code, "ز", "ذ", longPressOptions = listOf("ض", "ظ")), KeyData('ش'.code, "ش", "ژ"), KeyData('چ'.code, "چ", "ث"), 
             KeyData('ط'.code, "ط", "ظ"), KeyData('ب'.code, "ب", "ب"), KeyData('ن'.code, "ن", "ں", longPressOptions = listOf("ڻ")), 
             KeyData('م'.code, "م", "م"),
-            KeyData(CODE_DELETE, "⌫", "⌫", true, 1.5f)
+            KeyData(CODE_DELETE, "⌫", "⌫", true, 1.5f, longPressOptions = listOf("Clear All"))
         ),
         listOf(
             KeyData(CODE_NUMBERS, "?123", "?123", true, 1.2f),
             KeyData(CODE_EMOJI, "😀", "😀", true, 1f),
             KeyData(CODE_LANGUAGE_SWITCH, "\uD83C\uDF10", "\uD83C\uDF10", true, 1.2f),
-            KeyData(CODE_SPACE, " ", " ", true, 3.5f),
+            KeyData(CODE_SPACE, "اردو", "اردو", false, 3.5f), // isFunctional = false
             KeyData('۔'.code, "۔", ".", longPressOptions = listOf("،", "؟", "!", ":", "؛")),
             KeyData(CODE_ENTER, "↵", "↵", true, 1.2f)
         )
@@ -80,13 +78,13 @@ object KeyboardLayouts {
         ),
         listOf(
             KeyData('*'.code, "*", "*", longPressOptions = listOf("★", "†", "‡")), KeyData('"'.code, "\"", "\"", longPressOptions = listOf("“", "”", "«", "»")), KeyData('\''.code, "'", "'", longPressOptions = listOf("‘", "’")), KeyData(':'.code, ":", ":"), KeyData(';'.code, ";", ";"),
-            KeyData('!'.code, "!", "!", longPressOptions = listOf("¡")), KeyData('?'.code, "?", "?", longPressOptions = listOf("¿")), KeyData(CODE_DELETE, "⌫", "⌫", true, 1.5f)
+            KeyData('!'.code, "!", "!", longPressOptions = listOf("¡")), KeyData('?'.code, "?", "?", longPressOptions = listOf("¿")), KeyData(CODE_DELETE, "⌫", "⌫", true, 1.5f, longPressOptions = listOf("Clear All"))
         ),
         listOf(
             KeyData(CODE_NUMBERS, "ABC", "ABC", true, 1.2f),
             KeyData(CODE_EMOJI, "😀", "😀", true, 1f),
             KeyData(','.code, ",", ","),
-            KeyData(CODE_SPACE, " ", " ", true, 3.5f),
+            KeyData(CODE_SPACE, "English", "English", false, 3.5f),
             KeyData('.'.code, ".", ".", longPressOptions = listOf("…")),
             KeyData(CODE_ENTER, "↵", "↵", true, 1.2f)
         )
@@ -103,70 +101,43 @@ object KeyboardLayouts {
         ),
         listOf(
             KeyData('*'.code, "*", "*", longPressOptions = listOf("★")), KeyData('"'.code, "\"", "\"", longPressOptions = listOf("“", "”", "«", "»")), KeyData('\''.code, "'", "'", longPressOptions = listOf("‘", "’")), KeyData(':'.code, ":", ":"), KeyData('؛'.code, "؛", "؛"),
-            KeyData('!'.code, "!", "!", longPressOptions = listOf("¡")), KeyData('؟'.code, "؟", "؟"), KeyData(CODE_DELETE, "⌫", "⌫", true, 1.5f)
+            KeyData('!'.code, "!", "!", longPressOptions = listOf("¡")), KeyData('؟'.code, "؟", "؟"), KeyData(CODE_DELETE, "⌫", "⌫", true, 1.5f, longPressOptions = listOf("Clear All"))
         ),
         listOf(
             KeyData(CODE_NUMBERS, "ابپ", "ابپ", true, 1.2f),
             KeyData(CODE_EMOJI, "😀", "😀", true, 1f),
             KeyData('،'.code, "،", "،"),
-            KeyData(CODE_SPACE, " ", " ", true, 3.5f),
+            KeyData(CODE_SPACE, "اردو", "اردو", false, 3.5f),
             KeyData('۔'.code, "۔", ".", longPressOptions = listOf("…")),
             KeyData(CODE_ENTER, "↵", "↵", true, 1.2f)
         )
     )
 
-    val emojiLayoutPages = listOf(
+    val emojiLayout = listOf(
+        listOf(KeyData(0, "😀", "😀"), KeyData(0, "😃", "😃"), KeyData(0, "😄", "😄"), KeyData(0, "😁", "😁"), KeyData(0, "😆", "😆"), KeyData(0, "😅", "😅"), KeyData(0, "😂", "😂"), KeyData(0, "🤣", "🤣"), KeyData(0, "🥲", "🥲")),
+        listOf(KeyData(0, "🥹", "🥹"), KeyData(0, "☺️", "☺️"), KeyData(0, "😊", "😊"), KeyData(0, "😇", "😇"), KeyData(0, "🙂", "🙂"), KeyData(0, "🙃", "🙃"), KeyData(0, "😉", "😉"), KeyData(0, "😌", "😌"), KeyData(0, "😍", "😍")),
+        listOf(KeyData(0, "🥰", "🥰"), KeyData(0, "😘", "😘"), KeyData(0, "😗", "😗"), KeyData(0, "😙", "😙"), KeyData(0, "😚", "😚"), KeyData(0, "😋", "😋"), KeyData(0, "😛", "😛"), KeyData(0, "😝", "😝"), KeyData(0, "😜", "😜")),
+        listOf(KeyData(0, "🤪", "🤪"), KeyData(0, "🤨", "🤨"), KeyData(0, "🧐", "🧐"), KeyData(0, "🤓", "🤓"), KeyData(0, "😎", "😎"), KeyData(0, "🥸", "🥸"), KeyData(0, "🤩", "🤩"), KeyData(0, "🥳", "🥳"), KeyData(0, "😏", "😏")),
+        
+        listOf(KeyData(0, "😒", "😒"), KeyData(0, "😞", "😞"), KeyData(0, "😔", "😔"), KeyData(0, "😟", "😟"), KeyData(0, "😕", "😕"), KeyData(0, "🙁", "🙁"), KeyData(0, "😣", "😣"), KeyData(0, "😖", "😖"), KeyData(0, "😫", "😫")),
+        listOf(KeyData(0, "😩", "😩"), KeyData(0, "🥺", "🥺"), KeyData(0, "😢", "😢"), KeyData(0, "😭", "😭"), KeyData(0, "😮‍💨", "😮‍💨"), KeyData(0, "😤", "😤"), KeyData(0, "😠", "😠"), KeyData(0, "😡", "😡"), KeyData(0, "🤬", "🤬")),
+        listOf(KeyData(0, "🤯", "🤯"), KeyData(0, "😳", "😳"), KeyData(0, "🥵", "🥵"), KeyData(0, "🥶", "🥶"), KeyData(0, "😱", "😱"), KeyData(0, "😨", "😨"), KeyData(0, "😰", "😰"), KeyData(0, "😥", "😥"), KeyData(0, "😓", "😓")),
+        listOf(KeyData(0, "🤗", "🤗"), KeyData(0, "🤔", "🤔"), KeyData(0, "🫣", "🫣"), KeyData(0, "🤭", "🤭"), KeyData(0, "🤫", "🤫"), KeyData(0, "🤥", "🤥"), KeyData(0, "😶", "😶"), KeyData(0, "😐", "😐"), KeyData(0, "😑", "😑")),
+        
+        listOf(KeyData(0, "🐶", "🐶"), KeyData(0, "🐱", "🐱"), KeyData(0, "🐭", "🐭"), KeyData(0, "🐹", "🐹"), KeyData(0, "🐰", "🐰"), KeyData(0, "🦊", "🦊"), KeyData(0, "🐻", "🐻"), KeyData(0, "🐼", "🐼"), KeyData(0, "🐻‍❄️", "🐻‍❄️")),
+        listOf(KeyData(0, "🙈", "🙈"), KeyData(0, "🙉", "🙉"), KeyData(0, "🙊", "🙊"), KeyData(0, "🐵", "🐵"), KeyData(0, "🐔", "🐔"), KeyData(0, "🐧", "🐧"), KeyData(0, "🐦", "🐦"), KeyData(0, "🐤", "🐤"), KeyData(0, "🦆", "🦆")),
+        listOf(KeyData(0, "🌲", "🌲"), KeyData(0, "🌱", "🌱"), KeyData(0, "🌷", "🌷"), KeyData(0, "🌹", "🌹"), KeyData(0, "🌺", "🌺"), KeyData(0, "🌸", "🌸"), KeyData(0, "🌼", "🌼"), KeyData(0, "🌻", "🌻"), KeyData(0, "🌞", "🌞")),
+        listOf(KeyData(0, "🌎", "🌎"), KeyData(0, "🌙", "🌙"), KeyData(0, "⭐", "⭐"), KeyData(0, "🔥", "🔥"), KeyData(0, "💧", "💧"), KeyData(0, "⚡", "⚡"), KeyData(0, "❄️", "❄️"), KeyData(0, "🌩️", "🌩️"), KeyData(0, "✨", "✨")),
+        
+        listOf(KeyData(0, "👋", "👋"), KeyData(0, "🤚", "🤚"), KeyData(0, "🖐️", "🖐️"), KeyData(0, "✋", "✋"), KeyData(0, "🖖", "🖖"), KeyData(0, "👌", "👌"), KeyData(0, "🤌", "🤌"), KeyData(0, "🤏", "🤏"), KeyData(0, "✌️", "✌️")),
+        listOf(KeyData(0, "🤞", "🤞"), KeyData(0, "🫰", "🫰"), KeyData(0, "🤟", "🤟"), KeyData(0, "🤘", "🤘"), KeyData(0, "🤙", "🤙"), KeyData(0, "👈", "👈"), KeyData(0, "👉", "👉"), KeyData(0, "👆", "👆"), KeyData(0, "👇", "👇")),
+        listOf(KeyData(0, "❤️", "❤️"), KeyData(0, "🧡", "🧡"), KeyData(0, "💛", "💛"), KeyData(0, "💚", "💚"), KeyData(0, "💙", "💙"), KeyData(0, "💜", "💜"), KeyData(0, "🤎", "🤎"), KeyData(0, "🖤", "🖤"), KeyData(0, "🤍", "🤍")),
+        listOf(KeyData(0, "💔", "💔"), KeyData(0, "❤️‍🔥", "❤️‍🔥"), KeyData(0, "❤️‍🩹", "❤️‍🩹"), KeyData(0, "❣️", "❣️"), KeyData(0, "💕", "💕"), KeyData(0, "👍", "👍"), KeyData(0, "👎", "👎"), KeyData(0, "👏", "👏"), KeyData(0, "🙌", "🙌")),
+        
         listOf(
-            listOf(KeyData(0, "😀", "😀"), KeyData(0, "😃", "😃"), KeyData(0, "😄", "😄"), KeyData(0, "😁", "😁"), KeyData(0, "😆", "😆"), KeyData(0, "😅", "😅"), KeyData(0, "😂", "😂"), KeyData(0, "🤣", "🤣"), KeyData(0, "🥲", "🥲")),
-            listOf(KeyData(0, "🥹", "🥹"), KeyData(0, "☺️", "☺️"), KeyData(0, "😊", "😊"), KeyData(0, "😇", "😇"), KeyData(0, "🙂", "🙂"), KeyData(0, "🙃", "🙃"), KeyData(0, "😉", "😉"), KeyData(0, "😌", "😌"), KeyData(0, "😍", "😍")),
-            listOf(KeyData(0, "🥰", "🥰"), KeyData(0, "😘", "😘"), KeyData(0, "😗", "😗"), KeyData(0, "😙", "😙"), KeyData(0, "😚", "😚"), KeyData(0, "😋", "😋"), KeyData(0, "😛", "😛"), KeyData(0, "😝", "😝"), KeyData(0, "😜", "😜")),
-            listOf(KeyData(0, "🤪", "🤪"), KeyData(0, "🤨", "🤨"), KeyData(0, "🧐", "🧐"), KeyData(0, "🤓", "🤓"), KeyData(0, "😎", "😎"), KeyData(0, "🥸", "🥸"), KeyData(0, "🤩", "🤩"), KeyData(0, "🥳", "🥳"), KeyData(0, "😏", "😏")),
-            listOf(
-                KeyData(CODE_EMOJI, "ABC", "ABC", true, 1.5f),
-                KeyData(CODE_EMOJI_PREV_PAGE, "◀", "◀", true, 1f),
-                KeyData(CODE_SPACE, " ", " ", true, 3f),
-                KeyData(CODE_EMOJI_NEXT_PAGE, "▶", "▶", true, 1f),
-                KeyData(CODE_DELETE, "⌫", "⌫", true, 1.5f)
-            )
-        ),
-        listOf(
-            listOf(KeyData(0, "😒", "😒"), KeyData(0, "😞", "😞"), KeyData(0, "😔", "😔"), KeyData(0, "😟", "😟"), KeyData(0, "😕", "😕"), KeyData(0, "🙁", "🙁"), KeyData(0, "😣", "😣"), KeyData(0, "😖", "😖"), KeyData(0, "😫", "😫")),
-            listOf(KeyData(0, "😩", "😩"), KeyData(0, "🥺", "🥺"), KeyData(0, "😢", "😢"), KeyData(0, "😭", "😭"), KeyData(0, "😮‍💨", "😮‍💨"), KeyData(0, "😤", "😤"), KeyData(0, "😠", "😠"), KeyData(0, "😡", "😡"), KeyData(0, "🤬", "🤬")),
-            listOf(KeyData(0, "🤯", "🤯"), KeyData(0, "😳", "😳"), KeyData(0, "🥵", "🥵"), KeyData(0, "🥶", "🥶"), KeyData(0, "😱", "😱"), KeyData(0, "😨", "😨"), KeyData(0, "😰", "😰"), KeyData(0, "😥", "😥"), KeyData(0, "😓", "😓")),
-            listOf(KeyData(0, "🤗", "🤗"), KeyData(0, "🤔", "🤔"), KeyData(0, "🫣", "🫣"), KeyData(0, "🤭", "🤭"), KeyData(0, "🤫", "🤫"), KeyData(0, "🤥", "🤥"), KeyData(0, "😶", "😶"), KeyData(0, "😐", "😐"), KeyData(0, "😑", "😑")),
-            listOf(
-                KeyData(CODE_EMOJI, "ABC", "ABC", true, 1.5f),
-                KeyData(CODE_EMOJI_PREV_PAGE, "◀", "◀", true, 1f),
-                KeyData(CODE_SPACE, " ", " ", true, 3f),
-                KeyData(CODE_EMOJI_NEXT_PAGE, "▶", "▶", true, 1f),
-                KeyData(CODE_DELETE, "⌫", "⌫", true, 1.5f)
-            )
-        ),
-        listOf(
-            listOf(KeyData(0, "🐶", "🐶"), KeyData(0, "🐱", "🐱"), KeyData(0, "🐭", "🐭"), KeyData(0, "🐹", "🐹"), KeyData(0, "🐰", "🐰"), KeyData(0, "🦊", "🦊"), KeyData(0, "🐻", "🐻"), KeyData(0, "🐼", "🐼"), KeyData(0, "🐻‍❄️", "🐻‍❄️")),
-            listOf(KeyData(0, "🙈", "🙈"), KeyData(0, "🙉", "🙉"), KeyData(0, "🙊", "🙊"), KeyData(0, "🐵", "🐵"), KeyData(0, "🐔", "🐔"), KeyData(0, "🐧", "🐧"), KeyData(0, "🐦", "🐦"), KeyData(0, "🐤", "🐤"), KeyData(0, "🦆", "🦆")),
-            listOf(KeyData(0, "🌲", "🌲"), KeyData(0, "🌱", "🌱"), KeyData(0, "🌷", "🌷"), KeyData(0, "🌹", "🌹"), KeyData(0, "🌺", "🌺"), KeyData(0, "🌸", "🌸"), KeyData(0, "🌼", "🌼"), KeyData(0, "🌻", "🌻"), KeyData(0, "🌞", "🌞")),
-            listOf(KeyData(0, "🌎", "🌎"), KeyData(0, "🌙", "🌙"), KeyData(0, "⭐", "⭐"), KeyData(0, "🔥", "🔥"), KeyData(0, "💧", "💧"), KeyData(0, "⚡", "⚡"), KeyData(0, "❄️", "❄️"), KeyData(0, "🌩️", "🌩️"), KeyData(0, "✨", "✨")),
-            listOf(
-                KeyData(CODE_EMOJI, "ABC", "ABC", true, 1.5f),
-                KeyData(CODE_EMOJI_PREV_PAGE, "◀", "◀", true, 1f),
-                KeyData(CODE_SPACE, " ", " ", true, 3f),
-                KeyData(CODE_EMOJI_NEXT_PAGE, "▶", "▶", true, 1f),
-                KeyData(CODE_DELETE, "⌫", "⌫", true, 1.5f)
-            )
-        ),
-        listOf(
-            listOf(KeyData(0, "👋", "👋"), KeyData(0, "🤚", "🤚"), KeyData(0, "🖐️", "🖐️"), KeyData(0, "✋", "✋"), KeyData(0, "🖖", "🖖"), KeyData(0, "👌", "👌"), KeyData(0, "🤌", "🤌"), KeyData(0, "🤏", "🤏"), KeyData(0, "✌️", "✌️")),
-            listOf(KeyData(0, "🤞", "🤞"), KeyData(0, "🫰", "🫰"), KeyData(0, "🤟", "🤟"), KeyData(0, "🤘", "🤘"), KeyData(0, "🤙", "🤙"), KeyData(0, "👈", "👈"), KeyData(0, "👉", "👉"), KeyData(0, "👆", "👆"), KeyData(0, "👇", "👇")),
-            listOf(KeyData(0, "❤️", "❤️"), KeyData(0, "🧡", "🧡"), KeyData(0, "💛", "💛"), KeyData(0, "💚", "💚"), KeyData(0, "💙", "💙"), KeyData(0, "💜", "💜"), KeyData(0, "🤎", "🤎"), KeyData(0, "🖤", "🖤"), KeyData(0, "🤍", "🤍")),
-            listOf(KeyData(0, "💔", "💔"), KeyData(0, "❤️‍🔥", "❤️‍🔥"), KeyData(0, "❤️‍🩹", "❤️‍🩹"), KeyData(0, "❣️", "❣️"), KeyData(0, "💕", "💕"), KeyData(0, "👍", "👍"), KeyData(0, "👎", "👎"), KeyData(0, "👏", "👏"), KeyData(0, "🙌", "🙌")),
-            listOf(
-                KeyData(CODE_EMOJI, "ABC", "ABC", true, 1.5f),
-                KeyData(CODE_EMOJI_PREV_PAGE, "◀", "◀", true, 1f),
-                KeyData(CODE_SPACE, " ", " ", true, 3f),
-                KeyData(CODE_EMOJI_NEXT_PAGE, "▶", "▶", true, 1f),
-                KeyData(CODE_DELETE, "⌫", "⌫", true, 1.5f)
-            )
+            KeyData(CODE_EMOJI, "ABC", "ABC", true, 1.5f),
+            KeyData(CODE_SPACE, "English", "English", false, 4.5f),
+            KeyData(CODE_DELETE, "⌫", "⌫", true, 1.5f, longPressOptions = listOf("Clear All"))
         )
     )
 }

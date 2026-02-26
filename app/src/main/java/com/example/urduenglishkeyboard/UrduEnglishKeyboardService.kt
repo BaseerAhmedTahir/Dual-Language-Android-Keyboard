@@ -153,7 +153,6 @@ class UrduEnglishKeyboardService : InputMethodService() {
         isShifted = false
         isEmoji = false
         isNumbers = false
-        currentEmojiPage = 0
         currentComposingText.clear()
         
         if (::keyboardView.isInitialized) {
@@ -204,7 +203,7 @@ class UrduEnglishKeyboardService : InputMethodService() {
         for (option in keyData.longPressOptions) {
             val btn = TextView(this).apply {
                 text = option
-                textSize = 28f
+                textSize = if (option == "Clear All") 20f else 28f
                 setPadding(36, 24, 36, 24)
                 setTextColor(textColor)
                 typeface = if (option.any { it in '\u0600'..'\u06FF' }) keyboardView.getUrduTypeface() else android.graphics.Typeface.DEFAULT
@@ -213,7 +212,14 @@ class UrduEnglishKeyboardService : InputMethodService() {
                 typedArray.recycle()
                 
                 setOnClickListener {
-                    currentInputConnection?.commitText(option, 1)
+                    if (option == "Clear All") {
+                        currentComposingText.clear()
+                        currentInputConnection?.deleteSurroundingText(10000, 10000)
+                        updateSuggestions(emptyList())
+                    } else {
+                        val commitStr = option.replace("◌", "")
+                        currentInputConnection?.commitText(commitStr, 1)
+                    }
                     popupWindow?.dismiss()
                 }
             }
@@ -278,18 +284,7 @@ class UrduEnglishKeyboardService : InputMethodService() {
                 } else {
                     isEmoji = true
                     isNumbers = false
-                    currentEmojiPage = 0
                 }
-                updateKeyboardLayout()
-            }
-            KeyboardLayouts.CODE_EMOJI_NEXT_PAGE -> {
-                val maxPages = KeyboardLayouts.emojiLayoutPages.size
-                currentEmojiPage = (currentEmojiPage + 1) % maxPages
-                updateKeyboardLayout()
-            }
-            KeyboardLayouts.CODE_EMOJI_PREV_PAGE -> {
-                val maxPages = KeyboardLayouts.emojiLayoutPages.size
-                currentEmojiPage = (currentEmojiPage - 1 + maxPages) % maxPages
                 updateKeyboardLayout()
             }
             KeyboardLayouts.CODE_SPACE -> {
@@ -401,9 +396,7 @@ class UrduEnglishKeyboardService : InputMethodService() {
 
     private fun updateKeyboardLayout() {
         val layout = if (isEmoji) {
-            val maxPages = KeyboardLayouts.emojiLayoutPages.size
-            if (currentEmojiPage !in 0 until maxPages) currentEmojiPage = 0
-            KeyboardLayouts.emojiLayoutPages[currentEmojiPage]
+            KeyboardLayouts.emojiLayout
         } else if (isNumbers) {
             if (isEnglish) KeyboardLayouts.numberSymbolLayout else KeyboardLayouts.urduNumberSymbolLayout
         } else if (isEnglish) {

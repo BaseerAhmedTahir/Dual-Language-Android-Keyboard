@@ -76,21 +76,50 @@ class CustomKeyboardView @JvmOverloads constructor(
             removeAllViews()
             currentLayoutHashCode = layoutHash
             
+            val container = if (rows.size > 5) {
+                val sv = android.widget.ScrollView(context).apply {
+                    layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+                    isVerticalScrollBarEnabled = false
+                }
+                val ll = LinearLayout(context).apply { 
+                    orientation = VERTICAL
+                    layoutParams = android.widget.FrameLayout.LayoutParams(
+                        android.widget.FrameLayout.LayoutParams.MATCH_PARENT, 
+                        android.widget.FrameLayout.LayoutParams.WRAP_CONTENT
+                    )
+                }
+                sv.addView(ll)
+                addView(sv)
+                ll
+            } else {
+                this
+            }
+
             for (rowParams in rows) {
                 val rowLayout = LinearLayout(context).apply {
                     orientation = HORIZONTAL
-                    layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, 0, 1f)
+                    layoutParams = if (rows.size > 5) {
+                        LayoutParams(LayoutParams.MATCH_PARENT, 150) // Fixed height in pixels for scrolling rows
+                    } else {
+                        LayoutParams(LayoutParams.MATCH_PARENT, 0, 1f)
+                    }
                 }
                 for (key in rowParams) {
                     val keyView = createKeyView(key, isShifted, isUrdu)
                     rowLayout.addView(keyView)
                 }
-                addView(rowLayout)
+                container.addView(rowLayout)
             }
         } else {
             // Fast Path: Layout hasn't changed structure, just update labels
-            for (i in 0 until childCount) {
-                val rowLayout = getChildAt(i) as LinearLayout
+            val container = if (rows.size > 5) {
+                (getChildAt(0) as android.widget.ScrollView).getChildAt(0) as LinearLayout
+            } else {
+                this
+            }
+            
+            for (i in 0 until container.childCount) {
+                val rowLayout = container.getChildAt(i) as LinearLayout
                 val rowData = rows[i]
                 for (j in 0 until rowLayout.childCount) {
                     val keyContainer = rowLayout.getChildAt(j) as android.widget.FrameLayout
@@ -164,7 +193,7 @@ class CustomKeyboardView @JvmOverloads constructor(
             
             val bgDrawable = GradientDrawable().apply {
                 val regularBg = if (isDarkTheme) Color.parseColor("#292C31") else Color.WHITE
-                val functionalBg = if (isDarkTheme) Color.parseColor("#1C1E21") else Color.parseColor("#D4D6D9")
+                val functionalBg = if (isDarkTheme) Color.parseColor("#3B3E43") else Color.parseColor("#DEE1E5")
                 setColor(if (key.isFunctional) functionalBg else regularBg)
                 cornerRadius = 20f // Pill-shaped modern feel
             }
@@ -228,7 +257,15 @@ class CustomKeyboardView @JvmOverloads constructor(
             setTextColor(textColor)
             gravity = Gravity.CENTER
             
-            if (isUrdu && !key.isFunctional) {
+            if (key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_NUMBERS || 
+                key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_LANGUAGE_SWITCH || 
+                key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_EMOJI) {
+                typeface = android.graphics.Typeface.DEFAULT
+                textSize = 15f
+            } else if (key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_SPACE) {
+                typeface = if (isUrdu) urduTypeface else android.graphics.Typeface.DEFAULT
+                textSize = 18f
+            } else if (isUrdu && !key.isFunctional) {
                 typeface = urduTypeface
                 textSize = 30f
             } else {
