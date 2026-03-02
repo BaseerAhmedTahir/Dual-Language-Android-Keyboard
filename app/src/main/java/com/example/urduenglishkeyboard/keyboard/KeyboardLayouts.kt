@@ -8,6 +8,14 @@ object KeyboardLayouts {
     const val CODE_LANGUAGE_SWITCH = -2
     const val CODE_NUMBERS = -3
     const val CODE_EMOJI = -4
+    
+    // Emoji Category Codes
+    const val CODE_EMOJI_SMILEYS = -10
+    const val CODE_EMOJI_ANIMALS = -11
+    const val CODE_EMOJI_FOOD = -12
+    const val CODE_EMOJI_TRAVEL = -13
+    const val CODE_EMOJI_OBJECTS = -14
+    const val CODE_EMOJI_SYMBOLS = -15
 
     val englishQwerty = listOf(
         listOf(
@@ -113,7 +121,8 @@ object KeyboardLayouts {
         )
     )
 
-    val emojiLayout = listOf(
+    // EMOJI CATEGORIES
+    private val smileysKeys = listOf(
         listOf(KeyData(0, "😀", "😀"), KeyData(0, "😃", "😃"), KeyData(0, "😄", "😄"), KeyData(0, "😁", "😁"), KeyData(0, "😆", "😆"), KeyData(0, "😅", "😅"), KeyData(0, "😂", "😂"), KeyData(0, "🤣", "🤣"), KeyData(0, "🥲", "🥲")),
         listOf(KeyData(0, "🥹", "🥹"), KeyData(0, "☺️", "☺️"), KeyData(0, "😊", "😊"), KeyData(0, "😇", "😇"), KeyData(0, "🙂", "🙂"), KeyData(0, "🙃", "🙃"), KeyData(0, "😉", "😉"), KeyData(0, "😌", "😌"), KeyData(0, "😍", "😍")),
         listOf(KeyData(0, "🥰", "🥰"), KeyData(0, "😘", "😘"), KeyData(0, "😗", "😗"), KeyData(0, "😙", "😙"), KeyData(0, "😚", "😚"), KeyData(0, "😋", "😋"), KeyData(0, "😛", "😛"), KeyData(0, "😝", "😝"), KeyData(0, "😜", "😜")),
@@ -124,20 +133,79 @@ object KeyboardLayouts {
         listOf(KeyData(0, "🤯", "🤯"), KeyData(0, "😳", "😳"), KeyData(0, "🥵", "🥵"), KeyData(0, "🥶", "🥶"), KeyData(0, "😱", "😱"), KeyData(0, "😨", "😨"), KeyData(0, "😰", "😰"), KeyData(0, "😥", "😥"), KeyData(0, "😓", "😓")),
         listOf(KeyData(0, "🤗", "🤗"), KeyData(0, "🤔", "🤔"), KeyData(0, "🫣", "🫣"), KeyData(0, "🤭", "🤭"), KeyData(0, "🤫", "🤫"), KeyData(0, "🤥", "🤥"), KeyData(0, "😶", "😶"), KeyData(0, "😐", "😐"), KeyData(0, "😑", "😑")),
         
-        listOf(KeyData(0, "🐶", "🐶"), KeyData(0, "🐱", "🐱"), KeyData(0, "🐭", "🐭"), KeyData(0, "🐹", "🐹"), KeyData(0, "🐰", "🐰"), KeyData(0, "🦊", "🦊"), KeyData(0, "🐻", "🐻"), KeyData(0, "🐼", "🐼"), KeyData(0, "🐻‍❄️", "🐻‍❄️")),
-        listOf(KeyData(0, "🙈", "🙈"), KeyData(0, "🙉", "🙉"), KeyData(0, "🙊", "🙊"), KeyData(0, "🐵", "🐵"), KeyData(0, "🐔", "🐔"), KeyData(0, "🐧", "🐧"), KeyData(0, "🐦", "🐦"), KeyData(0, "🐤", "🐤"), KeyData(0, "🦆", "🦆")),
-        listOf(KeyData(0, "🌲", "🌲"), KeyData(0, "🌱", "🌱"), KeyData(0, "🌷", "🌷"), KeyData(0, "🌹", "🌹"), KeyData(0, "🌺", "🌺"), KeyData(0, "🌸", "🌸"), KeyData(0, "🌼", "🌼"), KeyData(0, "🌻", "🌻"), KeyData(0, "🌞", "🌞")),
-        listOf(KeyData(0, "🌎", "🌎"), KeyData(0, "🌙", "🌙"), KeyData(0, "⭐", "⭐"), KeyData(0, "🔥", "🔥"), KeyData(0, "💧", "💧"), KeyData(0, "⚡", "⚡"), KeyData(0, "❄️", "❄️"), KeyData(0, "🌩️", "🌩️"), KeyData(0, "✨", "✨")),
-        
         listOf(KeyData(0, "👋", "👋"), KeyData(0, "🤚", "🤚"), KeyData(0, "🖐️", "🖐️"), KeyData(0, "✋", "✋"), KeyData(0, "🖖", "🖖"), KeyData(0, "👌", "👌"), KeyData(0, "🤌", "🤌"), KeyData(0, "🤏", "🤏"), KeyData(0, "✌️", "✌️")),
         listOf(KeyData(0, "🤞", "🤞"), KeyData(0, "🫰", "🫰"), KeyData(0, "🤟", "🤟"), KeyData(0, "🤘", "🤘"), KeyData(0, "🤙", "🤙"), KeyData(0, "👈", "👈"), KeyData(0, "👉", "👉"), KeyData(0, "👆", "👆"), KeyData(0, "👇", "👇")),
         listOf(KeyData(0, "❤️", "❤️"), KeyData(0, "🧡", "🧡"), KeyData(0, "💛", "💛"), KeyData(0, "💚", "💚"), KeyData(0, "💙", "💙"), KeyData(0, "💜", "💜"), KeyData(0, "🤎", "🤎"), KeyData(0, "🖤", "🖤"), KeyData(0, "🤍", "🤍")),
-        listOf(KeyData(0, "💔", "💔"), KeyData(0, "❤️‍🔥", "❤️‍🔥"), KeyData(0, "❤️‍🩹", "❤️‍🩹"), KeyData(0, "❣️", "❣️"), KeyData(0, "💕", "💕"), KeyData(0, "👍", "👍"), KeyData(0, "👎", "👎"), KeyData(0, "👏", "👏"), KeyData(0, "🙌", "🙌")),
+        listOf(KeyData(0, "💔", "💔"), KeyData(0, "❤️‍🔥", "❤️‍🔥"), KeyData(0, "❤️‍🩹", "❤️‍🩹"), KeyData(0, "❣️", "❣️"), KeyData(0, "💕", "💕"), KeyData(0, "👍", "👍"), KeyData(0, "👎", "👎"), KeyData(0, "👏", "👏"), KeyData(0, "🙌", "🙌"))
+    )
+
+    private val animalsKeys = listOf(
+        listOf(KeyData(0, "🐶", "🐶"), KeyData(0, "🐱", "🐱"), KeyData(0, "🐭", "🐭"), KeyData(0, "🐹", "🐹"), KeyData(0, "🐰", "🐰"), KeyData(0, "🦊", "🦊"), KeyData(0, "🐻", "🐻"), KeyData(0, "🐼", "🐼"), KeyData(0, "🐻‍❄️", "🐻‍❄️")),
+        listOf(KeyData(0, "🙈", "🙈"), KeyData(0, "🙉", "🙉"), KeyData(0, "🙊", "🙊"), KeyData(0, "🐵", "🐵"), KeyData(0, "🐔", "🐔"), KeyData(0, "🐧", "🐧"), KeyData(0, "🐦", "🐦"), KeyData(0, "🐤", "🐤"), KeyData(0, "🦆", "🦆")),
+        listOf(KeyData(0, "🦅", "🦅"), KeyData(0, "🦉", "🦉"), KeyData(0, "🦇", "🦇"), KeyData(0, "🐺", "🐺"), KeyData(0, "🐗", "🐗"), KeyData(0, "🐴", "🐴"), KeyData(0, "🦄", "🦄"), KeyData(0, "🐝", "🐝"), KeyData(0, "🪱", "🪱")),
+        listOf(KeyData(0, "🐛", "🐛"), KeyData(0, "🦋", "🦋"), KeyData(0, "🐌", "🐌"), KeyData(0, "🐞", "🐞"), KeyData(0, "🐜", "🐜"), KeyData(0, "🪰", "🪰"), KeyData(0, "🪲", "🪲"), KeyData(0, "🪳", "🪳"), KeyData(0, "🦟", "🦟")),
+        listOf(KeyData(0, "🐢", "🐢"), KeyData(0, "🐍", "🐍"), KeyData(0, "🦎", "🦎"), KeyData(0, "🦖", "🦖"), KeyData(0, "🦕", "🦕"), KeyData(0, "🐙", "🐙"), KeyData(0, "🦑", "🦑"), KeyData(0, "🦐", "🦐"), KeyData(0, "🦞", "🦞"))
+    )
+
+    private val foodKeys = listOf(
+        listOf(KeyData(0, "🍏", "🍏"), KeyData(0, "🍎", "🍎"), KeyData(0, "🍐", "🍐"), KeyData(0, "🍊", "🍊"), KeyData(0, "🍋", "🍋"), KeyData(0, "🍌", "🍌"), KeyData(0, "🍉", "🍉"), KeyData(0, "🍇", "🍇"), KeyData(0, "🍓", "🍓")),
+        listOf(KeyData(0, "🫐", "🫐"), KeyData(0, "🍈", "🍈"), KeyData(0, "🍒", "🍒"), KeyData(0, "🍑", "🍑"), KeyData(0, "🥭", "🥭"), KeyData(0, "🍍", "🍍"), KeyData(0, "🥥", "🥥"), KeyData(0, "🥝", "🥝"), KeyData(0, "🍅", "🍅")),
+        listOf(KeyData(0, "🥑", "🥑"), KeyData(0, "🍆", "🍆"), KeyData(0, "🥔", "🥔"), KeyData(0, "🥕", "🥕"), KeyData(0, "🌽", "🌽"), KeyData(0, "🌶️", "🌶️"), KeyData(0, "🥒", "🥒"), KeyData(0, "🥬", "🥬"), KeyData(0, "🥦", "🥦")),
+        listOf(KeyData(0, "🍔", "🍔"), KeyData(0, "🍟", "🍟"), KeyData(0, "🍕", "🍕"), KeyData(0, "🌭", "🌭"), KeyData(0, "🥪", "🥪"), KeyData(0, "🌮", "🌮"), KeyData(0, "🌯", "🌯"), KeyData(0, "🫔", "🫔"), KeyData(0, "🥙", "🥙")),
+        listOf(KeyData(0, "🧆", "🧆"), KeyData(0, "🥚", "🥚"), KeyData(0, "🍳", "🍳"), KeyData(0, "🥘", "🥘"), KeyData(0, "🍲", "🍲"), KeyData(0, "🫕", "🫕"), KeyData(0, "🥣", "🥣"), KeyData(0, "🥗", "🥗"), KeyData(0, "🍿", "🍿"))
+    )
+
+    private val travelKeys = listOf(
+        listOf(KeyData(0, "🚗", "🚗"), KeyData(0, "🚕", "🚕"), KeyData(0, "🚙", "🚙"), KeyData(0, "🚌", "🚌"), KeyData(0, "🚎", "🚎"), KeyData(0, "🏎️", "🏎️"), KeyData(0, "🚓", "🚓"), KeyData(0, "🚑", "🚑"), KeyData(0, "🚒", "🚒")),
+        listOf(KeyData(0, "🚐", "🚐"), KeyData(0, "🛻", "🛻"), KeyData(0, "🚚", "🚚"), KeyData(0, "🚛", "🚛"), KeyData(0, "🚜", "🚜"), KeyData(0, "🦯", "🦯"), KeyData(0, "🦽", "🦽"), KeyData(0, "🦼", "🦼"), KeyData(0, "🛴", "🛴")),
+        listOf(KeyData(0, "🚲", "🚲"), KeyData(0, "🛵", "🛵"), KeyData(0, "🏍️", "🏍️"), KeyData(0, "🛺", "🛺"), KeyData(0, "🚨", "🚨"), KeyData(0, "🚔", "🚔"), KeyData(0, "🚍", "🚍"), KeyData(0, "🚘", "🚘"), KeyData(0, "🚖", "🚖")),
+        listOf(KeyData(0, "🌲", "🌲"), KeyData(0, "🌱", "🌱"), KeyData(0, "🌷", "🌷"), KeyData(0, "🌹", "🌹"), KeyData(0, "🌺", "🌺"), KeyData(0, "🌸", "🌸"), KeyData(0, "🌼", "🌼"), KeyData(0, "🌻", "🌻"), KeyData(0, "🌞", "🌞")),
+        listOf(KeyData(0, "🌎", "🌎"), KeyData(0, "🌙", "🌙"), KeyData(0, "⭐", "⭐"), KeyData(0, "🔥", "🔥"), KeyData(0, "💧", "💧"), KeyData(0, "⚡", "⚡"), KeyData(0, "❄️", "❄️"), KeyData(0, "🌩️", "🌩️"), KeyData(0, "✨", "✨"))
+    )
+
+    private val objectsKeys = listOf(
+        listOf(KeyData(0, "👓", "👓"), KeyData(0, "🕶️", "🕶️"), KeyData(0, "🥽", "🥽"), KeyData(0, "🥼", "🥼"), KeyData(0, "🦺", "🦺"), KeyData(0, "👔", "👔"), KeyData(0, "👕", "👕"), KeyData(0, "👖", "👖"), KeyData(0, "🧣", "🧣")),
+        listOf(KeyData(0, "🧤", "🧤"), KeyData(0, "🧥", "🧥"), KeyData(0, "🧦", "🧦"), KeyData(0, "👗", "👗"), KeyData(0, "👘", "👘"), KeyData(0, "🥻", "🥻"), KeyData(0, "🩱", "🩱"), KeyData(0, "🩲", "🩲"), KeyData(0, "🩳", "🩳")),
+        listOf(KeyData(0, "👙", "👙"), KeyData(0, "👚", "👚"), KeyData(0, "👛", "👛"), KeyData(0, "👜", "👜"), KeyData(0, "👝", "👝"), KeyData(0, "🛍️", "🛍️"), KeyData(0, "🎒", "🎒"), KeyData(0, "🩴", "🩴"), KeyData(0, "👞", "👞")),
+        listOf(KeyData(0, "⌚", "⌚"), KeyData(0, "📱", "📱"), KeyData(0, "📲", "📲"), KeyData(0, "💻", "💻"), KeyData(0, "⌨️", "⌨️"), KeyData(0, "🖥️", "🖥️"), KeyData(0, "🖨️", "🖨️"), KeyData(0, "🖱️", "🖱️"), KeyData(0, "🖲️", "🖲️")),
+        listOf(KeyData(0, "💡", "💡"), KeyData(0, "🔦", "🔦"), KeyData(0, "🏮", "🏮"), KeyData(0, "📔", "📔"), KeyData(0, "📕", "📕"), KeyData(0, "📖", "📖"), KeyData(0, "📗", "📗"), KeyData(0, "📘", "📘"), KeyData(0, "📙", "📙"))
+    )
+
+    private val symbolsKeys = listOf(
+        listOf(KeyData(0, "♈", "♈"), KeyData(0, "♉", "♉"), KeyData(0, "♊", "♊"), KeyData(0, "♋", "♋"), KeyData(0, "♌", "♌"), KeyData(0, "♍", "♍"), KeyData(0, "♎", "♎"), KeyData(0, "♏", "♏"), KeyData(0, "♐", "♐")),
+        listOf(KeyData(0, "♑", "♑"), KeyData(0, "♒", "♒"), KeyData(0, "♓", "♓"), KeyData(0, "⛎", "⛎"), KeyData(0, "✖️", "✖️"), KeyData(0, "➕", "➕"), KeyData(0, "➖", "➖"), KeyData(0, "➗", "➗"), KeyData(0, "🟰", "🟰")),
+        listOf(KeyData(0, "❗", "❗"), KeyData(0, "❓", "❓"), KeyData(0, "❕", "❕"), KeyData(0, "❔", "❔"), KeyData(0, "💯", "💯"), KeyData(0, "🔠", "🔠"), KeyData(0, "🔡", "🔡"), KeyData(0, "🔢", "🔢"), KeyData(0, "🔣", "🔣")),
+        listOf(KeyData(0, "🔴", "🔴"), KeyData(0, "🟠", "🟠"), KeyData(0, "🟡", "🟡"), KeyData(0, "🟢", "🟢"), KeyData(0, "🔵", "🔵"), KeyData(0, "🟣", "🟣"), KeyData(0, "🟤", "🟤"), KeyData(0, "⚫", "⚫"), KeyData(0, "⚪", "⚪")),
+        listOf(KeyData(0, "🟥", "🟥"), KeyData(0, "🟧", "🟧"), KeyData(0, "🟨", "🟨"), KeyData(0, "🟩", "🟩"), KeyData(0, "🟦", "🟦"), KeyData(0, "🟪", "🟪"), KeyData(0, "🟫", "🟫"), KeyData(0, "⬛", "⬛"), KeyData(0, "⬜", "⬜"))
+    )
+
+    // Method to build a complete emoji layout for a specific category
+    fun buildEmojiLayout(activeCategory: Int): List<List<KeyData>> {
+        val keys = when (activeCategory) {
+            CODE_EMOJI_SMILEYS -> smileysKeys
+            CODE_EMOJI_ANIMALS -> animalsKeys
+            CODE_EMOJI_FOOD -> foodKeys
+            CODE_EMOJI_TRAVEL -> travelKeys
+            CODE_EMOJI_OBJECTS -> objectsKeys
+            CODE_EMOJI_SYMBOLS -> symbolsKeys
+            else -> smileysKeys
+        }
         
-        listOf(
+        val tabRow = listOf(
+            KeyData(CODE_EMOJI_SMILEYS, "😀", isFunctional = activeCategory != CODE_EMOJI_SMILEYS, weight = 1.2f),
+            KeyData(CODE_EMOJI_ANIMALS, "🐶", isFunctional = activeCategory != CODE_EMOJI_ANIMALS, weight = 1.2f),
+            KeyData(CODE_EMOJI_FOOD, "🍔", isFunctional = activeCategory != CODE_EMOJI_FOOD, weight = 1.2f),
+            KeyData(CODE_EMOJI_TRAVEL, "🚗", isFunctional = activeCategory != CODE_EMOJI_TRAVEL, weight = 1.2f),
+            KeyData(CODE_EMOJI_OBJECTS, "💡", isFunctional = activeCategory != CODE_EMOJI_OBJECTS, weight = 1.2f),
+            KeyData(CODE_EMOJI_SYMBOLS, "🔣", isFunctional = activeCategory != CODE_EMOJI_SYMBOLS, weight = 1.2f)
+        )
+        
+        val controlRow = listOf(
             KeyData(CODE_EMOJI, "ABC", "ABC", true, 1.5f),
             KeyData(CODE_SPACE, "English", "English", false, 4.5f),
             KeyData(CODE_DELETE, "⌫", "⌫", true, 1.5f, longPressOptions = listOf("Clear All"))
         )
-    )
+        
+        return keys + listOf(tabRow, controlRow)
+    }
 }

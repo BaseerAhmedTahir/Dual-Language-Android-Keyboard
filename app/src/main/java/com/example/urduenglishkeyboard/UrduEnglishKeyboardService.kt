@@ -35,7 +35,7 @@ class UrduEnglishKeyboardService : InputMethodService() {
     private var isShifted = false
     private var isEmoji = false
     private var isNumbers = false
-    private var currentEmojiPage = 0
+    private var currentEmojiCategory = KeyboardLayouts.CODE_EMOJI_SMILEYS
     
     private var popupWindow: PopupWindow? = null
     
@@ -67,6 +67,31 @@ class UrduEnglishKeyboardService : InputMethodService() {
         
         keyboardView.setOnKeyLongClickListener { keyData, keyViewTextView ->
             handleKeyLongClick(keyData, keyViewTextView)
+        }
+        
+        keyboardView.setOnCursorMoveListener { direction ->
+            val ic = currentInputConnection ?: return@setOnCursorMoveListener
+            val keyEventCode = if (direction > 0) KeyEvent.KEYCODE_DPAD_RIGHT else KeyEvent.KEYCODE_DPAD_LEFT
+            ic.sendKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, keyEventCode))
+            ic.sendKeyEvent(KeyEvent(KeyEvent.ACTION_UP, keyEventCode))
+        }
+
+        keyboardView.setOnSwipeDeleteListener {
+            val ic = currentInputConnection ?: return@setOnSwipeDeleteListener
+            if (currentComposingText.isNotEmpty()) {
+                currentComposingText.clear()
+                ic.setComposingText("", 0)
+                updateSuggestions(emptyList())
+            } else {
+                val textBefore = ic.getTextBeforeCursor(100, 0)
+                if (!textBefore.isNullOrEmpty()) {
+                    val lastSpaceIndex = textBefore.trimEnd().lastIndexOf(' ')
+                    val deleteLength = if (lastSpaceIndex == -1) textBefore.length else textBefore.length - lastSpaceIndex - 1
+                    val totalDelete = deleteLength + (textBefore.length - textBefore.trimEnd().length)
+                    ic.deleteSurroundingText(maxOf(1, totalDelete), 0)
+                }
+            }
+            performHapticFeedback(keyboardView, HapticFeedbackConstants.KEYBOARD_TAP)
         }
         
         setupSuggestionListeners()
@@ -179,6 +204,17 @@ class UrduEnglishKeyboardService : InputMethodService() {
         currentComposingText.clear()
         
         if (::keyboardView.isInitialized) {
+            val actionId = info?.imeOptions?.and(android.view.inputmethod.EditorInfo.IME_MASK_ACTION)
+            val enterLabel = when(actionId) {
+                android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH -> "🔍"
+                android.view.inputmethod.EditorInfo.IME_ACTION_GO -> "➔"
+                android.view.inputmethod.EditorInfo.IME_ACTION_SEND -> "📤"
+                android.view.inputmethod.EditorInfo.IME_ACTION_DONE -> "✓"
+                android.view.inputmethod.EditorInfo.IME_ACTION_NEXT -> "⇥"
+                else -> "↵"
+            }
+            keyboardView.setEnterKeyLabel(enterLabel)
+            
             updateKeyboardLayout()
             updateSuggestions(emptyList())
         }
@@ -341,6 +377,15 @@ class UrduEnglishKeyboardService : InputMethodService() {
                 }
                 updateKeyboardLayout()
             }
+            KeyboardLayouts.CODE_EMOJI_SMILEYS,
+            KeyboardLayouts.CODE_EMOJI_ANIMALS,
+            KeyboardLayouts.CODE_EMOJI_FOOD,
+            KeyboardLayouts.CODE_EMOJI_TRAVEL,
+            KeyboardLayouts.CODE_EMOJI_OBJECTS,
+            KeyboardLayouts.CODE_EMOJI_SYMBOLS -> {
+                currentEmojiCategory = keyData.code
+                updateKeyboardLayout()
+            }
             else -> {
                 if (keyData.code == 0) {
                     // It's an Emoji or sticker. Just commit it directly.
@@ -418,7 +463,7 @@ class UrduEnglishKeyboardService : InputMethodService() {
 
     private fun updateKeyboardLayout() {
         val layout = if (isEmoji) {
-            KeyboardLayouts.emojiLayout
+            KeyboardLayouts.buildEmojiLayout(currentEmojiCategory)
         } else if (isNumbers) {
             if (isEnglish) KeyboardLayouts.numberSymbolLayout else KeyboardLayouts.urduNumberSymbolLayout
         } else if (isEnglish) {

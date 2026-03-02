@@ -64,6 +64,22 @@ class CustomKeyboardView @JvmOverloads constructor(
         this.keyLongClickListener = listener
     }
     
+    private var enterKeyLabel = "↵"
+    private var cursorMoveListener: ((Int) -> Unit)? = null
+    private var swipeDeleteListener: (() -> Unit)? = null
+
+    fun setEnterKeyLabel(label: String) {
+        enterKeyLabel = label
+    }
+
+    fun setOnCursorMoveListener(listener: (Int) -> Unit) {
+        this.cursorMoveListener = listener
+    }
+
+    fun setOnSwipeDeleteListener(listener: () -> Unit) {
+        this.swipeDeleteListener = listener
+    }
+
     fun getUrduTypeface(): android.graphics.Typeface? = urduTypeface
 
     private var currentLayoutHashCode: Int = 0
@@ -78,15 +94,11 @@ class CustomKeyboardView @JvmOverloads constructor(
             
             val container = if (rows.size > 5) {
                 val sv = android.widget.ScrollView(context).apply {
-                    layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+                    layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, 0, 1f)
                     isVerticalScrollBarEnabled = false
                 }
                 val ll = LinearLayout(context).apply { 
                     orientation = VERTICAL
-                    layoutParams = android.widget.FrameLayout.LayoutParams(
-                        android.widget.FrameLayout.LayoutParams.MATCH_PARENT, 
-                        android.widget.FrameLayout.LayoutParams.WRAP_CONTENT
-                    )
                 }
                 sv.addView(ll)
                 addView(sv)
@@ -95,7 +107,8 @@ class CustomKeyboardView @JvmOverloads constructor(
                 this
             }
 
-            for (rowParams in rows) {
+            for (i in rows.indices) {
+                val rowParams = rows[i]
                 val rowLayout = LinearLayout(context).apply {
                     orientation = HORIZONTAL
                     layoutParams = if (rows.size > 5) {
@@ -108,26 +121,40 @@ class CustomKeyboardView @JvmOverloads constructor(
                     val keyView = createKeyView(key, isShifted, isUrdu)
                     rowLayout.addView(keyView)
                 }
-                container.addView(rowLayout)
+                
+                if (rows.size > 5 && i >= rows.size - 2) {
+                    this.addView(rowLayout) // Sticky tabs and controls
+                } else {
+                    container.addView(rowLayout) // Scrollable emojis
+                }
             }
         } else {
             // Fast Path: Layout hasn't changed structure, just update labels
-            val container = if (rows.size > 5) {
-                (getChildAt(0) as android.widget.ScrollView).getChildAt(0) as LinearLayout
+            var globalRowIndex = 0
+            if (rows.size > 5) {
+                val sv = getChildAt(0) as android.widget.ScrollView
+                val scrollingContainer = sv.getChildAt(0) as LinearLayout
+                for (i in 0 until scrollingContainer.childCount) {
+                    updateRowLabels(scrollingContainer.getChildAt(i) as LinearLayout, rows[globalRowIndex++], isShifted)
+                }
+                for (i in 1 until childCount) {
+                    updateRowLabels(getChildAt(i) as LinearLayout, rows[globalRowIndex++], isShifted)
+                }
             } else {
-                this
-            }
-            
-            for (i in 0 until container.childCount) {
-                val rowLayout = container.getChildAt(i) as LinearLayout
-                val rowData = rows[i]
-                for (j in 0 until rowLayout.childCount) {
-                    val keyContainer = rowLayout.getChildAt(j) as android.widget.FrameLayout
-                    val key = rowData[j]
-                    val mainLabel = keyContainer.getChildAt(0) as TextView
-                    mainLabel.text = if (isShifted && key.shiftLabel.isNotEmpty()) key.shiftLabel else key.label
+                for (i in 0 until childCount) {
+                    updateRowLabels(getChildAt(i) as LinearLayout, rows[globalRowIndex++], isShifted)
                 }
             }
+        }
+    }
+
+    private fun updateRowLabels(rowLayout: LinearLayout, rowData: List<KeyData>, isShifted: Boolean) {
+        for (j in 0 until rowLayout.childCount) {
+            val keyContainer = rowLayout.getChildAt(j) as android.widget.FrameLayout
+            val key = rowData[j]
+            val mainLabel = keyContainer.getChildAt(0) as TextView
+            val actualLabel = if (key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_ENTER) enterKeyLabel else if (isShifted && key.shiftLabel.isNotEmpty()) key.shiftLabel else key.label
+            mainLabel.text = actualLabel
         }
     }
     
@@ -187,16 +214,19 @@ class CustomKeyboardView @JvmOverloads constructor(
     }
 
     private fun createKeyView(key: KeyData, isShifted: Boolean, isUrdu: Boolean): android.view.View {
+        val actualLabel = if (key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_ENTER) enterKeyLabel else if (isShifted && key.shiftLabel.isNotEmpty()) key.shiftLabel else key.label
         val container = android.widget.FrameLayout(context).apply {
             val lParams = LayoutParams(0, LayoutParams.MATCH_PARENT, key.weight)
             lParams.setMargins(6, 12, 6, 16) // Increased bottom margin for subtle "depth" separation
             layoutParams = lParams
             
+            // Premium color palette
+            val regularBgColor = if (isDarkTheme) Color.parseColor("#34373C") else Color.parseColor("#FFFFFF")
+            val functionalBgColor = if (isDarkTheme) Color.parseColor("#26282B") else Color.parseColor("#D4D8DD")
+            val pressedBgColor = if (isDarkTheme) Color.parseColor("#4A4D54") else Color.parseColor("#E4E8ED")
+            
             val bgDrawable = GradientDrawable().apply {
-                // Premium color palette
-                val regularBg = if (isDarkTheme) Color.parseColor("#34373C") else Color.parseColor("#FFFFFF")
-                val functionalBg = if (isDarkTheme) Color.parseColor("#26282B") else Color.parseColor("#D4D8DD")
-                setColor(if (key.isFunctional) functionalBg else regularBg)
+                setColor(if (key.isFunctional) functionalBgColor else regularBgColor)
                 cornerRadius = 24f // Sleeker pill/rounded-rect shape
             }
             
@@ -212,24 +242,55 @@ class CustomKeyboardView @JvmOverloads constructor(
 
             elevation = if (isDarkTheme) 2f else 3f // Very subtle drop shadow
             
+            // Keep ripple for fallback, but we manually color change for instant response
             val rippleColor = android.content.res.ColorStateList.valueOf(Color.parseColor(if (isDarkTheme) "#55AAAAAA" else "#33000000"))
             background = android.graphics.drawable.RippleDrawable(rippleColor, layerDrawable, null)
             
             isClickable = true
             isFocusable = true
+            
+            var startX = 0f
+            var isSwiping = false
                     
             setOnTouchListener { v, event ->
                 when (event.action) {
                     android.view.MotionEvent.ACTION_DOWN -> {
-                        val currentLabel = if (isShifted && key.shiftLabel.isNotEmpty()) key.shiftLabel else key.label
-                        showKeyPopup(this, currentLabel, key.isFunctional)
+                        startX = event.rawX
+                        isSwiping = false
+                        bgDrawable.setColor(pressedBgColor)
+                        v.invalidate()
+                        showKeyPopup(v, actualLabel, key.isFunctional)
+                    }
+                    android.view.MotionEvent.ACTION_MOVE -> {
+                        val deltaX = event.rawX - startX
+                        if (key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_SPACE) {
+                            if (Math.abs(deltaX) > 40f) { // Threshold for cursor move
+                                isSwiping = true
+                                if (deltaX > 0) {
+                                    cursorMoveListener?.invoke(1)
+                                } else {
+                                    cursorMoveListener?.invoke(-1)
+                                }
+                                startX = event.rawX // Reset start to allow continuous sliding
+                            }
+                        } else if (key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_DELETE) {
+                            if (deltaX < -50f && !isSwiping) { // Threshold for swipe delete left
+                                isSwiping = true
+                                swipeDeleteListener?.invoke()
+                            }
+                        }
                     }
                     android.view.MotionEvent.ACTION_UP, android.view.MotionEvent.ACTION_CANCEL -> {
+                        bgDrawable.setColor(if (key.isFunctional) functionalBgColor else regularBgColor)
+                        v.invalidate()
                         dismissKeyPopup()
                         if (isRepeating) {
                             isRepeating = false
                             repeatingKey = null
                             repeatHandler.removeCallbacks(repeatRunnable)
+                        }
+                        if (isSwiping && event.action == android.view.MotionEvent.ACTION_UP) {
+                            return@setOnTouchListener true // Suppress standard click if we swiped
                         }
                     }
                 }
@@ -268,7 +329,7 @@ class CustomKeyboardView @JvmOverloads constructor(
             ).apply {
                 setMargins(0, 0, 0, 6) // Adjust center visually to account for 3D depth inset
             }
-            text = if (isShifted && key.shiftLabel.isNotEmpty()) key.shiftLabel else key.label
+            text = actualLabel
             setTextColor(textColor)
             gravity = Gravity.CENTER
             
