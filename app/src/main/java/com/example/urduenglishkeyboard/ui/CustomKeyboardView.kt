@@ -140,16 +140,17 @@ class CustomKeyboardView @JvmOverloads constructor(
         if (keyPopupWindow == null) {
             val popupLayout = android.widget.FrameLayout(context).apply {
                 val bgDrawable = GradientDrawable().apply {
-                    setColor(if (isDarkTheme) Color.parseColor("#4A4D51") else Color.parseColor("#FFFFFF"))
-                    cornerRadius = 28f
+                    setColor(if (isDarkTheme) Color.parseColor("#383C41") else Color.parseColor("#FFFFFF"))
+                    cornerRadius = 32f
+                    setStroke(2, if (isDarkTheme) Color.parseColor("#4A4D51") else Color.parseColor("#E0E0E0"))
                 }
                 background = bgDrawable
-                elevation = 20f
-                setPadding(16, 16, 16, 24)
+                elevation = 24f
+                setPadding(24, 24, 24, 32)
             }
 
             popupTextView = TextView(context).apply {
-                textSize = 42f
+                textSize = 44f
                 setTextColor(if (isDarkTheme) Color.WHITE else Color.BLACK)
                 gravity = Gravity.CENTER
                 layoutParams = android.widget.FrameLayout.LayoutParams(
@@ -160,7 +161,7 @@ class CustomKeyboardView @JvmOverloads constructor(
             }
             popupLayout.addView(popupTextView)
 
-            keyPopupWindow = PopupWindow(popupLayout, 160, 200, false).apply {
+            keyPopupWindow = PopupWindow(popupLayout, 180, 220, false).apply {
                 isClippingEnabled = false
             }
         }
@@ -188,19 +189,31 @@ class CustomKeyboardView @JvmOverloads constructor(
     private fun createKeyView(key: KeyData, isShifted: Boolean, isUrdu: Boolean): android.view.View {
         val container = android.widget.FrameLayout(context).apply {
             val lParams = LayoutParams(0, LayoutParams.MATCH_PARENT, key.weight)
-            lParams.setMargins(6, 12, 6, 12)
+            lParams.setMargins(6, 12, 6, 16) // Increased bottom margin for subtle "depth" separation
             layoutParams = lParams
             
             val bgDrawable = GradientDrawable().apply {
-                val regularBg = if (isDarkTheme) Color.parseColor("#292C31") else Color.WHITE
-                val functionalBg = if (isDarkTheme) Color.parseColor("#3B3E43") else Color.parseColor("#DEE1E5")
+                // Premium color palette
+                val regularBg = if (isDarkTheme) Color.parseColor("#34373C") else Color.parseColor("#FFFFFF")
+                val functionalBg = if (isDarkTheme) Color.parseColor("#26282B") else Color.parseColor("#D4D8DD")
                 setColor(if (key.isFunctional) functionalBg else regularBg)
-                cornerRadius = 20f // Pill-shaped modern feel
+                cornerRadius = 24f // Sleeker pill/rounded-rect shape
             }
-            elevation = 3f // Very subtle drop shadow
+            
+            // Add a subtle bottom layer to simulate 3D depth, exactly like modern keyboards do
+            val layerDrawable = android.graphics.drawable.LayerDrawable(arrayOf(
+                GradientDrawable().apply {
+                    setColor(if (isDarkTheme) Color.parseColor("#151618") else Color.parseColor("#B0B5BC"))
+                    cornerRadius = 24f
+                },
+                bgDrawable
+            ))
+            layerDrawable.setLayerInset(1, 0, 0, 0, 6) // Inset the top layer by 6px from the bottom
+
+            elevation = if (isDarkTheme) 2f else 3f // Very subtle drop shadow
             
             val rippleColor = android.content.res.ColorStateList.valueOf(Color.parseColor(if (isDarkTheme) "#55AAAAAA" else "#33000000"))
-            background = android.graphics.drawable.RippleDrawable(rippleColor, bgDrawable, null)
+            background = android.graphics.drawable.RippleDrawable(rippleColor, layerDrawable, null)
             
             isClickable = true
             isFocusable = true
@@ -252,7 +265,9 @@ class CustomKeyboardView @JvmOverloads constructor(
                 android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
                 android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
                 Gravity.CENTER
-            )
+            ).apply {
+                setMargins(0, 0, 0, 6) // Adjust center visually to account for 3D depth inset
+            }
             text = if (isShifted && key.shiftLabel.isNotEmpty()) key.shiftLabel else key.label
             setTextColor(textColor)
             gravity = Gravity.CENTER

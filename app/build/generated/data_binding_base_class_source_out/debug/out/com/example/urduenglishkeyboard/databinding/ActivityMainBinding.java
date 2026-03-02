@@ -4,37 +4,73 @@ package com.example.urduenglishkeyboard.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.example.urduenglishkeyboard.R;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
 
 public final class ActivityMainBinding implements ViewBinding {
   @NonNull
-  private final LinearLayout rootView;
+  private final CoordinatorLayout rootView;
 
   @NonNull
-  public final Button btnEnableKeyboard;
+  public final MaterialCardView cardEnable;
 
   @NonNull
-  public final Button btnSelectKeyboard;
+  public final MaterialCardView cardSelect;
 
-  private ActivityMainBinding(@NonNull LinearLayout rootView, @NonNull Button btnEnableKeyboard,
-      @NonNull Button btnSelectKeyboard) {
+  @NonNull
+  public final ImageView iconEnableStatus;
+
+  @NonNull
+  public final ImageView iconSelectStatus;
+
+  @NonNull
+  public final SwitchMaterial switchSound;
+
+  @NonNull
+  public final SwitchMaterial switchVibration;
+
+  @NonNull
+  public final Toolbar toolbar;
+
+  @NonNull
+  public final TextView tvEnableStatus;
+
+  @NonNull
+  public final TextView tvSelectStatus;
+
+  private ActivityMainBinding(@NonNull CoordinatorLayout rootView,
+      @NonNull MaterialCardView cardEnable, @NonNull MaterialCardView cardSelect,
+      @NonNull ImageView iconEnableStatus, @NonNull ImageView iconSelectStatus,
+      @NonNull SwitchMaterial switchSound, @NonNull SwitchMaterial switchVibration,
+      @NonNull Toolbar toolbar, @NonNull TextView tvEnableStatus,
+      @NonNull TextView tvSelectStatus) {
     this.rootView = rootView;
-    this.btnEnableKeyboard = btnEnableKeyboard;
-    this.btnSelectKeyboard = btnSelectKeyboard;
+    this.cardEnable = cardEnable;
+    this.cardSelect = cardSelect;
+    this.iconEnableStatus = iconEnableStatus;
+    this.iconSelectStatus = iconSelectStatus;
+    this.switchSound = switchSound;
+    this.switchVibration = switchVibration;
+    this.toolbar = toolbar;
+    this.tvEnableStatus = tvEnableStatus;
+    this.tvSelectStatus = tvSelectStatus;
   }
 
   @Override
   @NonNull
-  public LinearLayout getRoot() {
+  public CoordinatorLayout getRoot() {
     return rootView;
   }
 
@@ -59,19 +95,63 @@ public final class ActivityMainBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
-      id = R.id.btn_enable_keyboard;
-      Button btnEnableKeyboard = ViewBindings.findChildViewById(rootView, id);
-      if (btnEnableKeyboard == null) {
+      id = R.id.card_enable;
+      MaterialCardView cardEnable = ViewBindings.findChildViewById(rootView, id);
+      if (cardEnable == null) {
         break missingId;
       }
 
-      id = R.id.btn_select_keyboard;
-      Button btnSelectKeyboard = ViewBindings.findChildViewById(rootView, id);
-      if (btnSelectKeyboard == null) {
+      id = R.id.card_select;
+      MaterialCardView cardSelect = ViewBindings.findChildViewById(rootView, id);
+      if (cardSelect == null) {
         break missingId;
       }
 
-      return new ActivityMainBinding((LinearLayout) rootView, btnEnableKeyboard, btnSelectKeyboard);
+      id = R.id.icon_enable_status;
+      ImageView iconEnableStatus = ViewBindings.findChildViewById(rootView, id);
+      if (iconEnableStatus == null) {
+        break missingId;
+      }
+
+      id = R.id.icon_select_status;
+      ImageView iconSelectStatus = ViewBindings.findChildViewById(rootView, id);
+      if (iconSelectStatus == null) {
+        break missingId;
+      }
+
+      id = R.id.switch_sound;
+      SwitchMaterial switchSound = ViewBindings.findChildViewById(rootView, id);
+      if (switchSound == null) {
+        break missingId;
+      }
+
+      id = R.id.switch_vibration;
+      SwitchMaterial switchVibration = ViewBindings.findChildViewById(rootView, id);
+      if (switchVibration == null) {
+        break missingId;
+      }
+
+      id = R.id.toolbar;
+      Toolbar toolbar = ViewBindings.findChildViewById(rootView, id);
+      if (toolbar == null) {
+        break missingId;
+      }
+
+      id = R.id.tv_enable_status;
+      TextView tvEnableStatus = ViewBindings.findChildViewById(rootView, id);
+      if (tvEnableStatus == null) {
+        break missingId;
+      }
+
+      id = R.id.tv_select_status;
+      TextView tvSelectStatus = ViewBindings.findChildViewById(rootView, id);
+      if (tvSelectStatus == null) {
+        break missingId;
+      }
+
+      return new ActivityMainBinding((CoordinatorLayout) rootView, cardEnable, cardSelect,
+          iconEnableStatus, iconSelectStatus, switchSound, switchVibration, toolbar, tvEnableStatus,
+          tvSelectStatus);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

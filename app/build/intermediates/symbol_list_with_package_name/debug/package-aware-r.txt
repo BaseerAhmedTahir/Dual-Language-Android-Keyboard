@@ -2985,6 +2985,8 @@ drawable notification_template_icon_bg
 drawable notification_template_icon_low_bg
 drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
+drawable suggestion_bg
+drawable suggestion_bg_primary
 drawable test_level_drawable
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
@@ -3076,10 +3078,10 @@ id beginning
 id blocking
 id bottom
 id bounce
-id btn_enable_keyboard
-id btn_select_keyboard
 id buttonPanel
 id cancel_button
+id card_enable
+id card_select
 id center
 id centerCrop
 id centerInside
@@ -3180,7 +3182,9 @@ id home
 id homeAsUp
 id honorRequest
 id icon
+id icon_enable_status
 id icon_group
+id icon_select_status
 id ifRoom
 id ignore
 id ignoreRequest
@@ -3381,6 +3385,8 @@ id suggestion1
 id suggestion2
 id suggestion3
 id suggestion_bar_layout
+id switch_sound
+id switch_vibration
 id tabMode
 id tag_accessibility_actions
 id tag_accessibility_clickable_spans
@@ -3416,6 +3422,7 @@ id title
 id titleDividerNoCustom
 id title_template
 id toggle
+id toolbar
 id top
 id topPanel
 id touch_outside
@@ -3427,6 +3434,8 @@ id transition_position
 id transition_scene_layoutid_cache
 id transition_transform
 id triangle
+id tv_enable_status
+id tv_select_status
 id unchecked
 id uniform
 id unlabeled

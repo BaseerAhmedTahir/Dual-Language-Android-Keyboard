@@ -74,6 +74,29 @@ class UrduEnglishKeyboardService : InputMethodService() {
         return view
     }
 
+    private fun isHapticFeedbackEnabled(): Boolean {
+        val prefs = getSharedPreferences("keyboard_prefs", android.content.Context.MODE_PRIVATE)
+        return prefs.getBoolean("vibration_enabled", true)
+    }
+
+    private fun isSoundEnabled(): Boolean {
+        val prefs = getSharedPreferences("keyboard_prefs", android.content.Context.MODE_PRIVATE)
+        return prefs.getBoolean("sound_enabled", true)
+    }
+
+    private fun playKeyClickSound() {
+        if (isSoundEnabled()) {
+            val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+            audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_STANDARD)
+        }
+    }
+
+    private fun performHapticFeedback(view: View, constant: Int) {
+        if (isHapticFeedbackEnabled()) {
+            view.performHapticFeedback(constant)
+        }
+    }
+
     private fun applyTheme(view: View) {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         val isDark = currentNightMode == Configuration.UI_MODE_NIGHT_YES
@@ -185,7 +208,7 @@ class UrduEnglishKeyboardService : InputMethodService() {
     private fun handleKeyLongClick(keyData: KeyData, keyView: View) {
         if (keyData.longPressOptions.isEmpty()) return
         
-        keyboardView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+        performHapticFeedback(keyboardView, HapticFeedbackConstants.LONG_PRESS)
         
         val popupView = layoutInflater.inflate(R.layout.popup_key_options, null) as LinearLayout
         
@@ -244,9 +267,8 @@ class UrduEnglishKeyboardService : InputMethodService() {
     private fun handleKeyClick(keyData: KeyData) {
         val inputConnection = currentInputConnection ?: return
         
-        keyboardView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-        val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-        audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_STANDARD)
+        performHapticFeedback(keyboardView, HapticFeedbackConstants.KEYBOARD_TAP)
+        playKeyClickSound()
         
         when (keyData.code) {
             KeyboardLayouts.CODE_DELETE -> {
