@@ -50,8 +50,8 @@ class UrduEnglishKeyboardService : InputMethodService() {
     
     // Voice Input State
     private var speechRecognizer: SpeechRecognizer? = null
-    private var voiceOverlayWindow: PopupWindow? = null
-    private lateinit var voiceOverlayView: View
+    private lateinit var keyboardLayoutContainer: View
+    private lateinit var voiceOverlayContainer: View
     private lateinit var voicePromptText: TextView
     private lateinit var voiceMicIcon: ImageView
     
@@ -64,6 +64,7 @@ class UrduEnglishKeyboardService : InputMethodService() {
 
     override fun onCreate() {
         super.onCreate()
+        CrashLogger.init(this)
         wordDao = AppDatabase.getDatabase(this).wordDao()
         setupVoiceRecognition()
         seedDatabaseMockData()
@@ -71,6 +72,16 @@ class UrduEnglishKeyboardService : InputMethodService() {
 
     override fun onCreateInputView(): View {
         val view = layoutInflater.inflate(R.layout.keyboard_view, null)
+        keyboardLayoutContainer = view.findViewById(R.id.keyboard_layout_container)
+        voiceOverlayContainer = view.findViewById(R.id.voice_overlay_container)
+        voiceOverlayContainer.visibility = View.GONE
+        
+        voicePromptText = view.findViewById(R.id.voice_prompt_text)
+        voiceMicIcon = view.findViewById(R.id.voice_mic_icon)
+        val closeBtn = view.findViewById<TextView>(R.id.voice_close_btn)
+        closeBtn.setOnClickListener { stopVoiceInput() }
+        voiceMicIcon.setOnClickListener { startListeningIntent() }
+        
         keyboardView = view.findViewById(R.id.custom_keyboard_view)
         suggestion1 = view.findViewById(R.id.suggestion1)
         suggestion2 = view.findViewById(R.id.suggestion2)
@@ -512,24 +523,32 @@ class UrduEnglishKeyboardService : InputMethodService() {
                 speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
                 speechRecognizer?.setRecognitionListener(object : RecognitionListener {
                 override fun onReadyForSpeech(params: Bundle?) {
-                    voicePromptText.text = "Listening..."
-                    voiceMicIcon.alpha = 1.0f
+                    if (::voicePromptText.isInitialized) {
+                        voicePromptText.text = "Listening..."
+                        voiceMicIcon.alpha = 1.0f
+                    }
                 }
                 override fun onBeginningOfSpeech() {}
                 override fun onRmsChanged(rmsdB: Float) {
-                    val scale = 1.0f + (rmsdB / 10f).coerceIn(0f, 0.3f)
-                    voiceMicIcon.scaleX = scale
-                    voiceMicIcon.scaleY = scale
+                    if (::voiceMicIcon.isInitialized) {
+                        val scale = 1.0f + (rmsdB / 10f).coerceIn(0f, 0.3f)
+                        voiceMicIcon.scaleX = scale
+                        voiceMicIcon.scaleY = scale
+                    }
                 }
                 override fun onBufferReceived(buffer: ByteArray?) {}
                 override fun onEndOfSpeech() {
-                    voicePromptText.text = "Processing..."
-                    voiceMicIcon.scaleX = 1f
-                    voiceMicIcon.scaleY = 1f
+                    if (::voicePromptText.isInitialized) {
+                        voicePromptText.text = "Processing..."
+                        voiceMicIcon.scaleX = 1f
+                        voiceMicIcon.scaleY = 1f
+                    }
                 }
                 override fun onError(error: Int) {
-                    voicePromptText.text = "Tap mic to try again"
-                    voiceMicIcon.alpha = 0.5f
+                    if (::voicePromptText.isInitialized) {
+                        voicePromptText.text = "Tap mic to try again"
+                        voiceMicIcon.alpha = 0.5f
+                    }
                 }
                 override fun onResults(results: Bundle?) {
                     val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
@@ -572,37 +591,9 @@ class UrduEnglishKeyboardService : InputMethodService() {
             return
         }
 
-        // Initialize Overlay if needed
-        if (voiceOverlayWindow == null) {
-            voiceOverlayView = layoutInflater.inflate(R.layout.voice_overlay, null)
-            voicePromptText = voiceOverlayView.findViewById(R.id.voice_prompt_text)
-            voiceMicIcon = voiceOverlayView.findViewById(R.id.voice_mic_icon)
-            val closeBtn = voiceOverlayView.findViewById<TextView>(R.id.voice_close_btn)
-
-            closeBtn.setOnClickListener { stopVoiceInput() }
-            voiceMicIcon.setOnClickListener {
-                startListeningIntent()
-            }
-
-            voiceOverlayWindow = PopupWindow(
-                voiceOverlayView,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                false // Important: false so it doesn't crash or steal IME focus
-            ).apply {
-                elevation = 20f
-            }
-        }
-
         // Show Overlay covering the keyboard
-        if (!voiceOverlayWindow!!.isShowing) {
-            voiceOverlayWindow?.showAtLocation(
-                keyboardView,
-                Gravity.BOTTOM,
-                0,
-                0
-            )
-        }
+        keyboardLayoutContainer.visibility = View.GONE
+        voiceOverlayContainer.visibility = View.VISIBLE
         
         startListeningIntent()
     }
@@ -628,8 +619,11 @@ class UrduEnglishKeyboardService : InputMethodService() {
 
     private fun stopVoiceInput() {
         speechRecognizer?.stopListening()
-        if (voiceOverlayWindow?.isShowing == true) {
-            voiceOverlayWindow?.dismiss()
+        if (::voiceOverlayContainer.isInitialized) {
+            voiceOverlayContainer.visibility = View.GONE
+        }
+        if (::keyboardLayoutContainer.isInitialized) {
+            keyboardLayoutContainer.visibility = View.VISIBLE
         }
     }
 }

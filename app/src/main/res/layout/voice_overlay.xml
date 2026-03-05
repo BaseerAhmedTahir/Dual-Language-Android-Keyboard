@@ -20,7 +20,7 @@
         android:id="@+id/voice_mic_icon"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:src="@android:drawable/ic_btn_speak_now"
+        android:src="@drawable/ic_mic"
         android:background="@drawable/suggestion_bg_primary"
         android:tint="#FFFFFF"
         android:padding="16dp" />
@@ -34,7 +34,6 @@
         android:textSize="14sp"
         android:textStyle="bold"
         android:layout_marginTop="32dp"
-        android:padding="8dp"
-        android:background="?attr/selectableItemBackground" />
+        android:padding="8dp" />
 
 </LinearLayout>

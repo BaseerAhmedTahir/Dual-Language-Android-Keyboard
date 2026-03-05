@@ -2908,6 +2908,7 @@ drawable ic_launcher
 drawable ic_m3_chip_check
 drawable ic_m3_chip_checked_circle
 drawable ic_m3_chip_close
+drawable ic_mic
 drawable ic_mtrl_checked_circle
 drawable ic_mtrl_chip_checked_black
 drawable ic_mtrl_chip_checked_circle
@@ -3197,6 +3198,7 @@ id italic
 id item_touch_helper_previous_elevation
 id jumpToEnd
 id jumpToStart
+id keyboard_layout_container
 id labeled
 id layout
 id left
@@ -3450,6 +3452,7 @@ id visible
 id visible_removing_fragment_view_tag
 id voice_close_btn
 id voice_mic_icon
+id voice_overlay_container
 id voice_prompt_text
 id withText
 id with_icon

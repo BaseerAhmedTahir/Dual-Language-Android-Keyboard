@@ -1,19 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingBottom="4dp"
-    android:background="#E8EAED"> <!-- Gboard Material Light Gray -->
+    android:layout_height="wrap_content">
 
-    <include layout="@layout/suggestion_bar" />
-
-    <com.example.urduenglishkeyboard.ui.CustomKeyboardView
-        android:id="@+id/custom_keyboard_view"
+    <LinearLayout
+        android:id="@+id/keyboard_layout_container"
         android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:paddingTop="6dp"
-        android:paddingStart="4dp"
-        android:paddingEnd="4dp" />
-        
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="4dp"
+        android:background="#E8EAED"> <!-- Gboard Material Light Gray -->
+
+        <include layout="@layout/suggestion_bar" />
+
+        <com.example.urduenglishkeyboard.ui.CustomKeyboardView
+            android:id="@+id/custom_keyboard_view"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:paddingTop="6dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp" />
+            
+    </LinearLayout>
+
+    <include layout="@layout/voice_overlay" 
+        android:id="@+id/voice_overlay_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</FrameLayout>

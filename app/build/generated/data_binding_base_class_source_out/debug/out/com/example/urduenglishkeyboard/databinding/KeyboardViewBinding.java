@@ -4,6 +4,7 @@ package com.example.urduenglishkeyboard.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,20 +18,29 @@ import java.lang.String;
 
 public final class KeyboardViewBinding implements ViewBinding {
   @NonNull
-  private final LinearLayout rootView;
+  private final FrameLayout rootView;
 
   @NonNull
   public final CustomKeyboardView customKeyboardView;
 
-  private KeyboardViewBinding(@NonNull LinearLayout rootView,
-      @NonNull CustomKeyboardView customKeyboardView) {
+  @NonNull
+  public final LinearLayout keyboardLayoutContainer;
+
+  @NonNull
+  public final VoiceOverlayBinding voiceOverlayContainer;
+
+  private KeyboardViewBinding(@NonNull FrameLayout rootView,
+      @NonNull CustomKeyboardView customKeyboardView, @NonNull LinearLayout keyboardLayoutContainer,
+      @NonNull VoiceOverlayBinding voiceOverlayContainer) {
     this.rootView = rootView;
     this.customKeyboardView = customKeyboardView;
+    this.keyboardLayoutContainer = keyboardLayoutContainer;
+    this.voiceOverlayContainer = voiceOverlayContainer;
   }
 
   @Override
   @NonNull
-  public LinearLayout getRoot() {
+  public FrameLayout getRoot() {
     return rootView;
   }
 
@@ -61,7 +71,21 @@ public final class KeyboardViewBinding implements ViewBinding {
         break missingId;
       }
 
-      return new KeyboardViewBinding((LinearLayout) rootView, customKeyboardView);
+      id = R.id.keyboard_layout_container;
+      LinearLayout keyboardLayoutContainer = ViewBindings.findChildViewById(rootView, id);
+      if (keyboardLayoutContainer == null) {
+        break missingId;
+      }
+
+      id = R.id.voice_overlay_container;
+      View voiceOverlayContainer = ViewBindings.findChildViewById(rootView, id);
+      if (voiceOverlayContainer == null) {
+        break missingId;
+      }
+      VoiceOverlayBinding binding_voiceOverlayContainer = VoiceOverlayBinding.bind(voiceOverlayContainer);
+
+      return new KeyboardViewBinding((FrameLayout) rootView, customKeyboardView,
+          keyboardLayoutContainer, binding_voiceOverlayContainer);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

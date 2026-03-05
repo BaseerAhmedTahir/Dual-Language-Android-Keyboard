@@ -21,7 +21,24 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        CrashLogger.init(this)
         setContentView(R.layout.activity_main)
+
+        prefs = getSharedPreferences("keyboard_prefs", Context.MODE_PRIVATE)
+        val lastCrash = prefs.getString("last_crash", null)
+        if (lastCrash != null) {
+            android.app.AlertDialog.Builder(this)
+                .setTitle("Keyboard Crash Detected")
+                .setMessage("Please send this to the developer:\n\n$lastCrash")
+                .setPositiveButton("Clear & Copy") { _, _ -> 
+                    val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                    val clip = android.content.ClipData.newPlainText("Crash Log", lastCrash)
+                    clipboard.setPrimaryClip(clip)
+                    prefs.edit().remove("last_crash").apply() 
+                }
+                .setCancelable(false)
+                .show()
+        }
 
         if (intent.getBooleanExtra("request_mic_permission", false)) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
@@ -62,7 +79,11 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         updateSetupStatus()
-        
+    }
+
+    override fun onNewIntent(newIntent: Intent) {
+        super.onNewIntent(newIntent)
+        intent = newIntent
         if (intent.getBooleanExtra("request_mic_permission", false)) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 101)

@@ -28,11 +28,19 @@
         "source": "C:\\Users\\Mustafavi\\.gradle\\daemon\\8.4\\com.example.urduenglishkeyboard.app-main-37:\\drawable\\suggestion_bg_primary.xml"
     },
     {
+        "merged": "C:\\Users\\Mustafavi\\.gradle\\daemon\\8.4\\com.example.urduenglishkeyboard.app-merged_res-35:\\drawable_ic_mic.xml.flat",
+        "source": "C:\\Users\\Mustafavi\\.gradle\\daemon\\8.4\\com.example.urduenglishkeyboard.app-main-37:\\drawable\\ic_mic.xml"
+    },
+    {
         "merged": "C:\\Users\\Mustafavi\\.gradle\\daemon\\8.4\\com.example.urduenglishkeyboard.app-merged_res-35:\\drawable_suggestion_bg.xml.flat",
         "source": "C:\\Users\\Mustafavi\\.gradle\\daemon\\8.4\\com.example.urduenglishkeyboard.app-main-37:\\drawable\\suggestion_bg.xml"
     },
     {
         "merged": "com.example.urduenglishkeyboard.app-merged_res-35:/layout_voice_overlay.xml.flat",
         "source": "com.example.urduenglishkeyboard.app-main-37:/layout/voice_overlay.xml"
+    },
+    {
+        "merged": "C:\\Users\\Mustafavi\\.gradle\\daemon\\8.4\\com.example.urduenglishkeyboard.app-merged_res-35:\\layout_voice_overlay.xml.flat",
+        "source": "C:\\Users\\Mustafavi\\.gradle\\daemon\\8.4\\com.example.urduenglishkeyboard.app-main-37:\\layout\\voice_overlay.xml"
     }
 ]
