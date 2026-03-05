@@ -3447,11 +3447,14 @@ int id view_tree_saved_state_registry_owner 0x7f0801c6
 int id view_tree_view_model_store_owner 0x7f0801c7
 int id visible 0x7f0801c8
 int id visible_removing_fragment_view_tag 0x7f0801c9
-int id withText 0x7f0801ca
-int id with_icon 0x7f0801cb
-int id withinBounds 0x7f0801cc
-int id wrap 0x7f0801cd
-int id wrap_content 0x7f0801ce
+int id voice_close_btn 0x7f0801ca
+int id voice_mic_icon 0x7f0801cb
+int id voice_prompt_text 0x7f0801cc
+int id withText 0x7f0801cd
+int id with_icon 0x7f0801ce
+int id withinBounds 0x7f0801cf
+int id wrap 0x7f0801d0
+int id wrap_content 0x7f0801d1
 int integer abc_config_activityDefaultDur 0x7f090000
 int integer abc_config_activityShortDur 0x7f090001
 int integer app_bar_elevation_anim_duration 0x7f090002
@@ -3649,6 +3652,7 @@ int layout select_dialog_multichoice_material 0x7f0b006b
 int layout select_dialog_singlechoice_material 0x7f0b006c
 int layout suggestion_bar 0x7f0b006d
 int layout support_simple_spinner_dropdown_item 0x7f0b006e
+int layout voice_overlay 0x7f0b006f
 int plurals mtrl_badge_content_description 0x7f0d0000
 int string abc_action_bar_home_description 0x7f0e0000
 int string abc_action_bar_up_description 0x7f0e0001

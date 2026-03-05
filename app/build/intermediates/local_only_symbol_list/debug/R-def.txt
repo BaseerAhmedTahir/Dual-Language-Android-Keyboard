@@ -17,10 +17,14 @@ id switch_vibration
 id toolbar
 id tv_enable_status
 id tv_select_status
+id voice_close_btn
+id voice_mic_icon
+id voice_prompt_text
 layout activity_main
 layout keyboard_view
 layout popup_key_options
 layout suggestion_bar
+layout voice_overlay
 string app_name
 string setup_enable
 string setup_select

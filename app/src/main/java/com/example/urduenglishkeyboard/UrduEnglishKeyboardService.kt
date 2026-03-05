@@ -8,6 +8,12 @@ import android.widget.PopupWindow
 import android.widget.LinearLayout
 import android.view.ViewGroup
 import android.view.Gravity
+import android.widget.ImageView
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
+import android.content.Intent
+import android.os.Bundle
 import com.example.urduenglishkeyboard.data.AppDatabase
 import com.example.urduenglishkeyboard.data.WordDao
 import com.example.urduenglishkeyboard.data.WordEntity
@@ -39,6 +45,13 @@ class UrduEnglishKeyboardService : InputMethodService() {
     
     private var popupWindow: PopupWindow? = null
     
+    // Voice Input State
+    private var speechRecognizer: SpeechRecognizer? = null
+    private var voiceOverlayWindow: PopupWindow? = null
+    private lateinit var voiceOverlayView: View
+    private lateinit var voicePromptText: TextView
+    private lateinit var voiceMicIcon: ImageView
+    
     private val serviceJob = Job()
     private val coroutineScope = CoroutineScope(Dispatchers.Main + serviceJob)
     private var suggestionJob: Job? = null
@@ -49,6 +62,7 @@ class UrduEnglishKeyboardService : InputMethodService() {
     override fun onCreate() {
         super.onCreate()
         wordDao = AppDatabase.getDatabase(this).wordDao()
+        setupVoiceRecognition()
         seedDatabaseMockData()
     }
 
@@ -225,6 +239,7 @@ class UrduEnglishKeyboardService : InputMethodService() {
         currentComposingText.clear()
         updateSuggestions(emptyList())
         popupWindow?.dismiss()
+        stopVoiceInput()
     }
     
     override fun onUpdateSelection(
@@ -308,7 +323,11 @@ class UrduEnglishKeyboardService : InputMethodService() {
         
         when (keyData.code) {
             KeyboardLayouts.CODE_DELETE -> {
-                if (currentComposingText.isNotEmpty()) {
+                val selectedText = inputConnection.getSelectedText(0)
+                if (!selectedText.isNullOrEmpty()) {
+                    // Fast sentence/selection deletion: If text is highlighted natively, delete the selection.
+                    inputConnection.commitText("", 1)
+                } else if (currentComposingText.isNotEmpty()) {
                     currentComposingText.deleteCharAt(currentComposingText.length - 1)
                     if (currentComposingText.isNotEmpty()) {
                         inputConnection.setComposingText(currentComposingText.toString(), 1)
@@ -344,6 +363,9 @@ class UrduEnglishKeyboardService : InputMethodService() {
                     isNumbers = false
                 }
                 updateKeyboardLayout()
+            }
+            KeyboardLayouts.CODE_VOICE -> {
+                startVoiceInput()
             }
             KeyboardLayouts.CODE_SPACE -> {
                 if (currentComposingText.isNotEmpty()) {
@@ -478,5 +500,109 @@ class UrduEnglishKeyboardService : InputMethodService() {
     override fun onDestroy() {
         super.onDestroy()
         serviceJob.cancel()
+    }
+
+    // Voice Input Integration
+    private fun setupVoiceRecognition() {
+        if (SpeechRecognizer.isRecognitionAvailable(this)) {
+            speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
+            speechRecognizer?.setRecognitionListener(object : RecognitionListener {
+                override fun onReadyForSpeech(params: Bundle?) {
+                    voicePromptText.text = "Listening..."
+                    voiceMicIcon.alpha = 1.0f
+                }
+                override fun onBeginningOfSpeech() {}
+                override fun onRmsChanged(rmsdB: Float) {
+                    val scale = 1.0f + (rmsdB / 10f).coerceIn(0f, 0.3f)
+                    voiceMicIcon.scaleX = scale
+                    voiceMicIcon.scaleY = scale
+                }
+                override fun onBufferReceived(buffer: ByteArray?) {}
+                override fun onEndOfSpeech() {
+                    voicePromptText.text = "Processing..."
+                    voiceMicIcon.scaleX = 1f
+                    voiceMicIcon.scaleY = 1f
+                }
+                override fun onError(error: Int) {
+                    voicePromptText.text = "Tap mic to try again"
+                    voiceMicIcon.alpha = 0.5f
+                }
+                override fun onResults(results: Bundle?) {
+                    val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                    if (!matches.isNullOrEmpty()) {
+                        val spokenText = matches[0]
+                        currentInputConnection?.commitText("$spokenText ", 1)
+                    }
+                    stopVoiceInput()
+                }
+                override fun onPartialResults(partialResults: Bundle?) {}
+                override fun onEvent(eventType: Int, params: Bundle?) {}
+            })
+        }
+    }
+
+    private fun startVoiceInput() {
+        // Stop any active components
+        currentInputConnection?.finishComposingText()
+        currentComposingText.clear()
+        updateSuggestions(emptyList())
+
+        // Check hardware/OS support
+        if (speechRecognizer == null) {
+            currentInputConnection?.commitText("[Voice Not Supported]", 1)
+            return
+        }
+
+        // Initialize Overlay if needed
+        if (voiceOverlayWindow == null) {
+            voiceOverlayView = layoutInflater.inflate(R.layout.voice_overlay, null)
+            voicePromptText = voiceOverlayView.findViewById(R.id.voice_prompt_text)
+            voiceMicIcon = voiceOverlayView.findViewById(R.id.voice_mic_icon)
+            val closeBtn = voiceOverlayView.findViewById<TextView>(R.id.voice_close_btn)
+
+            closeBtn.setOnClickListener { stopVoiceInput() }
+            voiceMicIcon.setOnClickListener {
+                startListeningIntent()
+            }
+
+            voiceOverlayWindow = PopupWindow(
+                voiceOverlayView,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                true
+            ).apply {
+                elevation = 20f
+            }
+        }
+
+        // Show Overlay covering the keyboard
+        if (!voiceOverlayWindow!!.isShowing) {
+            voiceOverlayWindow?.showAtLocation(
+                keyboardView,
+                Gravity.BOTTOM,
+                0,
+                0
+            )
+        }
+        
+        startListeningIntent()
+    }
+
+    private fun startListeningIntent() {
+        voicePromptText.text = "Initializing..."
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            val lang = if (isEnglish) "en-US" else "ur-PK"
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, lang)
+            putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1)
+        }
+        speechRecognizer?.startListening(intent)
+    }
+
+    private fun stopVoiceInput() {
+        speechRecognizer?.stopListening()
+        if (voiceOverlayWindow?.isShowing == true) {
+            voiceOverlayWindow?.dismiss()
+        }
     }
 }

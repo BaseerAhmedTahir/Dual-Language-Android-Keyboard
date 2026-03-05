@@ -8,6 +8,7 @@ object KeyboardLayouts {
     const val CODE_LANGUAGE_SWITCH = -2
     const val CODE_NUMBERS = -3
     const val CODE_EMOJI = -4
+    const val CODE_VOICE = -6
     
     // Emoji Category Codes
     const val CODE_EMOJI_SMILEYS = -10
@@ -38,7 +39,7 @@ object KeyboardLayouts {
         ),
         listOf(
             KeyData(CODE_NUMBERS, "?123", "?123", true, 1.2f),
-            KeyData(CODE_EMOJI, "😀", "😀", true, 1f),
+            KeyData(CODE_VOICE, "\uD83C\uDFA4", "\uD83C\uDFA4", true, 1f), // Microphone
             KeyData(CODE_LANGUAGE_SWITCH, "\uD83C\uDF10", "\uD83C\uDF10", true, 1.2f),
             KeyData(CODE_SPACE, "English", "English", false, 3.5f), // isFunctional = false for regular tint
             KeyData('.'.code, ".", ".", longPressOptions = listOf(",", "?", "!", ":", ";", "'", "\"")),
@@ -48,14 +49,14 @@ object KeyboardLayouts {
 
     val urduPhonetic = listOf(
         listOf(
-            KeyData('ق'.code, "ق", "◌ْ", longPressOptions = listOf("1", "۱")), KeyData('و'.code, "و", "◌ّ", longPressOptions = listOf("2", "۲", "ؤ")), KeyData('ع'.code, "ع", "◌ٰ", longPressOptions = listOf("3", "۳", "أ", "إ")), 
-            KeyData('ر'.code, "ر", "ڑ", longPressOptions = listOf("4", "۴")), KeyData('ت'.code, "ت", "ٹ", longPressOptions = listOf("5", "۵")), KeyData('ے'.code, "ے", "◌َ", longPressOptions = listOf("6", "۶")), 
-            KeyData('ء'.code, "ء", "◌ُ", longPressOptions = listOf("7", "۷")), KeyData('ی'.code, "ی", "◌ِ", longPressOptions = listOf("8", "۸", "ئ")), KeyData('ہ'.code, "ہ", "ۃ", longPressOptions = listOf("9", "۹", "ھ", "ح")), 
-            KeyData('پ'.code, "پ", "◌ٌ", longPressOptions = listOf("0", "۰"))
+            KeyData('ق'.code, "ق", "ق", longPressOptions = listOf("1", "۱")), KeyData('و'.code, "و", "ؤ", longPressOptions = listOf("2", "۲", "◌ّ")), KeyData('ع'.code, "ع", "غ", longPressOptions = listOf("3", "۳", "أ", "إ")), 
+            KeyData('ر'.code, "ر", "ڑ", longPressOptions = listOf("4", "۴")), KeyData('ت'.code, "ت", "ٹ", longPressOptions = listOf("5", "۵")), KeyData('ے'.code, "ے", "ي", longPressOptions = listOf("6", "۶", "ئ", "◌َ")), 
+            KeyData('ء'.code, "ء", "ئ", longPressOptions = listOf("7", "۷", "◌ُ")), KeyData('ی'.code, "ی", "ي", longPressOptions = listOf("8", "۸", "◌ِ")), KeyData('ہ'.code, "ہ", "ح", longPressOptions = listOf("9", "۹", "ۃ")), 
+            KeyData('پ'.code, "پ", "پ", longPressOptions = listOf("0", "۰", "◌ٌ"))
         ),
         listOf(
-            KeyData('ا'.code, "ا", "آ"), KeyData('س'.code, "س", "ص", longPressOptions = listOf("ث")), KeyData('د'.code, "د", "ڈ", longPressOptions = listOf("ذ")), 
-            KeyData('ف'.code, "ف", "ض"), KeyData('گ'.code, "گ", "غ"), KeyData('ح'.code, "ح", "ھ"), 
+            KeyData('ا'.code, "ا", "آ", longPressOptions = listOf("أ", "إ")), KeyData('س'.code, "س", "ص", longPressOptions = listOf("ث")), KeyData('د'.code, "د", "ڈ", longPressOptions = listOf("ذ")), 
+            KeyData('ف'.code, "ف", "ف"), KeyData('گ'.code, "گ", "غ"), KeyData('ھ'.code, "ھ", "ح"), 
             KeyData('ج'.code, "ج", "ض", longPressOptions = listOf("ژ")), KeyData('ک'.code, "ک", "خ", longPressOptions = listOf("ق")), KeyData('ل'.code, "ل", "ل")
         ),
         listOf(
@@ -67,7 +68,7 @@ object KeyboardLayouts {
         ),
         listOf(
             KeyData(CODE_NUMBERS, "?123", "?123", true, 1.2f),
-            KeyData(CODE_EMOJI, "😀", "😀", true, 1f),
+            KeyData(CODE_VOICE, "\uD83C\uDFA4", "\uD83C\uDFA4", true, 1f), // Microphone
             KeyData(CODE_LANGUAGE_SWITCH, "\uD83C\uDF10", "\uD83C\uDF10", true, 1.2f),
             KeyData(CODE_SPACE, "اردو", "اردو", false, 3.5f), // isFunctional = false
             KeyData('۔'.code, "۔", ".", longPressOptions = listOf("،", "؟", "!", ":", "؛")),
@@ -90,7 +91,7 @@ object KeyboardLayouts {
         ),
         listOf(
             KeyData(CODE_NUMBERS, "ABC", "ABC", true, 1.2f),
-            KeyData(CODE_EMOJI, "😀", "😀", true, 1f),
+            KeyData(CODE_VOICE, "\uD83C\uDFA4", "\uD83C\uDFA4", true, 1f),
             KeyData(','.code, ",", ","),
             KeyData(CODE_SPACE, "English", "English", false, 3.5f),
             KeyData('.'.code, ".", ".", longPressOptions = listOf("…")),
@@ -113,7 +114,7 @@ object KeyboardLayouts {
         ),
         listOf(
             KeyData(CODE_NUMBERS, "ابپ", "ابپ", true, 1.2f),
-            KeyData(CODE_EMOJI, "😀", "😀", true, 1f),
+            KeyData(CODE_VOICE, "\uD83C\uDFA4", "\uD83C\uDFA4", true, 1f),
             KeyData('،'.code, "،", "،"),
             KeyData(CODE_SPACE, "اردو", "اردو", false, 3.5f),
             KeyData('۔'.code, "۔", ".", longPressOptions = listOf("…")),

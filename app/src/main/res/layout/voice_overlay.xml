@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="240dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="#34373C">
+
+    <TextView
+        android:id="@+id/voice_prompt_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Speak now..."
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp" />
+
+    <ImageView
+        android:id="@+id/voice_mic_icon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@android:drawable/ic_btn_speak_now"
+        android:background="@drawable/suggestion_bg_primary"
+        android:tint="#FFFFFF"
+        android:padding="16dp" />
+
+    <TextView
+        android:id="@+id/voice_close_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CLOSE"
+        android:textColor="#4285F4"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginTop="32dp"
+        android:padding="8dp"
+        android:background="?attr/selectableItemBackground" />
+
+</LinearLayout>
