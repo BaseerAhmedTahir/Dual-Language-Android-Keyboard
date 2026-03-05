@@ -470,9 +470,11 @@ class UrduEnglishKeyboardService : InputMethodService() {
     }
 
     private fun updateSuggestions(words: List<String>) {
-        suggestion1.text = words.getOrNull(1) ?: ""
-        suggestion2.text = words.getOrNull(0) ?: "" // Top suggestion in the middle 
-        suggestion3.text = words.getOrNull(2) ?: ""
+        if (::suggestion1.isInitialized) {
+            suggestion1.text = words.getOrNull(1) ?: ""
+            suggestion2.text = words.getOrNull(0) ?: "" // Top suggestion in the middle 
+            suggestion3.text = words.getOrNull(2) ?: ""
+        }
     }
 
     private fun commitSuggestion(word: String) {
@@ -546,7 +548,13 @@ class UrduEnglishKeyboardService : InputMethodService() {
                 }
                 override fun onError(error: Int) {
                     if (::voicePromptText.isInitialized) {
-                        voicePromptText.text = "Tap mic to try again"
+                        val msg = when(error) {
+                            SpeechRecognizer.ERROR_NETWORK, SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> 
+                                if (!isEnglish) "Urdu voice needs Wi-Fi (No offline model)" else "Network Error"
+                            SpeechRecognizer.ERROR_NO_MATCH -> "Didn't catch that. Tap to try again."
+                            else -> "Error ($error). Tap mic to try again."
+                        }
+                        voicePromptText.text = msg
                         voiceMicIcon.alpha = 0.5f
                     }
                 }
