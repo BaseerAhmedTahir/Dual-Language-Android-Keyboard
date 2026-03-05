@@ -14,6 +14,9 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.content.Intent
 import android.os.Bundle
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
 import com.example.urduenglishkeyboard.data.AppDatabase
 import com.example.urduenglishkeyboard.data.WordDao
 import com.example.urduenglishkeyboard.data.WordEntity
@@ -504,9 +507,10 @@ class UrduEnglishKeyboardService : InputMethodService() {
 
     // Voice Input Integration
     private fun setupVoiceRecognition() {
-        if (SpeechRecognizer.isRecognitionAvailable(this)) {
-            speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
-            speechRecognizer?.setRecognitionListener(object : RecognitionListener {
+        try {
+            if (SpeechRecognizer.isRecognitionAvailable(this)) {
+                speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
+                speechRecognizer?.setRecognitionListener(object : RecognitionListener {
                 override fun onReadyForSpeech(params: Bundle?) {
                     voicePromptText.text = "Listening..."
                     voiceMicIcon.alpha = 1.0f
@@ -538,6 +542,10 @@ class UrduEnglishKeyboardService : InputMethodService() {
                 override fun onPartialResults(partialResults: Bundle?) {}
                 override fun onEvent(eventType: Int, params: Bundle?) {}
             })
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            // Gracefully handle lack of speech recognizer
         }
     }
 
@@ -550,6 +558,17 @@ class UrduEnglishKeyboardService : InputMethodService() {
         // Check hardware/OS support
         if (speechRecognizer == null) {
             currentInputConnection?.commitText("[Voice Not Supported]", 1)
+            return
+        }
+
+        // Check Microphone Permission
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            currentInputConnection?.commitText(" [Opening Settings for Mic Permission] ", 1)
+            val intent = Intent(this, MainActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                putExtra("request_mic_permission", true)
+            }
+            startActivity(intent)
             return
         }
 
@@ -569,7 +588,7 @@ class UrduEnglishKeyboardService : InputMethodService() {
                 voiceOverlayView,
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                true
+                false // Important: false so it doesn't crash or steal IME focus
             ).apply {
                 elevation = 20f
             }
@@ -589,14 +608,22 @@ class UrduEnglishKeyboardService : InputMethodService() {
     }
 
     private fun startListeningIntent() {
-        voicePromptText.text = "Initializing..."
-        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-            val lang = if (isEnglish) "en-US" else "ur-PK"
-            putExtra(RecognizerIntent.EXTRA_LANGUAGE, lang)
-            putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1)
+        try {
+            voicePromptText.text = "Initializing..."
+            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                val lang = if (isEnglish) "en-US" else "ur-PK"
+                putExtra(RecognizerIntent.EXTRA_LANGUAGE, lang)
+                putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1)
+            }
+            speechRecognizer?.startListening(intent)
+        } catch (e: SecurityException) {
+            voicePromptText.text = "Permission Denied: Enable Mic!"
+            currentInputConnection?.commitText("\n[Please enable Microphone permission for the keyboard in App Settings!]\n", 1)
+        } catch (e: Exception) {
+            voicePromptText.text = "Voice Error occurred."
+            e.printStackTrace()
         }
-        speechRecognizer?.startListening(intent)
     }
 
     private fun stopVoiceInput() {
