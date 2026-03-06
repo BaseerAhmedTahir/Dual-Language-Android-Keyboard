@@ -4,6 +4,8 @@ package com.example.urduenglishkeyboard.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -17,7 +19,19 @@ import java.lang.String;
 
 public final class SuggestionBarBinding implements ViewBinding {
   @NonNull
-  private final LinearLayout rootView;
+  private final FrameLayout rootView;
+
+  @NonNull
+  public final ImageView inlineVoiceCloseBtn;
+
+  @NonNull
+  public final LinearLayout inlineVoiceLayout;
+
+  @NonNull
+  public final ImageView inlineVoiceMicIcon;
+
+  @NonNull
+  public final TextView inlineVoicePromptText;
 
   @NonNull
   public final TextView suggestion1;
@@ -29,21 +43,31 @@ public final class SuggestionBarBinding implements ViewBinding {
   public final TextView suggestion3;
 
   @NonNull
+  public final FrameLayout suggestionBarContainer;
+
+  @NonNull
   public final LinearLayout suggestionBarLayout;
 
-  private SuggestionBarBinding(@NonNull LinearLayout rootView, @NonNull TextView suggestion1,
-      @NonNull TextView suggestion2, @NonNull TextView suggestion3,
-      @NonNull LinearLayout suggestionBarLayout) {
+  private SuggestionBarBinding(@NonNull FrameLayout rootView,
+      @NonNull ImageView inlineVoiceCloseBtn, @NonNull LinearLayout inlineVoiceLayout,
+      @NonNull ImageView inlineVoiceMicIcon, @NonNull TextView inlineVoicePromptText,
+      @NonNull TextView suggestion1, @NonNull TextView suggestion2, @NonNull TextView suggestion3,
+      @NonNull FrameLayout suggestionBarContainer, @NonNull LinearLayout suggestionBarLayout) {
     this.rootView = rootView;
+    this.inlineVoiceCloseBtn = inlineVoiceCloseBtn;
+    this.inlineVoiceLayout = inlineVoiceLayout;
+    this.inlineVoiceMicIcon = inlineVoiceMicIcon;
+    this.inlineVoicePromptText = inlineVoicePromptText;
     this.suggestion1 = suggestion1;
     this.suggestion2 = suggestion2;
     this.suggestion3 = suggestion3;
+    this.suggestionBarContainer = suggestionBarContainer;
     this.suggestionBarLayout = suggestionBarLayout;
   }
 
   @Override
   @NonNull
-  public LinearLayout getRoot() {
+  public FrameLayout getRoot() {
     return rootView;
   }
 
@@ -68,6 +92,30 @@ public final class SuggestionBarBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.inline_voice_close_btn;
+      ImageView inlineVoiceCloseBtn = ViewBindings.findChildViewById(rootView, id);
+      if (inlineVoiceCloseBtn == null) {
+        break missingId;
+      }
+
+      id = R.id.inline_voice_layout;
+      LinearLayout inlineVoiceLayout = ViewBindings.findChildViewById(rootView, id);
+      if (inlineVoiceLayout == null) {
+        break missingId;
+      }
+
+      id = R.id.inline_voice_mic_icon;
+      ImageView inlineVoiceMicIcon = ViewBindings.findChildViewById(rootView, id);
+      if (inlineVoiceMicIcon == null) {
+        break missingId;
+      }
+
+      id = R.id.inline_voice_prompt_text;
+      TextView inlineVoicePromptText = ViewBindings.findChildViewById(rootView, id);
+      if (inlineVoicePromptText == null) {
+        break missingId;
+      }
+
       id = R.id.suggestion1;
       TextView suggestion1 = ViewBindings.findChildViewById(rootView, id);
       if (suggestion1 == null) {
@@ -86,10 +134,17 @@ public final class SuggestionBarBinding implements ViewBinding {
         break missingId;
       }
 
-      LinearLayout suggestionBarLayout = (LinearLayout) rootView;
+      FrameLayout suggestionBarContainer = (FrameLayout) rootView;
 
-      return new SuggestionBarBinding((LinearLayout) rootView, suggestion1, suggestion2,
-          suggestion3, suggestionBarLayout);
+      id = R.id.suggestion_bar_layout;
+      LinearLayout suggestionBarLayout = ViewBindings.findChildViewById(rootView, id);
+      if (suggestionBarLayout == null) {
+        break missingId;
+      }
+
+      return new SuggestionBarBinding((FrameLayout) rootView, inlineVoiceCloseBtn,
+          inlineVoiceLayout, inlineVoiceMicIcon, inlineVoicePromptText, suggestion1, suggestion2,
+          suggestion3, suggestionBarContainer, suggestionBarLayout);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

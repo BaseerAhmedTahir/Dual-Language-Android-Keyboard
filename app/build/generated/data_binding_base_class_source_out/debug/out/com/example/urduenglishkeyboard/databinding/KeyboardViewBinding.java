@@ -26,16 +26,12 @@ public final class KeyboardViewBinding implements ViewBinding {
   @NonNull
   public final LinearLayout keyboardLayoutContainer;
 
-  @NonNull
-  public final VoiceOverlayBinding voiceOverlayContainer;
-
   private KeyboardViewBinding(@NonNull FrameLayout rootView,
-      @NonNull CustomKeyboardView customKeyboardView, @NonNull LinearLayout keyboardLayoutContainer,
-      @NonNull VoiceOverlayBinding voiceOverlayContainer) {
+      @NonNull CustomKeyboardView customKeyboardView,
+      @NonNull LinearLayout keyboardLayoutContainer) {
     this.rootView = rootView;
     this.customKeyboardView = customKeyboardView;
     this.keyboardLayoutContainer = keyboardLayoutContainer;
-    this.voiceOverlayContainer = voiceOverlayContainer;
   }
 
   @Override
@@ -77,15 +73,8 @@ public final class KeyboardViewBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.voice_overlay_container;
-      View voiceOverlayContainer = ViewBindings.findChildViewById(rootView, id);
-      if (voiceOverlayContainer == null) {
-        break missingId;
-      }
-      VoiceOverlayBinding binding_voiceOverlayContainer = VoiceOverlayBinding.bind(voiceOverlayContainer);
-
       return new KeyboardViewBinding((FrameLayout) rootView, customKeyboardView,
-          keyboardLayoutContainer, binding_voiceOverlayContainer);
+          keyboardLayoutContainer);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

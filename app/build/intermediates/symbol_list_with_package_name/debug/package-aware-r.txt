@@ -3193,6 +3193,10 @@ id ignoreRequest
 id image
 id indeterminate
 id info
+id inline_voice_close_btn
+id inline_voice_layout
+id inline_voice_mic_icon
+id inline_voice_prompt_text
 id invisible
 id inward
 id italic
@@ -3387,6 +3391,7 @@ id submit_area
 id suggestion1
 id suggestion2
 id suggestion3
+id suggestion_bar_container
 id suggestion_bar_layout
 id switch_sound
 id switch_vibration
@@ -3451,10 +3456,6 @@ id view_tree_saved_state_registry_owner
 id view_tree_view_model_store_owner
 id visible
 id visible_removing_fragment_view_tag
-id voice_close_btn
-id voice_mic_icon
-id voice_overlay_container
-id voice_prompt_text
 id withText
 id with_icon
 id withinBounds
@@ -3657,7 +3658,6 @@ layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
 layout suggestion_bar
 layout support_simple_spinner_dropdown_item
-layout voice_overlay
 plurals mtrl_badge_content_description
 string abc_action_bar_home_description
 string abc_action_bar_up_description

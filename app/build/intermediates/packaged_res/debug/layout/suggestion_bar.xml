@@ -1,80 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/suggestion_bar_layout"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/suggestion_bar_container"
     android:layout_width="match_parent"
     android:layout_height="52dp"
-    android:orientation="horizontal"
-    android:background="#00000000"
-    android:gravity="center"
-    android:paddingStart="8dp"
-    android:paddingEnd="8dp">
+    android:background="#E8EAED"> <!-- Match keyboard background -->
 
+    <!-- Normal Suggestion Bar -->
     <LinearLayout
-        android:layout_width="0dp"
+        android:id="@+id/suggestion_bar_layout"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:background="#00000000"
         android:gravity="center"
-        android:padding="6dp">
-        <TextView
-            android:id="@+id/suggestion1"
-            android:layout_width="match_parent"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center"
-            android:text=""
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:background="@drawable/suggestion_bg"
-            android:clickable="true"
-            android:focusable="true"/>
+            android:padding="6dp">
+            <TextView
+                android:id="@+id/suggestion1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text=""
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:background="@drawable/suggestion_bg"
+                android:clickable="true"
+                android:focusable="true"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="20dp"
+            android:background="#33A0A0A0"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:gravity="center"
+            android:padding="4dp">
+            <TextView
+                android:id="@+id/suggestion2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text=""
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:background="@drawable/suggestion_bg_primary"
+                android:clickable="true"
+                android:focusable="true"
+                android:elevation="2dp"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="20dp"
+            android:background="#33A0A0A0"/>
+            
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="6dp">
+            <TextView
+                android:id="@+id/suggestion3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text=""
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:background="@drawable/suggestion_bg"
+                android:clickable="true"
+                android:focusable="true"/>
+        </LinearLayout>
     </LinearLayout>
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="20dp"
-        android:background="#33A0A0A0"/>
-
+    <!-- Inline Voice UI (Hidden by Default) -->
     <LinearLayout
-        android:layout_width="0dp"
+        android:id="@+id/inline_voice_layout"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1.2"
-        android:gravity="center"
-        android:padding="4dp">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="8dp"
+        android:background="#F8F9FA"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/inline_voice_mic_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_mic"
+            android:tint="#4285F4" /> <!-- Google Blue -->
+
         <TextView
-            android:id="@+id/suggestion2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text=""
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
+            android:id="@+id/inline_voice_prompt_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:text="Listening..."
+            android:textColor="#202124"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:background="@drawable/suggestion_bg_primary"
+            android:ellipsize="end"
+            android:maxLines="1" />
+
+        <ImageView
+            android:id="@+id/inline_voice_close_btn"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:padding="8dp"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:tint="#5F6368"
+            android:background="@android:color/transparent"
             android:clickable="true"
-            android:focusable="true"
-            android:elevation="2dp"/>
+            android:focusable="true" />
     </LinearLayout>
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="20dp"
-        android:background="#33A0A0A0"/>
-        
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:padding="6dp">
-        <TextView
-            android:id="@+id/suggestion3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text=""
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:background="@drawable/suggestion_bg"
-            android:clickable="true"
-            android:focusable="true"/>
-    </LinearLayout>
-</LinearLayout>
+</FrameLayout>

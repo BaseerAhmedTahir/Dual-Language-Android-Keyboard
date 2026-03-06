@@ -77,20 +77,37 @@ class MainActivity : AppCompatActivity() {
 
         val cardDownloadVoice = findViewById<MaterialCardView>(R.id.card_download_voice)
         cardDownloadVoice.setOnClickListener {
-            // First try to jump directly into Google's hidden Voice Settings page
-            val directIntent = Intent().apply {
-                setClassName("com.google.android.googlequicksearchbox", "com.google.android.apps.gsa.settingsui.VoiceSearchPreferences")
-            }
             try {
+                // Safest direct route to Google App's internal Voice Search Settings
+                val directIntent = Intent(Intent.ACTION_MAIN).apply {
+                    setClassName("com.google.android.googlequicksearchbox", "com.google.android.apps.gsa.settingsui.VoiceSearchPreferences")
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
                 startActivity(directIntent)
             } catch (e: Exception) {
-                // Fallback 1: Generic Voice Input Settings
-                val fallbackIntent = Intent(Settings.ACTION_VOICE_INPUT_SETTINGS)
                 try {
-                    startActivity(fallbackIntent)
+                    // Fallback 1: Try the standard Search Settings Intent
+                    val searchSettingsIntent = Intent("android.search.action.SEARCH_SETTINGS").apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                    startActivity(searchSettingsIntent)
                 } catch (e2: Exception) {
-                    // Fallback 2: Main Phone Settings
-                    startActivity(Intent(Settings.ACTION_SETTINGS))
+                    try {
+                        // Fallback 2: Try the generic Voice Input Settings (What the user saw earlier)
+                        val voiceIntent = Intent(Settings.ACTION_VOICE_INPUT_SETTINGS).apply {
+                            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        }
+                        startActivity(voiceIntent)
+                    } catch (e3: Exception) {
+                        try {
+                            // Fallback 3: Try to open the Google App itself in the Play Store
+                            val playIntent = Intent(Intent.ACTION_VIEW, android.net.Uri.parse("market://details?id=com.google.android.googlequicksearchbox"))
+                            startActivity(playIntent)
+                        } catch (e4: Exception) {
+                            // Total Failure
+                            android.widget.Toast.makeText(this, "Could not open Voice Settings.", android.widget.Toast.LENGTH_LONG).show()
+                        }
+                    }
                 }
             }
         }

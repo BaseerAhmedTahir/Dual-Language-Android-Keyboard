@@ -48,10 +48,10 @@ class UrduEnglishKeyboardService : InputMethodService() {
     
     private var popupWindow: PopupWindow? = null
     
-    // Voice Input State
     private var speechRecognizer: SpeechRecognizer? = null
     private lateinit var keyboardLayoutContainer: View
-    private lateinit var voiceOverlayContainer: View
+    private lateinit var inlineVoiceLayout: View
+    private lateinit var suggestionBarLayout: View
     private lateinit var voicePromptText: TextView
     private lateinit var voiceMicIcon: ImageView
     
@@ -73,13 +73,15 @@ class UrduEnglishKeyboardService : InputMethodService() {
     override fun onCreateInputView(): View {
         val view = layoutInflater.inflate(R.layout.keyboard_view, null)
         keyboardLayoutContainer = view.findViewById(R.id.keyboard_layout_container)
-        voiceOverlayContainer = view.findViewById(R.id.voice_overlay_container)
-        voiceOverlayContainer.visibility = View.GONE
         
-        voicePromptText = view.findViewById(R.id.voice_prompt_text)
-        voiceMicIcon = view.findViewById(R.id.voice_mic_icon)
+        inlineVoiceLayout = view.findViewById(R.id.inline_voice_layout)
+        suggestionBarLayout = view.findViewById(R.id.suggestion_bar_layout)
+        inlineVoiceLayout.visibility = View.GONE
         
-        val closeBtn = view.findViewById<TextView>(R.id.voice_close_btn)
+        voicePromptText = view.findViewById(R.id.inline_voice_prompt_text)
+        voiceMicIcon = view.findViewById(R.id.inline_voice_mic_icon)
+        
+        val closeBtn = view.findViewById<ImageView>(R.id.inline_voice_close_btn)
         closeBtn.setOnClickListener { stopVoiceInput() }
         voiceMicIcon.setOnClickListener { startListeningIntent() }
         
@@ -605,9 +607,9 @@ class UrduEnglishKeyboardService : InputMethodService() {
             return
         }
 
-        // Show Overlay covering the keyboard
-        keyboardLayoutContainer.visibility = View.GONE
-        voiceOverlayContainer.visibility = View.VISIBLE
+        // Show Inline Voice UI, hide standard suggestions
+        suggestionBarLayout.visibility = View.GONE
+        inlineVoiceLayout.visibility = View.VISIBLE
         
         startListeningIntent()
     }
@@ -633,8 +635,11 @@ class UrduEnglishKeyboardService : InputMethodService() {
 
     private fun stopVoiceInput() {
         speechRecognizer?.stopListening()
-        if (::voiceOverlayContainer.isInitialized) {
-            voiceOverlayContainer.visibility = View.GONE
+        if (::inlineVoiceLayout.isInitialized) {
+            inlineVoiceLayout.visibility = View.GONE
+        }
+        if (::suggestionBarLayout.isInitialized) {
+            suggestionBarLayout.visibility = View.VISIBLE
         }
         if (::keyboardLayoutContainer.isInitialized) {
             keyboardLayoutContainer.visibility = View.VISIBLE
