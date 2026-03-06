@@ -1,11 +1,11 @@
 [
     {
-        "merged": "C:\\Users\\Mustafavi\\.gradle\\daemon\\8.4\\com.example.urduenglishkeyboard.app-merged_res-35:\\layout_keyboard_view.xml.flat",
-        "source": "C:\\Users\\Mustafavi\\.gradle\\daemon\\8.4\\com.example.urduenglishkeyboard.app-main-37:\\layout\\keyboard_view.xml"
+        "merged": "com.example.urduenglishkeyboard.app-merged_res-35:/layout_activity_main.xml.flat",
+        "source": "com.example.urduenglishkeyboard.app-main-37:/layout/activity_main.xml"
     },
     {
-        "merged": "com.example.urduenglishkeyboard.app-merged_res-35:/layout_suggestion_bar.xml.flat",
-        "source": "com.example.urduenglishkeyboard.app-main-37:/layout/suggestion_bar.xml"
+        "merged": "C:\\Users\\Mustafavi\\.gradle\\daemon\\8.4\\com.example.urduenglishkeyboard.app-merged_res-35:\\layout_keyboard_view.xml.flat",
+        "source": "C:\\Users\\Mustafavi\\.gradle\\daemon\\8.4\\com.example.urduenglishkeyboard.app-main-37:\\layout\\keyboard_view.xml"
     },
     {
         "merged": "C:\\Users\\Mustafavi\\.gradle\\daemon\\8.4\\com.example.urduenglishkeyboard.app-merged_res-35:\\layout_suggestion_bar.xml.flat",

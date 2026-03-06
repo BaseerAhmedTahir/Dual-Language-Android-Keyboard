@@ -14,6 +14,7 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.content.Intent
 import android.os.Bundle
+import android.content.Context
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
@@ -530,10 +531,28 @@ class UrduEnglishKeyboardService : InputMethodService() {
                 override fun onReadyForSpeech(params: Bundle?) {
                     if (::voicePromptText.isInitialized) {
                         voicePromptText.text = "Listening..."
-                        voiceMicIcon.alpha = 1.0f
+                        voiceMicIcon.alpha = 1f
+                        
+                        // Start a smooth pulsing animation
+                        val pulseAnimator = android.animation.ObjectAnimator.ofPropertyValuesHolder(
+                            voiceMicIcon,
+                            android.animation.PropertyValuesHolder.ofFloat("scaleX", 0.8f, 1.2f),
+                            android.animation.PropertyValuesHolder.ofFloat("scaleY", 0.8f, 1.2f)
+                        )
+                        pulseAnimator.duration = 800
+                        pulseAnimator.repeatCount = android.animation.ObjectAnimator.INFINITE
+                        pulseAnimator.repeatMode = android.animation.ObjectAnimator.REVERSE
+                        pulseAnimator.start()
+                        
+                        // Store the animator so we can cancel it later
+                        voiceMicIcon.setTag(R.id.inline_voice_mic_icon, pulseAnimator)
                     }
                 }
-                override fun onBeginningOfSpeech() {}
+                override fun onBeginningOfSpeech() {
+                    if (::voicePromptText.isInitialized) {
+                        voicePromptText.text = "Recording..."
+                    }
+                }
                 override fun onRmsChanged(rmsdB: Float) {
                     if (::voiceMicIcon.isInitialized) {
                         val scale = 1.0f + (rmsdB / 10f).coerceIn(0f, 0.3f)
@@ -543,6 +562,7 @@ class UrduEnglishKeyboardService : InputMethodService() {
                 }
                 override fun onBufferReceived(buffer: ByteArray?) {}
                 override fun onEndOfSpeech() {
+                    cancelPulseAnimation()
                     if (::voicePromptText.isInitialized) {
                         voicePromptText.text = "Processing..."
                         voiceMicIcon.scaleX = 1f
@@ -550,13 +570,14 @@ class UrduEnglishKeyboardService : InputMethodService() {
                     }
                 }
                 override fun onError(error: Int) {
+                    cancelPulseAnimation()
                     if (::voicePromptText.isInitialized) {
                         val msg = when(error) {
                             SpeechRecognizer.ERROR_NETWORK, SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> {
                                 if (!isEnglish) {
-                                    "Urdu voice needs Wi-Fi (No offline model)"
+                                    "Urdu voice requires Data/Wi-Fi."
                                 } else {
-                                    "Network Error"
+                                    "Network Error. Check connection."
                                 }
                             }
                             SpeechRecognizer.ERROR_NO_MATCH -> "Didn't catch that. Tap to try again."
@@ -564,9 +585,12 @@ class UrduEnglishKeyboardService : InputMethodService() {
                         }
                         voicePromptText.text = msg
                         voiceMicIcon.alpha = 0.5f
+                        voiceMicIcon.scaleX = 1f
+                        voiceMicIcon.scaleY = 1f
                     }
                 }
                 override fun onResults(results: Bundle?) {
+                    cancelPulseAnimation()
                     val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                     if (!matches.isNullOrEmpty()) {
                         val spokenText = matches[0]
@@ -614,9 +638,37 @@ class UrduEnglishKeyboardService : InputMethodService() {
         startListeningIntent()
     }
 
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as android.net.ConnectivityManager
+        val network = connectivityManager.activeNetwork ?: return false
+        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+        return when {
+            activeNetwork.hasTransport(android.net.NetworkCapabilities.TRANSPORT_WIFI) -> true
+            activeNetwork.hasTransport(android.net.NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            activeNetwork.hasTransport(android.net.NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            else -> false
+        }
+    }
+
+    private fun cancelPulseAnimation() {
+        if (::voiceMicIcon.isInitialized) {
+            val animator = voiceMicIcon.getTag(R.id.inline_voice_mic_icon) as? android.animation.ObjectAnimator
+            animator?.cancel()
+            voiceMicIcon.scaleX = 1f
+            voiceMicIcon.scaleY = 1f
+        }
+    }
+
     private fun startListeningIntent() {
+        if (!isEnglish && !isNetworkAvailable()) {
+            voicePromptText.text = "To use Urdu voice typing, please turn on Wi-Fi or Mobile Data."
+            voiceMicIcon.alpha = 0.5f
+            return
+        }
+
         try {
             voicePromptText.text = "Initializing..."
+            voiceMicIcon.alpha = 1f
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
                 val lang = if (isEnglish) "en-US" else "ur-PK"
@@ -634,6 +686,7 @@ class UrduEnglishKeyboardService : InputMethodService() {
     }
 
     private fun stopVoiceInput() {
+        cancelPulseAnimation()
         speechRecognizer?.stopListening()
         if (::inlineVoiceLayout.isInitialized) {
             inlineVoiceLayout.visibility = View.GONE

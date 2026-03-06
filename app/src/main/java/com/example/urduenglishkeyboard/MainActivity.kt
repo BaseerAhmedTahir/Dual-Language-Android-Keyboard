@@ -74,43 +74,6 @@ class MainActivity : AppCompatActivity() {
             val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.showInputMethodPicker()
         }
-
-        val cardDownloadVoice = findViewById<MaterialCardView>(R.id.card_download_voice)
-        cardDownloadVoice.setOnClickListener {
-            try {
-                // Safest direct route to Google App's internal Voice Search Settings
-                val directIntent = Intent(Intent.ACTION_MAIN).apply {
-                    setClassName("com.google.android.googlequicksearchbox", "com.google.android.apps.gsa.settingsui.VoiceSearchPreferences")
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                }
-                startActivity(directIntent)
-            } catch (e: Exception) {
-                try {
-                    // Fallback 1: Try the standard Search Settings Intent
-                    val searchSettingsIntent = Intent("android.search.action.SEARCH_SETTINGS").apply {
-                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    }
-                    startActivity(searchSettingsIntent)
-                } catch (e2: Exception) {
-                    try {
-                        // Fallback 2: Try the generic Voice Input Settings (What the user saw earlier)
-                        val voiceIntent = Intent(Settings.ACTION_VOICE_INPUT_SETTINGS).apply {
-                            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        }
-                        startActivity(voiceIntent)
-                    } catch (e3: Exception) {
-                        try {
-                            // Fallback 3: Try to open the Google App itself in the Play Store
-                            val playIntent = Intent(Intent.ACTION_VIEW, android.net.Uri.parse("market://details?id=com.google.android.googlequicksearchbox"))
-                            startActivity(playIntent)
-                        } catch (e4: Exception) {
-                            // Total Failure
-                            android.widget.Toast.makeText(this, "Could not open Voice Settings.", android.widget.Toast.LENGTH_LONG).show()
-                        }
-                    }
-                }
-            }
-        }
     }
 
     override fun onResume() {
