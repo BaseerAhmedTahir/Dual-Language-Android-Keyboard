@@ -74,6 +74,26 @@ class MainActivity : AppCompatActivity() {
             val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.showInputMethodPicker()
         }
+
+        val cardDownloadVoice = findViewById<MaterialCardView>(R.id.card_download_voice)
+        cardDownloadVoice.setOnClickListener {
+            // First try to jump directly into Google's hidden Voice Settings page
+            val directIntent = Intent().apply {
+                setClassName("com.google.android.googlequicksearchbox", "com.google.android.apps.gsa.settingsui.VoiceSearchPreferences")
+            }
+            try {
+                startActivity(directIntent)
+            } catch (e: Exception) {
+                // Fallback 1: Generic Voice Input Settings
+                val fallbackIntent = Intent(Settings.ACTION_VOICE_INPUT_SETTINGS)
+                try {
+                    startActivity(fallbackIntent)
+                } catch (e2: Exception) {
+                    // Fallback 2: Main Phone Settings
+                    startActivity(Intent(Settings.ACTION_SETTINGS))
+                }
+            }
+        }
     }
 
     override fun onResume() {

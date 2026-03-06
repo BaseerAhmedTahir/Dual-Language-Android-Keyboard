@@ -24,6 +24,9 @@ public final class ActivityMainBinding implements ViewBinding {
   private final CoordinatorLayout rootView;
 
   @NonNull
+  public final MaterialCardView cardDownloadVoice;
+
+  @NonNull
   public final MaterialCardView cardEnable;
 
   @NonNull
@@ -51,12 +54,13 @@ public final class ActivityMainBinding implements ViewBinding {
   public final TextView tvSelectStatus;
 
   private ActivityMainBinding(@NonNull CoordinatorLayout rootView,
-      @NonNull MaterialCardView cardEnable, @NonNull MaterialCardView cardSelect,
-      @NonNull ImageView iconEnableStatus, @NonNull ImageView iconSelectStatus,
-      @NonNull SwitchMaterial switchSound, @NonNull SwitchMaterial switchVibration,
-      @NonNull Toolbar toolbar, @NonNull TextView tvEnableStatus,
-      @NonNull TextView tvSelectStatus) {
+      @NonNull MaterialCardView cardDownloadVoice, @NonNull MaterialCardView cardEnable,
+      @NonNull MaterialCardView cardSelect, @NonNull ImageView iconEnableStatus,
+      @NonNull ImageView iconSelectStatus, @NonNull SwitchMaterial switchSound,
+      @NonNull SwitchMaterial switchVibration, @NonNull Toolbar toolbar,
+      @NonNull TextView tvEnableStatus, @NonNull TextView tvSelectStatus) {
     this.rootView = rootView;
+    this.cardDownloadVoice = cardDownloadVoice;
     this.cardEnable = cardEnable;
     this.cardSelect = cardSelect;
     this.iconEnableStatus = iconEnableStatus;
@@ -95,6 +99,12 @@ public final class ActivityMainBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.card_download_voice;
+      MaterialCardView cardDownloadVoice = ViewBindings.findChildViewById(rootView, id);
+      if (cardDownloadVoice == null) {
+        break missingId;
+      }
+
       id = R.id.card_enable;
       MaterialCardView cardEnable = ViewBindings.findChildViewById(rootView, id);
       if (cardEnable == null) {
@@ -149,9 +159,9 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityMainBinding((CoordinatorLayout) rootView, cardEnable, cardSelect,
-          iconEnableStatus, iconSelectStatus, switchSound, switchVibration, toolbar, tvEnableStatus,
-          tvSelectStatus);
+      return new ActivityMainBinding((CoordinatorLayout) rootView, cardDownloadVoice, cardEnable,
+          cardSelect, iconEnableStatus, iconSelectStatus, switchSound, switchVibration, toolbar,
+          tvEnableStatus, tvSelectStatus);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

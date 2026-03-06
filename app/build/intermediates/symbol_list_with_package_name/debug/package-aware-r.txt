@@ -3081,6 +3081,7 @@ id bottom
 id bounce
 id buttonPanel
 id cancel_button
+id card_download_voice
 id card_enable
 id card_select
 id center

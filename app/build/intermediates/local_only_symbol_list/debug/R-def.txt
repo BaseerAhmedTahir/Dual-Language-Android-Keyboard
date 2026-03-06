@@ -4,6 +4,7 @@ drawable ic_launcher
 drawable ic_mic
 drawable suggestion_bg
 drawable suggestion_bg_primary
+id card_download_voice
 id card_enable
 id card_select
 id custom_keyboard_view

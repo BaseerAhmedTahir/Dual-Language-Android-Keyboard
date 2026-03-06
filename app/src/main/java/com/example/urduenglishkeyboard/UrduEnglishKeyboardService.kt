@@ -78,6 +78,7 @@ class UrduEnglishKeyboardService : InputMethodService() {
         
         voicePromptText = view.findViewById(R.id.voice_prompt_text)
         voiceMicIcon = view.findViewById(R.id.voice_mic_icon)
+        
         val closeBtn = view.findViewById<TextView>(R.id.voice_close_btn)
         closeBtn.setOnClickListener { stopVoiceInput() }
         voiceMicIcon.setOnClickListener { startListeningIntent() }
@@ -549,8 +550,13 @@ class UrduEnglishKeyboardService : InputMethodService() {
                 override fun onError(error: Int) {
                     if (::voicePromptText.isInitialized) {
                         val msg = when(error) {
-                            SpeechRecognizer.ERROR_NETWORK, SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> 
-                                if (!isEnglish) "Urdu voice needs Wi-Fi (No offline model)" else "Network Error"
+                            SpeechRecognizer.ERROR_NETWORK, SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> {
+                                if (!isEnglish) {
+                                    "Urdu voice needs Wi-Fi (No offline model)"
+                                } else {
+                                    "Network Error"
+                                }
+                            }
                             SpeechRecognizer.ERROR_NO_MATCH -> "Didn't catch that. Tap to try again."
                             else -> "Error ($error). Tap mic to try again."
                         }
