@@ -53,6 +53,13 @@ class UrduEnglishKeyboardService : InputMethodService() {
     private lateinit var keyboardLayoutContainer: View
     private lateinit var inlineVoiceLayout: View
     private lateinit var suggestionBarLayout: View
+    private lateinit var emojiCategoryLayout: View
+    private lateinit var emojiTabSmileys: TextView
+    private lateinit var emojiTabAnimals: TextView
+    private lateinit var emojiTabFood: TextView
+    private lateinit var emojiTabTravel: TextView
+    private lateinit var emojiTabObjects: TextView
+    private lateinit var emojiTabSymbols: TextView
     private lateinit var voicePromptText: TextView
     private lateinit var voiceMicIcon: ImageView
     
@@ -77,7 +84,17 @@ class UrduEnglishKeyboardService : InputMethodService() {
         
         inlineVoiceLayout = view.findViewById(R.id.inline_voice_layout)
         suggestionBarLayout = view.findViewById(R.id.suggestion_bar_layout)
+        emojiCategoryLayout = view.findViewById(R.id.emoji_category_layout)
+        
+        emojiTabSmileys = view.findViewById(R.id.emoji_tab_smileys)
+        emojiTabAnimals = view.findViewById(R.id.emoji_tab_animals)
+        emojiTabFood = view.findViewById(R.id.emoji_tab_food)
+        emojiTabTravel = view.findViewById(R.id.emoji_tab_travel)
+        emojiTabObjects = view.findViewById(R.id.emoji_tab_objects)
+        emojiTabSymbols = view.findViewById(R.id.emoji_tab_symbols)
+        
         inlineVoiceLayout.visibility = View.GONE
+        emojiCategoryLayout.visibility = View.GONE
         
         voicePromptText = view.findViewById(R.id.inline_voice_prompt_text)
         voiceMicIcon = view.findViewById(R.id.inline_voice_mic_icon)
@@ -127,8 +144,31 @@ class UrduEnglishKeyboardService : InputMethodService() {
         }
         
         setupSuggestionListeners()
+        setupEmojiCategoryListeners()
         updateKeyboardLayout()
         return view
+    }
+
+    private fun setupEmojiCategoryListeners() {
+        val clickListener = View.OnClickListener { v ->
+            currentEmojiCategory = when (v.id) {
+                R.id.emoji_tab_smileys -> KeyboardLayouts.CODE_EMOJI_SMILEYS
+                R.id.emoji_tab_animals -> KeyboardLayouts.CODE_EMOJI_ANIMALS
+                R.id.emoji_tab_food -> KeyboardLayouts.CODE_EMOJI_FOOD
+                R.id.emoji_tab_travel -> KeyboardLayouts.CODE_EMOJI_TRAVEL
+                R.id.emoji_tab_objects -> KeyboardLayouts.CODE_EMOJI_OBJECTS
+                R.id.emoji_tab_symbols -> KeyboardLayouts.CODE_EMOJI_SYMBOLS
+                else -> KeyboardLayouts.CODE_EMOJI_SMILEYS
+            }
+            updateKeyboardLayout()
+        }
+
+        emojiTabSmileys.setOnClickListener(clickListener)
+        emojiTabAnimals.setOnClickListener(clickListener)
+        emojiTabFood.setOnClickListener(clickListener)
+        emojiTabTravel.setOnClickListener(clickListener)
+        emojiTabObjects.setOnClickListener(clickListener)
+        emojiTabSymbols.setOnClickListener(clickListener)
     }
 
     private fun isHapticFeedbackEnabled(): Boolean {
@@ -513,8 +553,50 @@ class UrduEnglishKeyboardService : InputMethodService() {
         } else {
             KeyboardLayouts.urduPhonetic
         }
+
+        // Hide Suggestions/Voice bar when Emojis are active, to maximize screen space
+        if (::suggestionBarLayout.isInitialized && ::inlineVoiceLayout.isInitialized && ::emojiCategoryLayout.isInitialized) {
+            if (isEmoji) {
+                suggestionBarLayout.visibility = View.GONE
+                inlineVoiceLayout.visibility = View.GONE
+                emojiCategoryLayout.visibility = View.VISIBLE
+                updateEmojiCategoryTabsUI()
+            } else {
+                // Return to normal typing view
+                // Voice overlay manages itself during speech, so we only force restore the suggestion bar if voice isn't active
+                emojiCategoryLayout.visibility = View.GONE
+                if (inlineVoiceLayout.visibility != View.VISIBLE) {
+                    suggestionBarLayout.visibility = View.VISIBLE
+                }
+            }
+        }
+
         val requiresNastaliq = !isEnglish && !isEmoji && !isNumbers
         keyboardView.renderLayout(layout, isShifted, requiresNastaliq)
+    }
+
+    private fun updateEmojiCategoryTabsUI() {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val isDark = currentNightMode == Configuration.UI_MODE_NIGHT_YES
+        val selectedBgColor = if (isDark) Color.parseColor("#383C41") else Color.parseColor("#D4D8DD")
+        
+        fun getBg(isSelected: Boolean): android.graphics.drawable.Drawable {
+            return if (isSelected) {
+                android.graphics.drawable.GradientDrawable().apply {
+                    setColor(selectedBgColor)
+                    cornerRadius = 24f
+                }
+            } else {
+                android.graphics.drawable.ColorDrawable(Color.TRANSPARENT)
+            }
+        }
+
+        emojiTabSmileys.background = getBg(currentEmojiCategory == KeyboardLayouts.CODE_EMOJI_SMILEYS)
+        emojiTabAnimals.background = getBg(currentEmojiCategory == KeyboardLayouts.CODE_EMOJI_ANIMALS)
+        emojiTabFood.background = getBg(currentEmojiCategory == KeyboardLayouts.CODE_EMOJI_FOOD)
+        emojiTabTravel.background = getBg(currentEmojiCategory == KeyboardLayouts.CODE_EMOJI_TRAVEL)
+        emojiTabObjects.background = getBg(currentEmojiCategory == KeyboardLayouts.CODE_EMOJI_OBJECTS)
+        emojiTabSymbols.background = getBg(currentEmojiCategory == KeyboardLayouts.CODE_EMOJI_SYMBOLS)
     }
 
     override fun onDestroy() {

@@ -2904,6 +2904,12 @@ drawable ic_call_decline_low
 drawable ic_clear_black_24
 drawable ic_clock_black_24dp
 drawable ic_keyboard_black_24dp
+drawable ic_keyboard_delete
+drawable ic_keyboard_emoji
+drawable ic_keyboard_enter
+drawable ic_keyboard_language
+drawable ic_keyboard_shift
+drawable ic_keyboard_voice
 drawable ic_launcher
 drawable ic_m3_chip_check
 drawable ic_m3_chip_checked_circle
@@ -3146,6 +3152,13 @@ id edit_query
 id edit_text_id
 id elastic
 id embed
+id emoji_category_layout
+id emoji_tab_animals
+id emoji_tab_food
+id emoji_tab_objects
+id emoji_tab_smileys
+id emoji_tab_symbols
+id emoji_tab_travel
 id end
 id endToStart
 id enterAlways

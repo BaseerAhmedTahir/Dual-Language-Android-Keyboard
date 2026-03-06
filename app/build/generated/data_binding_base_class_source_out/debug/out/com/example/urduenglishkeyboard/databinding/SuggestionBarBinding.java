@@ -22,6 +22,27 @@ public final class SuggestionBarBinding implements ViewBinding {
   private final FrameLayout rootView;
 
   @NonNull
+  public final LinearLayout emojiCategoryLayout;
+
+  @NonNull
+  public final TextView emojiTabAnimals;
+
+  @NonNull
+  public final TextView emojiTabFood;
+
+  @NonNull
+  public final TextView emojiTabObjects;
+
+  @NonNull
+  public final TextView emojiTabSmileys;
+
+  @NonNull
+  public final TextView emojiTabSymbols;
+
+  @NonNull
+  public final TextView emojiTabTravel;
+
+  @NonNull
   public final ImageView inlineVoiceCloseBtn;
 
   @NonNull
@@ -49,11 +70,22 @@ public final class SuggestionBarBinding implements ViewBinding {
   public final LinearLayout suggestionBarLayout;
 
   private SuggestionBarBinding(@NonNull FrameLayout rootView,
-      @NonNull ImageView inlineVoiceCloseBtn, @NonNull LinearLayout inlineVoiceLayout,
-      @NonNull ImageView inlineVoiceMicIcon, @NonNull TextView inlineVoicePromptText,
-      @NonNull TextView suggestion1, @NonNull TextView suggestion2, @NonNull TextView suggestion3,
+      @NonNull LinearLayout emojiCategoryLayout, @NonNull TextView emojiTabAnimals,
+      @NonNull TextView emojiTabFood, @NonNull TextView emojiTabObjects,
+      @NonNull TextView emojiTabSmileys, @NonNull TextView emojiTabSymbols,
+      @NonNull TextView emojiTabTravel, @NonNull ImageView inlineVoiceCloseBtn,
+      @NonNull LinearLayout inlineVoiceLayout, @NonNull ImageView inlineVoiceMicIcon,
+      @NonNull TextView inlineVoicePromptText, @NonNull TextView suggestion1,
+      @NonNull TextView suggestion2, @NonNull TextView suggestion3,
       @NonNull FrameLayout suggestionBarContainer, @NonNull LinearLayout suggestionBarLayout) {
     this.rootView = rootView;
+    this.emojiCategoryLayout = emojiCategoryLayout;
+    this.emojiTabAnimals = emojiTabAnimals;
+    this.emojiTabFood = emojiTabFood;
+    this.emojiTabObjects = emojiTabObjects;
+    this.emojiTabSmileys = emojiTabSmileys;
+    this.emojiTabSymbols = emojiTabSymbols;
+    this.emojiTabTravel = emojiTabTravel;
     this.inlineVoiceCloseBtn = inlineVoiceCloseBtn;
     this.inlineVoiceLayout = inlineVoiceLayout;
     this.inlineVoiceMicIcon = inlineVoiceMicIcon;
@@ -92,6 +124,48 @@ public final class SuggestionBarBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.emoji_category_layout;
+      LinearLayout emojiCategoryLayout = ViewBindings.findChildViewById(rootView, id);
+      if (emojiCategoryLayout == null) {
+        break missingId;
+      }
+
+      id = R.id.emoji_tab_animals;
+      TextView emojiTabAnimals = ViewBindings.findChildViewById(rootView, id);
+      if (emojiTabAnimals == null) {
+        break missingId;
+      }
+
+      id = R.id.emoji_tab_food;
+      TextView emojiTabFood = ViewBindings.findChildViewById(rootView, id);
+      if (emojiTabFood == null) {
+        break missingId;
+      }
+
+      id = R.id.emoji_tab_objects;
+      TextView emojiTabObjects = ViewBindings.findChildViewById(rootView, id);
+      if (emojiTabObjects == null) {
+        break missingId;
+      }
+
+      id = R.id.emoji_tab_smileys;
+      TextView emojiTabSmileys = ViewBindings.findChildViewById(rootView, id);
+      if (emojiTabSmileys == null) {
+        break missingId;
+      }
+
+      id = R.id.emoji_tab_symbols;
+      TextView emojiTabSymbols = ViewBindings.findChildViewById(rootView, id);
+      if (emojiTabSymbols == null) {
+        break missingId;
+      }
+
+      id = R.id.emoji_tab_travel;
+      TextView emojiTabTravel = ViewBindings.findChildViewById(rootView, id);
+      if (emojiTabTravel == null) {
+        break missingId;
+      }
+
       id = R.id.inline_voice_close_btn;
       ImageView inlineVoiceCloseBtn = ViewBindings.findChildViewById(rootView, id);
       if (inlineVoiceCloseBtn == null) {
@@ -142,9 +216,10 @@ public final class SuggestionBarBinding implements ViewBinding {
         break missingId;
       }
 
-      return new SuggestionBarBinding((FrameLayout) rootView, inlineVoiceCloseBtn,
-          inlineVoiceLayout, inlineVoiceMicIcon, inlineVoicePromptText, suggestion1, suggestion2,
-          suggestion3, suggestionBarContainer, suggestionBarLayout);
+      return new SuggestionBarBinding((FrameLayout) rootView, emojiCategoryLayout, emojiTabAnimals,
+          emojiTabFood, emojiTabObjects, emojiTabSmileys, emojiTabSymbols, emojiTabTravel,
+          inlineVoiceCloseBtn, inlineVoiceLayout, inlineVoiceMicIcon, inlineVoicePromptText,
+          suggestion1, suggestion2, suggestion3, suggestionBarContainer, suggestionBarLayout);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

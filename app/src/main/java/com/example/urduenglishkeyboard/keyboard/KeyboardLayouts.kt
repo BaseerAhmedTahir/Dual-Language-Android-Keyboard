@@ -140,8 +140,12 @@ object KeyboardLayouts {
         
         listOf(KeyData(0, "👋", "👋"), KeyData(0, "🤚", "🤚"), KeyData(0, "🖐️", "🖐️"), KeyData(0, "✋", "✋"), KeyData(0, "🖖", "🖖"), KeyData(0, "👌", "👌"), KeyData(0, "🤌", "🤌"), KeyData(0, "🤏", "🤏"), KeyData(0, "✌️", "✌️")),
         listOf(KeyData(0, "🤞", "🤞"), KeyData(0, "🫰", "🫰"), KeyData(0, "🤟", "🤟"), KeyData(0, "🤘", "🤘"), KeyData(0, "🤙", "🤙"), KeyData(0, "👈", "👈"), KeyData(0, "👉", "👉"), KeyData(0, "👆", "👆"), KeyData(0, "👇", "👇")),
-        listOf(KeyData(0, "❤️", "❤️"), KeyData(0, "🧡", "🧡"), KeyData(0, "💛", "💛"), KeyData(0, "💚", "💚"), KeyData(0, "💙", "💙"), KeyData(0, "💜", "💜"), KeyData(0, "🤎", "🤎"), KeyData(0, "🖤", "🖤"), KeyData(0, "🤍", "🤍")),
-        listOf(KeyData(0, "💔", "💔"), KeyData(0, "❤️‍🔥", "❤️‍🔥"), KeyData(0, "❤️‍🩹", "❤️‍🩹"), KeyData(0, "❣️", "❣️"), KeyData(0, "💕", "💕"), KeyData(0, "👍", "👍"), KeyData(0, "👎", "👎"), KeyData(0, "👏", "👏"), KeyData(0, "🙌", "🙌"))
+        listOf(KeyData(0, "👍", "👍"), KeyData(0, "👎", "👎"), KeyData(0, "✊", "✊"), KeyData(0, "👊", "👊"), KeyData(0, "🤛", "🤛"), KeyData(0, "🤜", "🤜"), KeyData(0, "🫷", "🫷"), KeyData(0, "🫸", "🫸"), KeyData(0, "👏", "👏")),
+        listOf(KeyData(0, "🙌", "🙌"), KeyData(0, "🫶", "🫶"), KeyData(0, "👐", "👐"), KeyData(0, "🤲", "🤲"), KeyData(0, "🤝", "🤝"), KeyData(0, "🙏", "🙏"), KeyData(0, "✍️", "✍️"), KeyData(0, "💅", "💅"), KeyData(0, "💪", "💪")),
+        
+        listOf(KeyData(0, "❤️", "❤️"), KeyData(0, "🧡", "🧡"), KeyData(0, "💛", "💛"), KeyData(0, "💚", "💚"), KeyData(0, "💙", "💙"), KeyData(0, "🩵", "🩵"), KeyData(0, "💜", "💜"), KeyData(0, "🤎", "🤎"), KeyData(0, "🖤", "🖤")),
+        listOf(KeyData(0, "🤍", "🤍"), KeyData(0, "💔", "💔"), KeyData(0, "❤️‍🔥", "❤️‍🔥"), KeyData(0, "❤️‍🩹", "❤️‍🩹"), KeyData(0, "❣️", "❣️"), KeyData(0, "💕", "💕"), KeyData(0, "💞", "💞"), KeyData(0, "💓", "💓"), KeyData(0, "💗", "💗")),
+        listOf(KeyData(0, "🚶", "🚶"), KeyData(0, "🏃", "🏃"), KeyData(0, "💃", "💃"), KeyData(0, "🧑‍🤝‍🧑", "🧑‍🤝‍🧑"), KeyData(0, "👫", "👫"), KeyData(0, "👬", "👬"), KeyData(0, "👭", "👭"), KeyData(0, "👨‍👩‍👦", "👨‍👩‍👦"), KeyData(0, "👪", "👪"))
     )
 
     private val animalsKeys = listOf(
@@ -149,7 +153,11 @@ object KeyboardLayouts {
         listOf(KeyData(0, "🙈", "🙈"), KeyData(0, "🙉", "🙉"), KeyData(0, "🙊", "🙊"), KeyData(0, "🐵", "🐵"), KeyData(0, "🐔", "🐔"), KeyData(0, "🐧", "🐧"), KeyData(0, "🐦", "🐦"), KeyData(0, "🐤", "🐤"), KeyData(0, "🦆", "🦆")),
         listOf(KeyData(0, "🦅", "🦅"), KeyData(0, "🦉", "🦉"), KeyData(0, "🦇", "🦇"), KeyData(0, "🐺", "🐺"), KeyData(0, "🐗", "🐗"), KeyData(0, "🐴", "🐴"), KeyData(0, "🦄", "🦄"), KeyData(0, "🐝", "🐝"), KeyData(0, "🪱", "🪱")),
         listOf(KeyData(0, "🐛", "🐛"), KeyData(0, "🦋", "🦋"), KeyData(0, "🐌", "🐌"), KeyData(0, "🐞", "🐞"), KeyData(0, "🐜", "🐜"), KeyData(0, "🪰", "🪰"), KeyData(0, "🪲", "🪲"), KeyData(0, "🪳", "🪳"), KeyData(0, "🦟", "🦟")),
-        listOf(KeyData(0, "🐢", "🐢"), KeyData(0, "🐍", "🐍"), KeyData(0, "🦎", "🦎"), KeyData(0, "🦖", "🦖"), KeyData(0, "🦕", "🦕"), KeyData(0, "🐙", "🐙"), KeyData(0, "🦑", "🦑"), KeyData(0, "🦐", "🦐"), KeyData(0, "🦞", "🦞"))
+        listOf(KeyData(0, "🐢", "🐢"), KeyData(0, "🐍", "🐍"), KeyData(0, "🦎", "🦎"), KeyData(0, "🦖", "🦖"), KeyData(0, "🦕", "🦕"), KeyData(0, "🐙", "🐙"), KeyData(0, "🦑", "🦑"), KeyData(0, "🦐", "🦐"), KeyData(0, "🦞", "🦞")),
+        
+        listOf(KeyData(0, "🦀", "🦀"), KeyData(0, "🐡", "🐡"), KeyData(0, "🐠", "🐠"), KeyData(0, "🐟", "🐟"), KeyData(0, "🐬", "🐬"), KeyData(0, "🐳", "🐳"), KeyData(0, "🐋", "🐋"), KeyData(0, "🦈", "🦈"), KeyData(0, "🦭", "🦭")),
+        listOf(KeyData(0, "🐊", "🐊"), KeyData(0, "🐸", "🐸"), KeyData(0, "🐅", "🐅"), KeyData(0, "🐆", "🐆"), KeyData(0, "🦓", "🦓"), KeyData(0, "🦍", "🦍"), KeyData(0, "🦧", "🦧"), KeyData(0, "🦣", "🦣"), KeyData(0, "🐘", "🐘")),
+        listOf(KeyData(0, "🦛", "🦛"), KeyData(0, "🦏", "🦏"), KeyData(0, "🐪", "🐪"), KeyData(0, "🐫", "🐫"), KeyData(0, "🦒", "🦒"), KeyData(0, "🦘", "🦘"), KeyData(0, "🦬", "🦬"), KeyData(0, "🐃", "🐃"), KeyData(0, "🐂", "🐂"))
     )
 
     private val foodKeys = listOf(
@@ -157,13 +165,23 @@ object KeyboardLayouts {
         listOf(KeyData(0, "🫐", "🫐"), KeyData(0, "🍈", "🍈"), KeyData(0, "🍒", "🍒"), KeyData(0, "🍑", "🍑"), KeyData(0, "🥭", "🥭"), KeyData(0, "🍍", "🍍"), KeyData(0, "🥥", "🥥"), KeyData(0, "🥝", "🥝"), KeyData(0, "🍅", "🍅")),
         listOf(KeyData(0, "🥑", "🥑"), KeyData(0, "🍆", "🍆"), KeyData(0, "🥔", "🥔"), KeyData(0, "🥕", "🥕"), KeyData(0, "🌽", "🌽"), KeyData(0, "🌶️", "🌶️"), KeyData(0, "🥒", "🥒"), KeyData(0, "🥬", "🥬"), KeyData(0, "🥦", "🥦")),
         listOf(KeyData(0, "🍔", "🍔"), KeyData(0, "🍟", "🍟"), KeyData(0, "🍕", "🍕"), KeyData(0, "🌭", "🌭"), KeyData(0, "🥪", "🥪"), KeyData(0, "🌮", "🌮"), KeyData(0, "🌯", "🌯"), KeyData(0, "🫔", "🫔"), KeyData(0, "🥙", "🥙")),
-        listOf(KeyData(0, "🧆", "🧆"), KeyData(0, "🥚", "🥚"), KeyData(0, "🍳", "🍳"), KeyData(0, "🥘", "🥘"), KeyData(0, "🍲", "🍲"), KeyData(0, "🫕", "🫕"), KeyData(0, "🥣", "🥣"), KeyData(0, "🥗", "🥗"), KeyData(0, "🍿", "🍿"))
+        listOf(KeyData(0, "🧆", "🧆"), KeyData(0, "🥚", "🥚"), KeyData(0, "🍳", "🍳"), KeyData(0, "🥘", "🥘"), KeyData(0, "🍲", "🍲"), KeyData(0, "🫕", "🫕"), KeyData(0, "🥣", "🥣"), KeyData(0, "🥗", "🥗"), KeyData(0, "🍿", "🍿")),
+        
+        listOf(KeyData(0, "🧈", "🧈"), KeyData(0, "🧂", "🧂"), KeyData(0, "🥫", "🥫"), KeyData(0, "🍱", "🍱"), KeyData(0, "🍘", "🍘"), KeyData(0, "🍙", "🍙"), KeyData(0, "🍚", "🍚"), KeyData(0, "🍛", "🍛"), KeyData(0, "🍜", "🍜")),
+        listOf(KeyData(0, "🍝", "🍝"), KeyData(0, "🍠", "🍠"), KeyData(0, "🍢", "🍢"), KeyData(0, "🍣", "🍣"), KeyData(0, "🍤", "🍤"), KeyData(0, "🍥", "🍥"), KeyData(0, "🥮", "🥮"), KeyData(0, "🍡", "🍡"), KeyData(0, "🥟", "🥟")),
+        listOf(KeyData(0, "🥠", "🥠"), KeyData(0, "🥡", "🥡"), KeyData(0, "🍦", "🍦"), KeyData(0, "🍧", "🍧"), KeyData(0, "🍨", "🍨"), KeyData(0, "🍩", "🍩"), KeyData(0, "🍪", "🍪"), KeyData(0, "🎂", "🎂"), KeyData(0, "🍰", "🍰")),
+        listOf(KeyData(0, "🧁", "🧁"), KeyData(0, "🥧", "🥧"), KeyData(0, "🍫", "🍫"), KeyData(0, "🍬", "🍬"), KeyData(0, "🍭", "🍭"), KeyData(0, "🍮", "🍮"), KeyData(0, "🍯", "🍯"), KeyData(0, "🍼", "🍼"), KeyData(0, "🥛", "🥛")),
+        listOf(KeyData(0, "☕", "☕"), KeyData(0, "🫖", "🫖"), KeyData(0, "🍵", "🍵"), KeyData(0, "🍶", "🍶"), KeyData(0, "🍾", "🍾"), KeyData(0, "🍷", "🍷"), KeyData(0, "🍸", "🍸"), KeyData(0, "🍹", "🍹"), KeyData(0, "🍺", "🍺"))
     )
 
     private val travelKeys = listOf(
         listOf(KeyData(0, "🚗", "🚗"), KeyData(0, "🚕", "🚕"), KeyData(0, "🚙", "🚙"), KeyData(0, "🚌", "🚌"), KeyData(0, "🚎", "🚎"), KeyData(0, "🏎️", "🏎️"), KeyData(0, "🚓", "🚓"), KeyData(0, "🚑", "🚑"), KeyData(0, "🚒", "🚒")),
         listOf(KeyData(0, "🚐", "🚐"), KeyData(0, "🛻", "🛻"), KeyData(0, "🚚", "🚚"), KeyData(0, "🚛", "🚛"), KeyData(0, "🚜", "🚜"), KeyData(0, "🦯", "🦯"), KeyData(0, "🦽", "🦽"), KeyData(0, "🦼", "🦼"), KeyData(0, "🛴", "🛴")),
         listOf(KeyData(0, "🚲", "🚲"), KeyData(0, "🛵", "🛵"), KeyData(0, "🏍️", "🏍️"), KeyData(0, "🛺", "🛺"), KeyData(0, "🚨", "🚨"), KeyData(0, "🚔", "🚔"), KeyData(0, "🚍", "🚍"), KeyData(0, "🚘", "🚘"), KeyData(0, "🚖", "🚖")),
+        listOf(KeyData(0, "🚡", "🚡"), KeyData(0, "🚠", "🚠"), KeyData(0, "🚟", "🚟"), KeyData(0, "🚃", "🚃"), KeyData(0, "🚋", "🚋"), KeyData(0, "🚞", "🚞"), KeyData(0, "🚝", "🚝"), KeyData(0, "🚄", "🚄"), KeyData(0, "🚅", "🚅")),
+        listOf(KeyData(0, "🚈", "🚈"), KeyData(0, "🚂", "🚂"), KeyData(0, "🚆", "🚆"), KeyData(0, "🚇", "🚇"), KeyData(0, "🚊", "🚊"), KeyData(0, "🚉", "🚉"), KeyData(0, "✈️", "✈️"), KeyData(0, "🛫", "🛫"), KeyData(0, "🛬", "🛬")),
+        listOf(KeyData(0, "🛩️", "🛩️"), KeyData(0, "💺", "💺"), KeyData(0, "🛰️", "🛰️"), KeyData(0, "🚀", "🚀"), KeyData(0, "🛸", "🛸"), KeyData(0, "🚁", "🚁"), KeyData(0, "🛶", "🛶"), KeyData(0, "⛵", "⛵"), KeyData(0, "🚤", "🚤")),
+        
         listOf(KeyData(0, "🌲", "🌲"), KeyData(0, "🌱", "🌱"), KeyData(0, "🌷", "🌷"), KeyData(0, "🌹", "🌹"), KeyData(0, "🌺", "🌺"), KeyData(0, "🌸", "🌸"), KeyData(0, "🌼", "🌼"), KeyData(0, "🌻", "🌻"), KeyData(0, "🌞", "🌞")),
         listOf(KeyData(0, "🌎", "🌎"), KeyData(0, "🌙", "🌙"), KeyData(0, "⭐", "⭐"), KeyData(0, "🔥", "🔥"), KeyData(0, "💧", "💧"), KeyData(0, "⚡", "⚡"), KeyData(0, "❄️", "❄️"), KeyData(0, "🌩️", "🌩️"), KeyData(0, "✨", "✨"))
     )
@@ -172,6 +190,9 @@ object KeyboardLayouts {
         listOf(KeyData(0, "👓", "👓"), KeyData(0, "🕶️", "🕶️"), KeyData(0, "🥽", "🥽"), KeyData(0, "🥼", "🥼"), KeyData(0, "🦺", "🦺"), KeyData(0, "👔", "👔"), KeyData(0, "👕", "👕"), KeyData(0, "👖", "👖"), KeyData(0, "🧣", "🧣")),
         listOf(KeyData(0, "🧤", "🧤"), KeyData(0, "🧥", "🧥"), KeyData(0, "🧦", "🧦"), KeyData(0, "👗", "👗"), KeyData(0, "👘", "👘"), KeyData(0, "🥻", "🥻"), KeyData(0, "🩱", "🩱"), KeyData(0, "🩲", "🩲"), KeyData(0, "🩳", "🩳")),
         listOf(KeyData(0, "👙", "👙"), KeyData(0, "👚", "👚"), KeyData(0, "👛", "👛"), KeyData(0, "👜", "👜"), KeyData(0, "👝", "👝"), KeyData(0, "🛍️", "🛍️"), KeyData(0, "🎒", "🎒"), KeyData(0, "🩴", "🩴"), KeyData(0, "👞", "👞")),
+        listOf(KeyData(0, "👟", "👟"), KeyData(0, "🥾", "🥾"), KeyData(0, "🥿", "🥿"), KeyData(0, "👠", "👠"), KeyData(0, "👡", "👡"), KeyData(0, "🩰", "🩰"), KeyData(0, "👢", "👢"), KeyData(0, "👑", "👑"), KeyData(0, "👒", "👒")),
+        listOf(KeyData(0, "🎩", "🎩"), KeyData(0, "🎓", "🎓"), KeyData(0, "🧢", "🧢"), KeyData(0, "🪖", "🪖"), KeyData(0, "⛑️", "⛑️"), KeyData(0, "📿", "📿"), KeyData(0, "💄", "💄"), KeyData(0, "💍", "💍"), KeyData(0, "💎", "💎")),
+        
         listOf(KeyData(0, "⌚", "⌚"), KeyData(0, "📱", "📱"), KeyData(0, "📲", "📲"), KeyData(0, "💻", "💻"), KeyData(0, "⌨️", "⌨️"), KeyData(0, "🖥️", "🖥️"), KeyData(0, "🖨️", "🖨️"), KeyData(0, "🖱️", "🖱️"), KeyData(0, "🖲️", "🖲️")),
         listOf(KeyData(0, "💡", "💡"), KeyData(0, "🔦", "🔦"), KeyData(0, "🏮", "🏮"), KeyData(0, "📔", "📔"), KeyData(0, "📕", "📕"), KeyData(0, "📖", "📖"), KeyData(0, "📗", "📗"), KeyData(0, "📘", "📘"), KeyData(0, "📙", "📙"))
     )
@@ -180,6 +201,11 @@ object KeyboardLayouts {
         listOf(KeyData(0, "♈", "♈"), KeyData(0, "♉", "♉"), KeyData(0, "♊", "♊"), KeyData(0, "♋", "♋"), KeyData(0, "♌", "♌"), KeyData(0, "♍", "♍"), KeyData(0, "♎", "♎"), KeyData(0, "♏", "♏"), KeyData(0, "♐", "♐")),
         listOf(KeyData(0, "♑", "♑"), KeyData(0, "♒", "♒"), KeyData(0, "♓", "♓"), KeyData(0, "⛎", "⛎"), KeyData(0, "✖️", "✖️"), KeyData(0, "➕", "➕"), KeyData(0, "➖", "➖"), KeyData(0, "➗", "➗"), KeyData(0, "🟰", "🟰")),
         listOf(KeyData(0, "❗", "❗"), KeyData(0, "❓", "❓"), KeyData(0, "❕", "❕"), KeyData(0, "❔", "❔"), KeyData(0, "💯", "💯"), KeyData(0, "🔠", "🔠"), KeyData(0, "🔡", "🔡"), KeyData(0, "🔢", "🔢"), KeyData(0, "🔣", "🔣")),
+        
+        listOf(KeyData(0, "❤️", "❤️"), KeyData(0, "🧡", "🧡"), KeyData(0, "💛", "💛"), KeyData(0, "💚", "💚"), KeyData(0, "💙", "💙"), KeyData(0, "💜", "💜"), KeyData(0, "🖤", "🖤"), KeyData(0, "🤍", "🤍"), KeyData(0, "🤎", "🤎")),
+        listOf(KeyData(0, "✅", "✅"), KeyData(0, "❌", "❌"), KeyData(0, "❎", "❎"), KeyData(0, "☑️", "☑️"), KeyData(0, "⚕️", "⚕️"), KeyData(0, "♻️", "♻️"), KeyData(0, "⚜️", "⚜️"), KeyData(0, "🔱", "🔱"), KeyData(0, "〽️", "〽️")),
+        listOf(KeyData(0, "⚠️", "⚠️"), KeyData(0, "🚸", "🚸"), KeyData(0, "⛔", "⛔"), KeyData(0, "🚫", "🚫"), KeyData(0, "🚳", "🚳"), KeyData(0, "🚭", "🚭"), KeyData(0, "🚯", "🚯"), KeyData(0, "🚱", "🚱"), KeyData(0, "🚷", "🚷")),
+        
         listOf(KeyData(0, "🔴", "🔴"), KeyData(0, "🟠", "🟠"), KeyData(0, "🟡", "🟡"), KeyData(0, "🟢", "🟢"), KeyData(0, "🔵", "🔵"), KeyData(0, "🟣", "🟣"), KeyData(0, "🟤", "🟤"), KeyData(0, "⚫", "⚫"), KeyData(0, "⚪", "⚪")),
         listOf(KeyData(0, "🟥", "🟥"), KeyData(0, "🟧", "🟧"), KeyData(0, "🟨", "🟨"), KeyData(0, "🟩", "🟩"), KeyData(0, "🟦", "🟦"), KeyData(0, "🟪", "🟪"), KeyData(0, "🟫", "🟫"), KeyData(0, "⬛", "⬛"), KeyData(0, "⬜", "⬜"))
     )
@@ -211,6 +237,6 @@ object KeyboardLayouts {
             KeyData(CODE_DELETE, "⌫", "⌫", true, 1.5f, longPressOptions = listOf("Clear All"))
         )
         
-        return keys + listOf(tabRow, controlRow)
+        return keys + listOf(controlRow)
     }
 }

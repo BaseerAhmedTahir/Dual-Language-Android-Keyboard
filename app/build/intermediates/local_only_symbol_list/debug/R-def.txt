@@ -1,5 +1,11 @@
 R_DEF: Internal format may change without notice
 local
+drawable ic_keyboard_delete
+drawable ic_keyboard_emoji
+drawable ic_keyboard_enter
+drawable ic_keyboard_language
+drawable ic_keyboard_shift
+drawable ic_keyboard_voice
 drawable ic_launcher
 drawable ic_mic
 drawable suggestion_bg
@@ -7,6 +13,13 @@ drawable suggestion_bg_primary
 id card_enable
 id card_select
 id custom_keyboard_view
+id emoji_category_layout
+id emoji_tab_animals
+id emoji_tab_food
+id emoji_tab_objects
+id emoji_tab_smileys
+id emoji_tab_symbols
+id emoji_tab_travel
 id icon_enable_status
 id icon_select_status
 id inline_voice_close_btn

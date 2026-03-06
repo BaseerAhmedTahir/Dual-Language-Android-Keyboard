@@ -113,10 +113,10 @@
             android:layout_marginStart="12dp"
             android:text="Listening..."
             android:textColor="#202124"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
-            android:ellipsize="end"
-            android:maxLines="1" />
+            android:minLines="1"
+            android:maxLines="3" />
 
         <ImageView
             android:id="@+id/inline_voice_close_btn"
@@ -128,6 +128,125 @@
             android:background="@android:color/transparent"
             android:clickable="true"
             android:focusable="true" />
+    </LinearLayout>
+
+    <!-- Emoji Category UI (Hidden by Default) -->
+    <LinearLayout
+        android:id="@+id/emoji_category_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="#00000000"
+        android:visibility="gone">
+
+        <!-- Smileys -->
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="6dp">
+            <TextView
+                android:id="@+id/emoji_tab_smileys"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="😀"
+                android:textSize="20sp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"/>
+        </FrameLayout>
+
+        <!-- Animals -->
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="6dp">
+            <TextView
+                android:id="@+id/emoji_tab_animals"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="🐶"
+                android:textSize="20sp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"/>
+        </FrameLayout>
+
+        <!-- Food -->
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="6dp">
+            <TextView
+                android:id="@+id/emoji_tab_food"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="🍔"
+                android:textSize="20sp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"/>
+        </FrameLayout>
+
+        <!-- Travel -->
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="6dp">
+            <TextView
+                android:id="@+id/emoji_tab_travel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="🚗"
+                android:textSize="20sp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"/>
+        </FrameLayout>
+
+        <!-- Objects -->
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="6dp">
+            <TextView
+                android:id="@+id/emoji_tab_objects"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="💡"
+                android:textSize="20sp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"/>
+        </FrameLayout>
+
+        <!-- Symbols -->
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="6dp">
+            <TextView
+                android:id="@+id/emoji_tab_symbols"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="🔣"
+                android:textSize="20sp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"/>
+        </FrameLayout>
     </LinearLayout>
 
 </FrameLayout>

@@ -122,7 +122,7 @@ class CustomKeyboardView @JvmOverloads constructor(
                     rowLayout.addView(keyView)
                 }
                 
-                if (rows.size > 5 && i >= rows.size - 2) {
+                if (rows.size > 5 && i >= rows.size - 1) {
                     this.addView(rowLayout) // Sticky tabs and controls
                 } else {
                     container.addView(rowLayout) // Scrollable emojis
@@ -152,9 +152,11 @@ class CustomKeyboardView @JvmOverloads constructor(
         for (j in 0 until rowLayout.childCount) {
             val keyContainer = rowLayout.getChildAt(j) as android.widget.FrameLayout
             val key = rowData[j]
-            val mainLabel = keyContainer.getChildAt(0) as TextView
-            val actualLabel = if (key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_ENTER) enterKeyLabel else if (isShifted && key.shiftLabel.isNotEmpty()) key.shiftLabel else key.label
-            mainLabel.text = actualLabel
+            val childView = keyContainer.getChildAt(0)
+            if (childView is TextView) {
+                val actualLabel = if (key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_ENTER) enterKeyLabel else if (isShifted && key.shiftLabel.isNotEmpty()) key.shiftLabel else key.label
+                childView.text = actualLabel
+            }
         }
     }
     
@@ -217,7 +219,7 @@ class CustomKeyboardView @JvmOverloads constructor(
         val actualLabel = if (key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_ENTER) enterKeyLabel else if (isShifted && key.shiftLabel.isNotEmpty()) key.shiftLabel else key.label
         val container = android.widget.FrameLayout(context).apply {
             val lParams = LayoutParams(0, LayoutParams.MATCH_PARENT, key.weight)
-            lParams.setMargins(6, 12, 6, 16) // Increased bottom margin for subtle "depth" separation
+            lParams.setMargins(6, 8, 6, 14) // Adjusted layout margin to give keys more breathing room
             layoutParams = lParams
             
             // Premium color palette
@@ -321,36 +323,79 @@ class CustomKeyboardView @JvmOverloads constructor(
         
         val textColor = if (isDarkTheme) Color.WHITE else Color.BLACK
         
-        val mainTextView = TextView(context).apply {
-            layoutParams = android.widget.FrameLayout.LayoutParams(
-                android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
-                android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
-                Gravity.CENTER
-            ).apply {
-                setMargins(0, 0, 0, 6) // Adjust center visually to account for 3D depth inset
-            }
-            text = actualLabel
-            setTextColor(textColor)
-            gravity = Gravity.CENTER
-            
-            if (key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_NUMBERS || 
-                key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_LANGUAGE_SWITCH || 
-                key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_EMOJI) {
-                typeface = android.graphics.Typeface.DEFAULT
-                textSize = 15f
-            } else if (key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_SPACE) {
-                typeface = if (isUrdu) urduTypeface else android.graphics.Typeface.DEFAULT
-                textSize = 18f
-            } else if (isUrdu && !key.isFunctional) {
-                typeface = urduTypeface
-                textSize = 30f
-            } else {
-                typeface = android.graphics.Typeface.DEFAULT
-                textSize = 26f
-            }
-        }
+        val isIconKey = key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_SHIFT ||
+                        key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_DELETE ||
+                        key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_LANGUAGE_SWITCH ||
+                        key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_EMOJI ||
+                        key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_VOICE
         
-        container.addView(mainTextView)
+        if (isIconKey) {
+            val iconView = android.widget.ImageView(context).apply {
+                layoutParams = android.widget.FrameLayout.LayoutParams(
+                    android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                    android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                    Gravity.CENTER
+                ).apply {
+                    setMargins(0, 0, 0, 6)
+                }
+                
+                // Special tint logic
+                val iconTint = if (key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_LANGUAGE_SWITCH) {
+                    if (isDarkTheme) Color.parseColor("#A8C7FA") else Color.parseColor("#0B57D0") // Blue Globe
+                } else {
+                    textColor // Standard color for Shift and Delete
+                }
+                setColorFilter(iconTint, android.graphics.PorterDuff.Mode.SRC_IN)
+                
+                val drawableRes = when (key.code) {
+                    com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_SHIFT -> R.drawable.ic_keyboard_shift
+                    com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_DELETE -> R.drawable.ic_keyboard_delete
+                    com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_LANGUAGE_SWITCH -> R.drawable.ic_keyboard_language
+                    com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_EMOJI -> R.drawable.ic_keyboard_emoji
+                    com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_VOICE -> R.drawable.ic_keyboard_voice
+                    else -> 0
+                }
+                
+                if (drawableRes != 0) {
+                    setImageResource(drawableRes)
+                }
+            }
+            container.addView(iconView)
+        } else {
+            val mainTextView = TextView(context).apply {
+                layoutParams = android.widget.FrameLayout.LayoutParams(
+                    android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                    android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                    Gravity.CENTER
+                ).apply {
+                    setMargins(0, 0, 0, 6) // Adjust center visually to account for 3D depth inset
+                }
+                text = actualLabel
+                if (key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_ENTER) {
+                    val enterColor = if (isDarkTheme) Color.parseColor("#8AB4F8") else Color.parseColor("#1A73E8")
+                    setTextColor(enterColor)
+                } else {
+                    setTextColor(textColor)
+                }
+                gravity = Gravity.CENTER
+                
+                if (key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_NUMBERS || 
+                    key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_EMOJI) {
+                    typeface = android.graphics.Typeface.DEFAULT
+                    textSize = 15f
+                } else if (key.code == com.example.urduenglishkeyboard.keyboard.KeyboardLayouts.CODE_SPACE) {
+                    typeface = if (isUrdu) urduTypeface else android.graphics.Typeface.DEFAULT
+                    textSize = 18f
+                } else if (isUrdu && !key.isFunctional) {
+                    typeface = urduTypeface
+                    textSize = 30f
+                } else {
+                    typeface = android.graphics.Typeface.DEFAULT
+                    textSize = 26f
+                }
+            }
+            container.addView(mainTextView)
+        }
         
         // Secondary label hint for long-press
         if (key.longPressOptions.isNotEmpty() && !key.isFunctional) {
@@ -360,11 +405,11 @@ class CustomKeyboardView @JvmOverloads constructor(
                     android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
                     Gravity.TOP or Gravity.END
                 )
-                params.setMargins(0, 10, 14, 0)
+                params.setMargins(0, 8, 16, 0)
                 layoutParams = params
                 text = key.longPressOptions[0]
-                setTextColor(Color.parseColor(if (isDarkTheme) "#A0A0A0" else "#707070"))
-                textSize = 11f
+                setTextColor(Color.parseColor(if (isDarkTheme) "#9AA0A6" else "#5F6368"))
+                textSize = 10.5f // Slightly smaller hint text
                 if (isUrdu) {
                     typeface = urduTypeface
                 }
